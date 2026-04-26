@@ -53,3 +53,8 @@ disallow_untyped_defs = true
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-v --tb=short"
+
+[dependency-groups]
+dev = [
+    "monkeytype>=23.3.0",
+]

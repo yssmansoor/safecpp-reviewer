@@ -1,8 +1,11 @@
 import logging
 import random
 import time
+from collections.abc import Callable, Generator, Iterable
+from typing import Any
 
 from openai import APIError, APITimeoutError, OpenAI, RateLimitError
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -39,7 +42,7 @@ class LlamaCppClient:
         timeout: float = 60.0,
         max_retries: int = 3,
         backoff_base: float = 1.5,
-    ):
+    ) -> None:
         self.provider = provider
         self.model = model
         self.max_retries = max_retries
@@ -50,19 +53,16 @@ class LlamaCppClient:
         # Provider config
         # -------------------------
         if provider == "local":
-            # llama.cpp OpenAI-compatible server
             self.client = OpenAI(
                 api_key=api_key or "local",
                 base_url=base_url or "http://127.0.0.1:8080",
                 timeout=timeout,
             )
-
         elif provider == "openai":
             self.client = OpenAI(
                 api_key=api_key,
                 timeout=timeout,
             )
-
         else:
             logger.exception(f"Unsupported provider: {provider}")
             raise LlamaCppError(f"Unsupported provider: {provider}")
@@ -70,18 +70,18 @@ class LlamaCppClient:
     # -------------------------
     # Retry wrapper
     # -------------------------
-    def _with_retries(self, func) -> CompletionResult:
-        err = None
+    def _with_retries(self, func: Callable[[], Any]) -> Any:
+        err: Exception | None = None
         for attempt in range(self.max_retries + 1):
             try:
                 return func()
 
             except (RateLimitError, APITimeoutError) as e:
+                err = e
                 if attempt == self.max_retries:
                     logger.error("Max retries exhausted", exc_info=True)
 
                 sleep_time = (self.backoff_base**attempt) + random.uniform(0, 0.5)
-
                 logger.warning(
                     f"[Retry {attempt + 1}/{self.max_retries}] {e} → sleep {sleep_time:.2f}s"
                 )
@@ -106,9 +106,14 @@ class LlamaCppClient:
         system: str | None = None,
         temperature: float = 0.2,
         max_tokens: int | None = None,
-        **kwargs,
-    ) -> CompletionResult:
-        def _call():
+        **kwargs: Any,
+    ) -> Any:
+        messages: list[ChatCompletionMessageParam] = []
+        if system is not None:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+
+        def _call() -> CompletionResult:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
@@ -118,17 +123,16 @@ class LlamaCppClient:
             )
 
             choice = response.choices[0].message
-            text = choice.content
+            text: str = choice.content or ""
 
-            # Collect token info safely (may be missing in some llama.cpp servers)
             usage = getattr(response, "usage", None)
-            prompt_tokens = getattr(usage, "prompt_tokens", 0) if usage else 0
-            completion_tokens = (
+            prompt_tokens: int = getattr(usage, "prompt_tokens", 0) if usage else 0
+            completion_tokens: int = (
                 getattr(usage, "completion_tokens", len(text.split()))
                 if usage
                 else len(text.split())
             )
-            timings = getattr(response, "timings", {})
+            timings: dict[str, Any] = getattr(response, "timings", {})
             tokens_per_second = float(timings.get("predicted_per_second", 0.0))
 
             return CompletionResult(
@@ -138,11 +142,6 @@ class LlamaCppClient:
                 prompt_tokens=prompt_tokens,
             )
 
-        messages: list[dict[str, str]] = []
-        if system is not None:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-
         return self._with_retries(_call)
 
     # -------------------------
@@ -150,10 +149,10 @@ class LlamaCppClient:
     # -------------------------
     def stream_chat(
         self,
-        messages: list[dict[str, str]],
-        **kwargs,
-    ):
-        def _call():
+        messages: Iterable[ChatCompletionMessageParam],
+        **kwargs: Any,
+    ) -> Generator[str, None, None]:
+        def _call() -> Any:
             return self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
@@ -173,10 +172,7 @@ class LlamaCppClient:
     # -------------------------
     def health_check(self) -> bool:
         try:
-            self.complete(
-                "ping",
-                max_tokens=1,
-            )
+            self.complete("ping", max_tokens=1)
             return True
         except Exception:
             return False
