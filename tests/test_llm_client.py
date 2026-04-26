@@ -14,6 +14,7 @@ import os
 
 import pytest
 from pydantic import ValidationError
+
 from safecpp_reviewer.llm.client import (
     CompletionResult,
     LlamaCppClient,
