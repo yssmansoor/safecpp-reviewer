@@ -14,7 +14,6 @@ import os
 
 import pytest
 from pydantic import ValidationError
-
 from safecpp_reviewer.llm.client import (
     CompletionResult,
     LlamaCppClient,
@@ -58,10 +57,10 @@ def test_client_strips_trailing_slash_from_base_url() -> None:
 
 
 def test_health_returns_false_on_unreachable_host() -> None:
-    """health() should return False (not raise) when the server is down."""
+    """health_check() should return False (not raise) when the server is down."""
     # Port 1 is reserved and nothing should be listening there.
     client = LlamaCppClient(base_url="http://127.0.0.1:1", timeout=1.0)
-    assert client.health() is False
+    assert client.health_check() is False
 
 
 # ----------------------------------------------------------------------------
@@ -78,9 +77,9 @@ needs_live_server = pytest.mark.skipif(
 
 @needs_live_server
 def test_health_returns_true_when_server_is_running() -> None:
-    """health() returns True against a real running server."""
+    """health_check() returns True against a real running server."""
     client = LlamaCppClient()
-    assert client.health() is True
+    assert client.health_check() is True
 
 
 @needs_live_server

@@ -1,25 +1,11 @@
-"""
-HTTP client for talking to a local llama.cpp inference server.
+import logging
+import random
+import time
 
-The llama.cpp server exposes an OpenAI-compatible API. This module wraps it
-with a typed, ergonomic Python interface that the rest of the project will
-use for all LLM interactions.
-
-Design notes:
-    - Synchronous (httpx.post) rather than async. The agent's plan->generate->
-      validate->refine loop is naturally sequential, so async adds complexity
-      without benefit. We can revisit if we ever batch requests.
-    - All errors funnel through LlamaCppError. Callers should catch this
-      single exception type rather than the variety of httpx/JSON errors
-      that could occur underneath.
-    - Returns a Pydantic model rather than a dict, so callers get autocomplete
-      and type checking on the result fields.
-"""
-
-from typing import Any
-
-import httpx
+from openai import APIError, APITimeoutError, OpenAI, RateLimitError
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
 
 
 class LlamaCppError(Exception):
@@ -44,133 +30,153 @@ class CompletionResult(BaseModel):
 
 
 class LlamaCppClient:
-    """Synchronous client for a local llama.cpp HTTP server.
-
-    Example:
-        >>> client = LlamaCppClient()
-        >>> if client.health():
-        ...     result = client.complete("Write a C++ comment.")
-        ...     print(result.text)
-    """
-
     def __init__(
         self,
+        provider: str = "local",  # "local" | "openai"
+        model: str = "owan",
+        api_key: str | None = None,
         base_url: str = "http://127.0.0.1:8080",
-        timeout: float = 120.0,
-    ) -> None:
-        """Initialize the client.
-
-        Args:
-            base_url: The llama.cpp server's base URL. No trailing slash.
-            timeout: Request timeout in seconds. Generation can take a while
-                on long prompts; 120s is a generous default.
-        """
-        # Strip trailing slash so we can safely concat paths like
-        # f"{self.base_url}/v1/chat/completions" without doubling the slash.
+        timeout: float = 60.0,
+        max_retries: int = 3,
+        backoff_base: float = 1.5,
+    ):
+        self.provider = provider
+        self.model = model
+        self.max_retries = max_retries
+        self.backoff_base = backoff_base
         self.base_url = base_url.rstrip("/")
-        self.timeout = timeout
 
-    def health(self) -> bool:
-        """Check whether the llama.cpp server is responsive.
-
-        Returns:
-            True if GET /health returns 200, False on any error or non-200.
-
-        This method never raises. It's designed to be safe to call in a
-        retry loop or startup check without try/except boilerplate.
-        """
-        try:
-            response = httpx.get(
-                f"{self.base_url}/health",
-                timeout=self.timeout,
+        # -------------------------
+        # Provider config
+        # -------------------------
+        if provider == "local":
+            # llama.cpp OpenAI-compatible server
+            self.client = OpenAI(
+                api_key=api_key or "local",
+                base_url=base_url or "http://127.0.0.1:8080",
+                timeout=timeout,
             )
-            return response.status_code == 200
-        except httpx.HTTPError:
-            # Covers connect errors, timeouts, DNS failures, and read errors.
-            # We deliberately swallow these because health() is meant to be
-            # a quiet probe, not a noisy alarm.
-            return False
 
+        elif provider == "openai":
+            self.client = OpenAI(
+                api_key=api_key,
+                timeout=timeout,
+            )
+
+        else:
+            logger.exception(f"Unsupported provider: {provider}")
+            raise LlamaCppError(f"Unsupported provider: {provider}")
+
+    # -------------------------
+    # Retry wrapper
+    # -------------------------
+    def _with_retries(self, func) -> CompletionResult:
+        err = None
+        for attempt in range(self.max_retries + 1):
+            try:
+                return func()
+
+            except (RateLimitError, APITimeoutError) as e:
+                if attempt == self.max_retries:
+                    logger.error("Max retries exhausted", exc_info=True)
+
+                sleep_time = (self.backoff_base**attempt) + random.uniform(0, 0.5)
+
+                logger.warning(
+                    f"[Retry {attempt + 1}/{self.max_retries}] {e} → sleep {sleep_time:.2f}s"
+                )
+                time.sleep(sleep_time)
+
+            except APIError as e:
+                logger.exception("API error")
+                raise LlamaCppError(f"API request failed: {e}") from e
+
+            except Exception as e:
+                logger.exception("Unexpected error")
+                raise LlamaCppError("Unexpected error") from e
+
+        raise LlamaCppError("Max retries exhausted") from err
+
+    # -------------------------
+    # Completion
+    # -------------------------
     def complete(
         self,
         prompt: str,
         system: str | None = None,
         temperature: float = 0.2,
-        max_tokens: int = 512,
-        stop: list[str] | None = None,
+        max_tokens: int | None = None,
+        **kwargs,
     ) -> CompletionResult:
-        """Generate a completion from the model.
+        def _call():
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                **kwargs,
+            )
 
-        Args:
-            prompt: The user message.
-            system: Optional system message that sets the model's behavior.
-            temperature: Sampling temperature. Lower (0.0-0.3) = more
-                deterministic, better for code. Higher (0.7-1.0) = more
-                creative.
-            max_tokens: Cap on tokens the model can produce.
-            stop: Optional list of stop sequences. Generation halts when any
-                appears in the output.
+            choice = response.choices[0].message
+            text = choice.content
 
-        Returns:
-            A CompletionResult with the text and timing info.
+            # Collect token info safely (may be missing in some llama.cpp servers)
+            usage = getattr(response, "usage", None)
+            prompt_tokens = getattr(usage, "prompt_tokens", 0) if usage else 0
+            completion_tokens = (
+                getattr(usage, "completion_tokens", len(text.split()))
+                if usage
+                else len(text.split())
+            )
+            timings = getattr(response, "timings", {})
+            tokens_per_second = float(timings.get("predicted_per_second", 0.0))
 
-        Raises:
-            LlamaCppError: On any failure (network, server error, malformed
-                response). The original exception is chained via __cause__.
-        """
-        # Build messages in OpenAI chat format. System message goes first
-        # if provided; user message always comes last.
+            return CompletionResult(
+                text=text,
+                tokens_generated=completion_tokens,
+                tokens_per_second=tokens_per_second,
+                prompt_tokens=prompt_tokens,
+            )
+
         messages: list[dict[str, str]] = []
         if system is not None:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
 
-        # Build the request body. Use Any for the value type because the body
-        # mixes types (lists, strings, floats, ints).
-        body: dict[str, Any] = {
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
-        if stop is not None:
-            body["stop"] = stop
+        return self._with_retries(_call)
 
-        # Issue the request and convert any failure to LlamaCppError.
-        # We use `from e` to preserve the original exception in the traceback,
-        # which is invaluable when debugging.
-        try:
-            response = httpx.post(
-                f"{self.base_url}/v1/chat/completions",
-                json=body,
-                timeout=self.timeout,
+    # -------------------------
+    # Streaming
+    # -------------------------
+    def stream_chat(
+        self,
+        messages: list[dict[str, str]],
+        **kwargs,
+    ):
+        def _call():
+            return self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                stream=True,
+                **kwargs,
             )
-            response.raise_for_status()
-            data = response.json()
-        except httpx.HTTPError as e:
-            raise LlamaCppError(f"HTTP request failed: {e}") from e
-        except ValueError as e:
-            # response.json() raises ValueError on malformed JSON.
-            raise LlamaCppError(f"Server returned invalid JSON: {e}") from e
 
-        # Extract fields. KeyError or IndexError here means the response
-        # didn't match the OpenAI schema, which we treat as a server error.
+        stream = self._with_retries(_call)
+
+        for chunk in stream:
+            delta = chunk.choices[0].delta
+            if delta and delta.content:
+                yield delta.content
+
+    # -------------------------
+    # Health check
+    # -------------------------
+    def health_check(self) -> bool:
         try:
-            text = data["choices"][0]["message"]["content"]
-            usage = data["usage"]
-            prompt_tokens = usage["prompt_tokens"]
-            completion_tokens = usage["completion_tokens"]
-        except (KeyError, IndexError) as e:
-            raise LlamaCppError(f"Unexpected response schema: missing key {e}") from e
-
-        # Timings are llama.cpp-specific and may not exist on all server
-        # versions. Default to 0.0 so callers don't have to handle missing
-        # data; if they care about throughput, they can check for > 0.
-        timings = data.get("timings", {})
-        tokens_per_second = float(timings.get("predicted_per_second", 0.0))
-
-        return CompletionResult(
-            text=text,
-            tokens_generated=completion_tokens,
-            tokens_per_second=tokens_per_second,
-            prompt_tokens=prompt_tokens,
-        )
+            self.complete(
+                "ping",
+                max_tokens=1,
+            )
+            return True
+        except Exception:
+            return False
