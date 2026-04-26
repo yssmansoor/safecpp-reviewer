@@ -28,7 +28,7 @@ def run_clang_tidy(file_path: Path) -> list[Violation]:
             violations.append(
                 Violation(
                     tool="clang-tidy",
-                    file_path=str(file_path),
+                    file_path=Path(file_path),
                     line=0,
                     column=None,
                     severity="warning",

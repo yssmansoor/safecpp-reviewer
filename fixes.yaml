@@ -5,20 +5,20 @@ Diagnostics:
     DiagnosticMessage:
       Message:         'Potential leak of memory pointed to by ''ptr'''
       FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
-      FileOffset:      83
+      FileOffset:      81
       Replacements:    []
     Notes:
       - Message:         Memory is allocated
         FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
-        FileOffset:      50
+        FileOffset:      49
         Replacements:    []
         Ranges:
           - FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
-            FileOffset:      50
+            FileOffset:      49
             Length:          10
       - Message:         'Potential leak of memory pointed to by ''ptr'''
         FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
-        FileOffset:      83
+        FileOffset:      81
         Replacements:    []
     Level:           Warning
     BuildDirectory:  '/home/abumahdi/projects/safecpp_reviewer'

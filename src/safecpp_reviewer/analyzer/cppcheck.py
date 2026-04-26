@@ -43,7 +43,7 @@ def run_cppcheck(file_path: Path) -> list[Violation]:
         violations.append(
             Violation(
                 tool="cppcheck",
-                file_path=file_attr,
+                file_path=Path(file_attr),
                 line=int(line_attr),
                 column=None,
                 severity=error.get(

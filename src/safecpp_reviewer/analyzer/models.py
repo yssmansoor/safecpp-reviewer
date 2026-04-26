@@ -30,14 +30,15 @@ SeverityLevel = Literal[
 
 
 class Violation(BaseModel):
+    """Describes a static analysis violation detected in a source file."""
+
     tool: str
 
     file_path: Path
     line: int
     column: int | None = None
 
-    severity: SeverityLevel
-
+    severity: str
     rule_id: str
 
     message: str
