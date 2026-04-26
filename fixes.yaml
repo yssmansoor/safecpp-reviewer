@@ -1,0 +1,25 @@
+---
+MainSourceFile:  '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
+Diagnostics:
+  - DiagnosticName:  clang-analyzer-cplusplus.NewDeleteLeaks
+    DiagnosticMessage:
+      Message:         'Potential leak of memory pointed to by ''ptr'''
+      FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
+      FileOffset:      83
+      Replacements:    []
+    Notes:
+      - Message:         Memory is allocated
+        FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
+        FileOffset:      50
+        Replacements:    []
+        Ranges:
+          - FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
+            FileOffset:      50
+            Length:          10
+      - Message:         'Potential leak of memory pointed to by ''ptr'''
+        FilePath:        '/home/abumahdi/projects/safecpp_reviewer/tests/data/bad_code.cpp'
+        FileOffset:      83
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/home/abumahdi/projects/safecpp_reviewer'
+...
