@@ -1,50 +1,39 @@
-# from pathlib import Path
-# from pydantic import BaseModel
-# from typing import Literal, Optional
-
-
-# class Violation(BaseModel):
-#     file: Path
-#     line: int
-#     column: Optional[int]
-#     rule_id: str          # e.g. "MISRA-C++:2023-6.7.2" or "clang-tidy:cppcoreguidelines-*"
-#     severity: Literal["error", "warning", "note", "style"]
-#     message: str
-#     tool: Literal["clang-tidy", "cppcheck"]
-#     category: Optional[str]
-#     code_snippet: Optional[str]
-#     fix_suggestion: Optional[str]
+"""Core data models for static analysis violations."""
 
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel
-
-SeverityLevel = Literal[
-    "error",
-    "warning",
-    "style",
-    "note",
-    "information",  # cppcheck emits this
-]
+from pydantic import BaseModel, Field
 
 
 class Violation(BaseModel):
-    """Describes a static analysis violation detected in a source file."""
+    """A single static analysis violation found in a C++ source file.
 
-    tool: str
+    Attributes:
+        file: Absolute or relative path to the source file.
+        line: 1-based line number where the violation occurs.
+        column: 1-based column number (None if not reported by tool).
+        rule_id: Tool-prefixed rule identifier, e.g. "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast".
+        severity: Normalized severity level across tools.
+        message: Human-readable description of the violation.
+        tool: Which static analysis tool produced this violation.
+        category: Optional grouping, e.g. "MISRA", "AUTOSAR", "cppcoreguidelines".
+        code_snippet: Optional source line(s) surrounding the violation.
+        fix_suggestion: Optional LLM-generated fix (populated in Phase 3+).
+    """
 
-    file_path: Path
-    line: int
-    column: int | None = None
-
-    severity: str
+    file: Path
+    line: int = Field(ge=1)
+    column: int | None = Field(default=None, ge=1)
     rule_id: str
-
+    severity: Literal["error", "warning", "note", "style"]
     message: str
-
+    tool: Literal["clang-tidy", "cppcheck"]
     category: str | None = None
-
     code_snippet: str | None = None
+    fix_suggestion: str | None = None
 
-    source_hash: str | None = None
+    def short(self) -> str:
+        """One-line summary for logging and CLI output."""
+        col = f":{self.column}" if self.column else ""
+        return f"[{self.tool}] {self.file}:{self.line}{col} ({self.rule_id}): {self.message}"

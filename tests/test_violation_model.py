@@ -4,9 +4,10 @@ from safecpp_reviewer.analyzer.models import Violation
 
 
 def test_violation_serialization():
+    """Test that Violation objects are serialized correctly."""
     v = Violation(
         tool="clang-tidy",
-        file_path=Path("main.cpp"),
+        file=Path("main.cpp"),
         line=10,
         column=5,
         severity="warning",
