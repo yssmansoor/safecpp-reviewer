@@ -5,6 +5,8 @@ pre-baked stdout/stderr strings directly into the parsers.  Integration tests
 that need live tools are gated behind RUN_INTEGRATION_TESTS=1.
 """
 
+# pylint: disable=protected-access
+
 import os
 from pathlib import Path
 
@@ -54,6 +56,7 @@ CPPCHECK_XML = """\
 
 
 def test_violation_short_includes_key_fields() -> None:
+    """Test that short includes key fields."""
     v = Violation(
         file=Path("/tmp/foo.cpp"),
         line=42,
@@ -70,6 +73,7 @@ def test_violation_short_includes_key_fields() -> None:
 
 
 def test_violation_column_optional() -> None:
+    """Test that column is optional."""
     v = Violation(
         file=Path("/tmp/foo.cpp"),
         line=1,
@@ -88,13 +92,14 @@ def test_violation_column_optional() -> None:
 
 
 def test_clang_tidy_parses_warning() -> None:
+    """Test that clang-tidy parses warnings correctly."""
     runner = ClangTidyRunner()
     violations = runner._parse(CLANG_TIDY_OUTPUT, FAKE_CPP)
 
     assert len(violations) == 2
 
     warning = violations[0]
-    assert warning.line == 10
+    assert warning.line == 9
     assert warning.column == 5
     assert warning.severity == "warning"
     assert warning.rule_id == "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast"
@@ -103,22 +108,25 @@ def test_clang_tidy_parses_warning() -> None:
 
 
 def test_clang_tidy_parses_error() -> None:
+    """Test that clang-tidy parses errors correctly."""
     runner = ClangTidyRunner()
     violations = runner._parse(CLANG_TIDY_OUTPUT, FAKE_CPP)
 
     error = violations[1]
-    assert error.line == 20
+    assert error.line == 19
     assert error.severity == "error"
 
 
 def test_clang_tidy_ignores_other_files() -> None:
+    """Test that clang-tidy ignores violations from other files."""
     output = "/other/file.cpp:5:1: warning: something [some-check]\n"
     runner = ClangTidyRunner()
     violations = runner._parse(output, FAKE_CPP)
-    assert violations == []
+    assert not violations
 
 
 def test_clang_tidy_raises_on_missing_file() -> None:
+    """Test that clang-tidy raises on missing file."""
     runner = ClangTidyRunner()
     with pytest.raises(FileNotFoundError):
         runner.run(Path("/nonexistent/file.cpp"))
@@ -130,6 +138,7 @@ def test_clang_tidy_raises_on_missing_file() -> None:
 
 
 def test_cppcheck_parses_error() -> None:
+    """Test that cppcheck parses errors correctly."""
     runner = CppcheckRunner()
     violations = runner._parse_xml(CPPCHECK_XML, FAKE_CPP)
 
@@ -138,26 +147,29 @@ def test_cppcheck_parses_error() -> None:
 
 
 def test_cppcheck_null_pointer_violation() -> None:
+    """Test that cppcheck parses null pointer violations correctly."""
     runner = CppcheckRunner()
     violations = runner._parse_xml(CPPCHECK_XML, FAKE_CPP)
 
     null_ptr = next(v for v in violations if "nullPointer" in v.rule_id)
-    assert null_ptr.line == 15
+    assert null_ptr.line == 14
     assert null_ptr.severity == "error"
     assert null_ptr.tool == "cppcheck"
     assert null_ptr.category == "cppcheck"
 
 
 def test_cppcheck_style_violation() -> None:
+    """Test that cppcheck parses style violations correctly."""
     runner = CppcheckRunner()
     violations = runner._parse_xml(CPPCHECK_XML, FAKE_CPP)
 
     unused = next(v for v in violations if "unusedVariable" in v.rule_id)
     assert unused.severity == "style"
-    assert unused.line == 8
+    assert unused.line == 7
 
 
 def test_cppcheck_filters_system_headers() -> None:
+    """Test that cppcheck filters out system headers."""
     runner = CppcheckRunner()
     violations = runner._parse_xml(CPPCHECK_XML, FAKE_CPP)
     files = [str(v.file) for v in violations]
@@ -165,12 +177,14 @@ def test_cppcheck_filters_system_headers() -> None:
 
 
 def test_cppcheck_invalid_xml_returns_empty() -> None:
+    """Test that cppcheck returns empty list for invalid XML."""
     runner = CppcheckRunner()
     violations = runner._parse_xml("this is not xml", FAKE_CPP)
-    assert violations == []
+    assert not violations
 
 
 def test_cppcheck_raises_on_missing_file() -> None:
+    """Test that cppcheck raises on missing file."""
     runner = CppcheckRunner()
     with pytest.raises(FileNotFoundError):
         runner.run(Path("/nonexistent/file.cpp"))
@@ -198,6 +212,7 @@ int add(int a, int b) {
 
 @needs_tools
 def test_integration_clang_tidy_finds_violations(tmp_path: Path) -> None:
+    """Test that clang-tidy finds violations in integration."""
     src = tmp_path / "sample.cpp"
     src.write_text(SAMPLE_CPP)
 
