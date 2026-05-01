@@ -6,6 +6,13 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
+class ReviewResponse(BaseModel):
+    """LLM review response with explanation and corrected code."""
+
+    explanation: str  # why this is a violation, in plain English
+    fixed_code: str  # the corrected snippet
+
+
 class Violation(BaseModel):
     """A single static analysis violation found in a C++ source file.
 
@@ -33,10 +40,45 @@ class Violation(BaseModel):
     code_snippet: str | None = None
     fix_suggestion: str | None = None
 
-    def short(self) -> str:
-        """One-line summary for logging and CLI output."""
+    # def short(self) -> str:
+    #     """One-line summary for logging and CLI output."""
+    #     col = f":{self.column}" if self.column else ""
+    #     base = f"[{self.tool}] {self.file}:{self.line}{col} ({self.rule_id}): {self.message}"
+    #     if self.code_snippet:
+    #         base += f"\n{self.code_snippet}"
+    #     return base
+
+    def short(self, color: bool = False) -> str:
+        """Multi-line summary for logging and CLI output.
+
+        Args:
+            color: If True, wrap severity and rule_id in rich markup tags.
+        """
+        sev_colors = {
+            "error": "bold red",
+            "warning": "yellow",
+            "style": "cyan",
+            "note": "dim",
+        }
+
+        if color:
+            sev = f"[{sev_colors[self.severity]}]{self.severity.upper():<7}[/]"
+            rule = f"[bold]{self.rule_id}[/bold]"
+            tool = f"[magenta]{self.tool}[/magenta]"
+        else:
+            sev = f"{self.severity.upper():<7}"
+            rule = self.rule_id
+            tool = self.tool
+
         col = f":{self.column}" if self.column else ""
-        base = f"[{self.tool}] {self.file}:{self.line}{col} ({self.rule_id}): {self.message}"
+        category = f" <{self.category}>" if self.category else ""
+
+        header = f"{sev} [{tool}]{category} {self.file}:{self.line}{col}"
+        body = f"  → {rule}\n  {self.message}"
+
+        out = f"{header}\n{body}"
         if self.code_snippet:
-            base += f"\n{self.code_snippet}"
-        return base
+            out += f"\n{self.code_snippet}"
+        if self.fix_suggestion:
+            out += f"\n  ↪ Fix: {self.fix_suggestion}"
+        return out

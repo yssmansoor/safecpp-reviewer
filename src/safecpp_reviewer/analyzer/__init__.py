@@ -4,12 +4,18 @@ Provides a single :func:`run_all` entry point that runs both clang-tidy and
 cppcheck on a file and merges results into one deduplicated list.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.cppcheck import CppcheckRunner
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
+
+if TYPE_CHECKING:
+    from safecpp_reviewer.agent.reviewer import ViolationReviewer
 
 
 def run_all(
@@ -17,6 +23,7 @@ def run_all(
     clang_tidy_checks: str = "cppcoreguidelines-*,modernize-*,readability-*,bugprone-*",
     cppcheck_enable: str = "all",
     extra_compiler_args: list[str] | None = None,
+    reviewer: ViolationReviewer | None = None,
 ) -> list[Violation]:
     """Run clang-tidy and cppcheck on *source_file* and merge the results.
 
@@ -69,6 +76,9 @@ def run_all(
 
     for v in unique:
         v.code_snippet = extract_snippet(v)
+
+    if reviewer is not None:
+        unique = [reviewer.review(v) for v in unique]
 
     return sorted(unique, key=lambda v: (str(v.file), v.line, v.column or 0))
 

@@ -33,6 +33,8 @@ class CompletionResult(BaseModel):
 
 
 class LlamaCppClient:
+    """Client for text completion using Llama.cpp or OpenAI API."""
+
     def __init__(
         self,
         provider: str = "local",  # "local" | "openai"
