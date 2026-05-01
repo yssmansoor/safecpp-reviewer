@@ -157,7 +157,9 @@ class CppcheckRunner:
             violations.append(
                 Violation(
                     file=loc_file,
-                    line=max(1, int(line_str)),
+                    line=max(
+                        0, int(line_str) - 1
+                    ),  # cppcheck lines are 1-based; convert to 0-based
                     column=int(col_str) if col_str and int(col_str) >= 1 else None,
                     rule_id=rule_id,
                     severity=severity,

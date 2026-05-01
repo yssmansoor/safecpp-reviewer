@@ -9,6 +9,7 @@ from pathlib import Path
 from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.cppcheck import CppcheckRunner
 from safecpp_reviewer.analyzer.models import Violation
+from safecpp_reviewer.analyzer.snippet import extract_snippet
 
 
 def run_all(
@@ -65,6 +66,9 @@ def run_all(
         if key not in seen:
             seen.add(key)
             unique.append(v)
+
+    for v in unique:
+        v.code_snippet = extract_snippet(v)
 
     return sorted(unique, key=lambda v: (str(v.file), v.line, v.column or 0))
 

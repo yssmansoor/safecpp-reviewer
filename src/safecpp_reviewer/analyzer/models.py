@@ -36,4 +36,7 @@ class Violation(BaseModel):
     def short(self) -> str:
         """One-line summary for logging and CLI output."""
         col = f":{self.column}" if self.column else ""
-        return f"[{self.tool}] {self.file}:{self.line}{col} ({self.rule_id}): {self.message}"
+        base = f"[{self.tool}] {self.file}:{self.line}{col} ({self.rule_id}): {self.message}"
+        if self.code_snippet:
+            base += f"\n{self.code_snippet}"
+        return base
