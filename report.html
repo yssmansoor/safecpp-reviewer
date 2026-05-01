@@ -123,7 +123,7 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
 <body>
 <div class="container">
 <h1>safecpp-reviewer — sample_violations.cpp</h1>
-<div class="subtitle">Generated 2026-05-01 23:20:15</div>
+<div class="subtitle">Generated 2026-05-01 23:34:39</div>
 <div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">19</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">12</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">6</div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:9:5</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
@@ -147,7 +147,7 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
        9 | // [modernize-use-nullptr] NULL instead of nullptr
       10 | int process(int a, int b) {
 <span class="marker">&gt;&gt;&gt;   11 |     int* ptr = NULL;                   // modernize-use-nullptr</span>
-      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The code uses NULL instead of nullptr, which is a modern C++ nullptr literal.</div>
+      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The use of NULL is deprecated in C++ and should be replaced with nullptr for better type safety and readability.</div>
 <pre class="code">int process(int a, int b) {
     int* ptr = nullptr;
     int result = static_cast&lt;int&gt;(a + b);
@@ -171,14 +171,14 @@ return result;</pre></div></div></div>
 if (ptr != nullptr) {
     *ptr = result;
 } else {
-    // Handle the error, e.g., log an error message or throw an exception
-    throw std::runtime_error(&quot;Pointer is null&quot;);
+    // Handle the error case where ptr is null
+    // For example, log an error or throw an exception
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:20:8</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      18 | }
       19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
 <span class="marker">&gt;&gt;&gt;   21 | double magic() {</span>
-      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; should use a trailing return type for better readability and consistency with modern C++ practices.</div>
+      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; should use a trailing return type for better readability and consistency.</div>
 <pre class="code">double magic() -&gt; double {
     return 3.14159 * 42;
 }</pre></div></div></div>
@@ -197,7 +197,7 @@ double magic() {
       24 |
       25 | // [modernize-use-override] missing override keyword
 <span class="marker">&gt;&gt;&gt;   26 | class Base {</span>
-      27 | public:</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The class &#x27;Base&#x27; defines a default destructor but does not define any special member functions (copy constructor, copy assignment operator, move constructor, or move assignment operator). According to the CppCoreGuidelines, classes with a user-declared destructor should also declare all other special member functions to prevent the compiler from generating default implementations that might not be safe or intended.</div>
+      27 | public:</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The class &#x27;Base&#x27; defines a default destructor but does not define any special member functions such as a copy constructor, copy assignment operator, move constructor, or move assignment operator. According to the CppCoreGuidelines, classes with a user-defined destructor should also define all other special member functions to avoid undefined behavior.</div>
 <pre class="code">class Base {
 public:
     Base() = default;
@@ -211,7 +211,7 @@ public:
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; in the &#x27;Derived&#x27; class should be annotated with &#x27;override&#x27; to indicate that it is intended to override a virtual function from the base class &#x27;Base&#x27;. This helps catch errors if the base class function signature changes.</div>
+      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; in the Derived class should be annotated with &#x27;override&#x27; to indicate that it is intended to override a virtual function from the Base class. This helps catch errors if the function signature in the Base class changes in the future.</div>
 <pre class="code">class Derived : public Base {
 public:
     void tick() override {}
@@ -229,7 +229,7 @@ public:
       37 | // [cppcheck: unusedFunction]
       38 | static void unused_helper() {
 <span class="marker">&gt;&gt;&gt;   39 |     char buf[16];</span>
-      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 16 is a magic number; consider replacing it with a named constant.</div>
+      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 16 is a magic number; consider replacing it with a named constant to improve readability and maintainability.</div>
 <pre class="code">static const size_t BUFFER_SIZE = 16;
 
 static void unused_helper() {
@@ -246,13 +246,13 @@ static void unused_helper() {
 
 static void unused_helper() {
     std::array&lt;char, 16&gt; buf;
-    std::strcpy(buf.data(), &quot;hello world!!!&quot;);
+    std::strcpy(buf.data(), &quot;hello world!!!&quot;);  // Use std::strcpy with array data()
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:9</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;process&#x27; is never used.</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
 <span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;process&#x27; is defined but never called, which makes it unnecessary and potentially confusing.</div>
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;process&#x27; is defined but never used, which is unnecessary and can lead to confusion.</div>
 <pre class="code">// [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
 // [modernize-use-nullptr] NULL instead of nullptr
 int process(int a, int b) {
@@ -290,7 +290,7 @@ delete ptr;</pre></div></div></div>
       26 | class Base {
       27 | public:
 <span class="marker">&gt;&gt;&gt;   28 |     virtual void tick() {}</span>
-      29 |     virtual ~Base() = default;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; is never used.</div>
+      29 |     virtual ~Base() = default;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; is never used, which makes it unnecessary and potentially confusing.</div>
 <pre class="code">class Base {
 public:
     virtual ~Base() = default;
@@ -308,18 +308,10 @@ public:
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function. This is redundant and can be fixed by removing the override keyword or providing a different implementation.</div>
+      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function. This is redundant and can be fixed by removing the override keyword.</div>
 <pre class="code">class Derived : public Base {
 public:
-    void tick() {}  // Removed &#x27;override&#x27; keyword
-};
-
-// Alternatively, if a different implementation is intended:
-class Derived : public Base {
-public:
-    void tick() override {
-        // Different implementation
-    }
+    void tick() {}
 };</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:37</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;unused_helper&#x27; is never used.</div><pre class="code">      35 | };
       36 |

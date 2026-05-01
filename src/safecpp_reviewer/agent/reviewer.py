@@ -74,12 +74,6 @@ class ViolationReviewer:
 
         Returns the same violation with fix_suggestion populated.
         """
-        # prompt = build_user_prompt(violation)
-        # result = self.client.complete(prompt, system=SYSTEM_PROMPT, temperature=0.1, max_tokens=512)
-        # cleaned = self._strip_fences(result.text)
-        # response = ReviewResponse.model_validate_json(cleaned)
-        # violation.fix_suggestion = f"{response.explanation}\n\n```cpp\n{response.fixed_code}\n```"
-        # return violation
         try:
             prompt = build_user_prompt(violation)
             result = self.client.complete(
@@ -87,7 +81,6 @@ class ViolationReviewer:
             )
             cleaned = self._strip_fences(result.text)
             response = self._parse_review_response(cleaned)
-            fixed_code = self._strip_code_fence(response.fixed_code)
 
             if response is None:
                 logger.warning(
@@ -97,6 +90,7 @@ class ViolationReviewer:
                 )
                 return violation
 
+            fixed_code = self._strip_code_fence(response.fixed_code)
             violation.fix_suggestion = f"{response.explanation}\n\n```cpp\n{fixed_code}\n```"
         except Exception as e:
             logger.warning("LLM review failed: %s", e)
