@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typing
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal
@@ -42,18 +43,18 @@ class CppParser:
 
     def parse_file(self, path: str | Path) -> list[Chunk]:
         """Parse a C++ source/header file into chunks."""
-        source_path = Path(path)
-        source = source_path.read_text(encoding="utf-8")
+        source_path: typing.Final = Path(path)
+        source: typing.Final = source_path.read_text(encoding="utf-8")
         return self.parse_source(source, source_path)
 
     def parse_source(self, source: str, file: str | Path = "<memory>") -> list[Chunk]:
         """Parse C++ source text into chunks."""
-        source_path = Path(file)
-        source_bytes = source.encode("utf-8")
-        tree = self.parser.parse(source_bytes)
-        root = tree.root_node
+        source_path: typing.Final = Path(file)
+        source_bytes: typing.Final = source.encode("utf-8")
+        tree: typing.Final = self.parser.parse(source_bytes)
+        root: typing.Final = tree.root_node
 
-        chunks = [
+        chunks: typing.Final = [
             self._chunk_from_node(node, source_bytes, source_path)
             for node in self._iter_chunk_nodes(root)
         ]
@@ -67,7 +68,7 @@ class CppParser:
         )
 
     def _iter_chunk_nodes(self, root: Node) -> Iterable[Node]:
-        stack = list(reversed(root.children))
+        stack: typing.Final = list(reversed(root.children))
         while stack:
             node = stack.pop()
             if node.type in self._CHUNK_NODE_TYPES:
@@ -75,7 +76,7 @@ class CppParser:
             stack.extend(reversed(node.children))
 
     def _chunk_from_node(self, node: Node, source_bytes: bytes, file: Path) -> Chunk:
-        content = self._node_text(node, source_bytes)
+        content: typing.Final = self._node_text(node, source_bytes)
         return Chunk(
             file=file,
             start_line=node.start_point.row + 1,
@@ -96,7 +97,7 @@ class CppParser:
         if not source.strip():
             return []
 
-        occupied = [
+        occupied: typing.Final = [
             (chunk.start_line, chunk.end_line)
             for chunk in semantic_chunks
             if chunk.chunk_type in {"function", "class", "namespace"}
@@ -104,9 +105,9 @@ class CppParser:
         if not occupied:
             return []
 
-        chunks: list[Chunk] = []
-        lines = source.splitlines(keepends=True)
-        line_count = len(lines) or 1
+        chunks: typing.Final[list[Chunk]] = []
+        lines: typing.Final = source.splitlines(keepends=True)
+        line_count: typing.Final = len(lines) or 1
         cursor = 1
 
         for start, end in sorted(occupied):
@@ -129,7 +130,7 @@ class CppParser:
         end_line: int,
         file: Path,
     ) -> list[Chunk]:
-        content = "".join(lines[start_line - 1 : end_line])
+        content: typing.Final = "".join(lines[start_line - 1 : end_line])
         if not content.strip():
             return []
 
@@ -157,11 +158,11 @@ class CppParser:
         )
 
     def _qualified_name(self, node: Node) -> str:
-        own_name = self._node_name(node)
+        own_name: typing.Final = self._node_name(node)
         if own_name is None:
             return ""
 
-        scopes: list[str] = []
+        scopes: typing.Final[list[str]] = []
         parent = node.parent
         while parent is not None:
             if parent.type in {"namespace_definition", *self._CLASS_NODE_TYPES}:
@@ -173,11 +174,11 @@ class CppParser:
         return "::".join([*reversed(scopes), own_name])
 
     def _node_name(self, node: Node) -> str | None:
-        name = node.child_by_field_name("name")
+        name: typing.Final = node.child_by_field_name("name")
         if name is not None:
             return self._node_bytes(name).decode("utf-8", errors="replace")
 
-        declarator = node.child_by_field_name("declarator")
+        declarator: typing.Final = node.child_by_field_name("declarator")
         if declarator is not None:
             return self._identifier_from_declarator(declarator)
 
@@ -190,13 +191,13 @@ class CppParser:
         if node.type in self._NAME_NODE_TYPES:
             return self._node_bytes(node).decode("utf-8", errors="replace")
 
-        name = node.child_by_field_name("name")
+        name: typing.Final = node.child_by_field_name("name")
         if name is not None:
             return self._node_bytes(name).decode("utf-8", errors="replace")
 
-        declarator = node.child_by_field_name("declarator")
+        declarator: typing.Final = node.child_by_field_name("declarator")
         if declarator is not None:
-            nested = self._identifier_from_declarator(declarator)
+            nested: typing.Final = self._identifier_from_declarator(declarator)
             if nested is not None:
                 return nested
 
@@ -208,7 +209,7 @@ class CppParser:
         return None
 
     def _find_identifier_child(self, node: Node) -> str | None:
-        stack = list(reversed(node.children))
+        stack: typing.Final = list(reversed(node.children))
         while stack:
             child = stack.pop()
             if child.type in self._NAME_NODE_TYPES:

@@ -4,7 +4,12 @@ Two execution modes:
 
 * **Legacy** (default) — calls :func:`safecpp_reviewer.analyzer.run_all`.
 * **Graph** (``--use-graph``) — runs the LangGraph pipeline.
+Two execution modes:
 
+* **Legacy** (default) — calls :func:`safecpp_reviewer.analyzer.run_all`.
+* **Graph** (``--use-graph``) — runs the LangGraph pipeline.
+
+Use ``--compare`` to run both modes and diff the results.
 Use ``--compare`` to run both modes and diff the results.
 """
 
@@ -14,6 +19,7 @@ import enum
 import json
 import logging
 import time
+import typing
 from pathlib import Path
 from typing import Annotated
 
@@ -59,7 +65,7 @@ def _render_terminal(violations: list[Violation]) -> None:
         console.print("[green]✓ No violations found.[/]")
         return
 
-    border_for = {"error": "red", "warning": "yellow", "style": "cyan", "note": "dim"}
+    border_for: typing.Final = {"error": "red", "warning": "yellow", "style": "cyan", "note": "dim"}
 
     for v in violations:
         col = f":{v.column}" if v.column else ""
@@ -80,8 +86,8 @@ def _render_terminal(violations: list[Violation]) -> None:
 
 
 def _render_json(violations: list[Violation], output_path: Path | None) -> None:
-    data = [v.model_dump(mode="json") for v in violations]
-    text = json.dumps(data, indent=2, default=str)
+    data: typing.Final = [v.model_dump(mode="json") for v in violations]
+    text: typing.Final = json.dumps(data, indent=2, default=str)
 
     if output_path:
         output_path.write_text(text, encoding="utf-8")
@@ -95,7 +101,7 @@ def _render_html_output(
     output_path: Path | None,
     source_file: Path,
 ) -> None:
-    target = output_path or Path("report.html")
+    target: typing.Final = output_path or Path("report.html")
     render_html(violations, target, title=f"safecpp-reviewer — {source_file.name}")
     err_console.print(f"[green]✓[/] Wrote HTML: {target}")
 
@@ -103,8 +109,8 @@ def _render_html_output(
 def _print_summary(violations: list[Violation]) -> None:
     from collections import Counter
 
-    counts = Counter(v.severity for v in violations)
-    parts = [
+    counts: typing.Final = Counter(v.severity for v in violations)
+    parts: typing.Final = [
         f"[red]{counts.get('error', 0)} errors[/]",
         f"[yellow]{counts.get('warning', 0)} warnings[/]",
         f"[cyan]{counts.get('style', 0)} style[/]",
@@ -123,9 +129,9 @@ def _run_legacy(
     reviewer: ViolationReviewer | None,
     checks: str,
 ) -> tuple[list[Violation], float]:
-    start = time.perf_counter()
-    violations = run_all(source, clang_tidy_checks=checks, reviewer=reviewer)
-    elapsed = time.perf_counter() - start
+    start: typing.Final = time.perf_counter()
+    violations: typing.Final = run_all(source, clang_tidy_checks=checks, reviewer=reviewer)
+    elapsed: typing.Final = time.perf_counter() - start
     return violations, elapsed
 
 
@@ -134,10 +140,10 @@ def _run_graph(
     reviewer: ViolationReviewer | None,
     checks: str,
 ) -> tuple[list[Violation], float]:
-    graph = build_graph(reviewer=reviewer, clang_tidy_checks=checks)
-    start = time.perf_counter()
-    final_state = graph.invoke(initial_state(source))
-    elapsed = time.perf_counter() - start
+    graph: typing.Final = build_graph(reviewer=reviewer, clang_tidy_checks=checks)
+    start: typing.Final = time.perf_counter()
+    final_state: typing.Final = graph.invoke(initial_state(source))
+    elapsed: typing.Final = time.perf_counter() - start
     return final_state["violations"], elapsed
 
 
@@ -152,7 +158,7 @@ def _print_comparison(
     legacy_secs: float,
     graph_secs: float,
 ) -> None:
-    table = Table(title="Pipeline comparison: legacy vs. graph")
+    table: typing.Final = Table(title="Pipeline comparison: legacy vs. graph")
     table.add_column("Metric", style="cyan")
     table.add_column("Legacy", justify="right")
     table.add_column("Graph", justify="right")
@@ -164,8 +170,8 @@ def _print_comparison(
         str(len(graph)),
         f"{len(graph) - len(legacy):+d}",
     )
-    fixed_legacy = sum(1 for v in legacy if v.fix_suggestion)
-    fixed_graph = sum(1 for v in graph if v.fix_suggestion)
+    fixed_legacy: typing.Final = sum(1 for v in legacy if v.fix_suggestion)
+    fixed_graph: typing.Final = sum(1 for v in graph if v.fix_suggestion)
     table.add_row(
         "With LLM fix",
         str(fixed_legacy),
@@ -182,11 +188,11 @@ def _print_comparison(
     console.print(table)
 
     # Diff which violations differ between runs
-    legacy_keys = {(v.tool, str(v.file), v.line, v.rule_id) for v in legacy}
-    graph_keys = {(v.tool, str(v.file), v.line, v.rule_id) for v in graph}
+    legacy_keys: typing.Final = {(v.tool, str(v.file), v.line, v.rule_id) for v in legacy}
+    graph_keys: typing.Final = {(v.tool, str(v.file), v.line, v.rule_id) for v in graph}
 
-    only_legacy = legacy_keys - graph_keys
-    only_graph = graph_keys - legacy_keys
+    only_legacy: typing.Final = legacy_keys - graph_keys
+    only_graph: typing.Final = graph_keys - legacy_keys
 
     if only_legacy or only_graph:
         console.print("\n[yellow]⚠ Violation set differs between pipelines:[/]")
@@ -263,7 +269,7 @@ def review(
     # ---- Set up reviewer (or skip)
     reviewer: ViolationReviewer | None = None
     if not no_llm:
-        client = LlamaCppClient(base_url=server_url)
+        client: typing.Final = LlamaCppClient(base_url=server_url)
         if not client.health_check():
             err_console.print(
                 f"[yellow]⚠[/] llama.cpp server unreachable at {server_url} — "
@@ -289,7 +295,7 @@ def review(
         err_console.print(f"[dim]Legacy pipeline: {elapsed:.2f}s[/]")
 
     # ---- Dispatch to renderers
-    formats = set(fmt)
+    formats: typing.Final = set(fmt)
     for f in formats:
         if f == OutputFormat.terminal:
             _render_terminal(violations)
@@ -299,7 +305,7 @@ def review(
             _render_html_output(violations, output, source)
 
     # ---- Exit code
-    error_count = sum(1 for v in violations if v.severity == "error")
+    error_count: typing.Final = sum(1 for v in violations if v.severity == "error")
     if error_count > 0:
         raise typer.Exit(code=1)
 
@@ -352,7 +358,7 @@ def batch(
     # ---- Set up reviewer (shared across all files)
     reviewer: ViolationReviewer | None = None
     if not no_llm:
-        client = LlamaCppClient(base_url=server_url)
+        client: typing.Final = LlamaCppClient(base_url=server_url)
         if client.health_check():
             reviewer = ViolationReviewer(client)
             err_console.print(f"[dim]Using LLM at {server_url}[/]")
@@ -361,8 +367,8 @@ def batch(
                 f"[yellow]⚠[/] LLM unreachable at {server_url} — running without LLM."
             )
 
-    runner = _run_graph if use_graph else _run_legacy
-    entries: list[ReportEntry] = []
+    runner: typing.Final = _run_graph if use_graph else _run_legacy
+    entries: typing.Final[list[ReportEntry]] = []
     total_errors = 0
 
     for src in sources:
@@ -386,7 +392,7 @@ def batch(
 
         err_console.print(f"  → {len(violations)} violation(s), {elapsed:.2f}s → {report_file}")
 
-    index_path = output_dir / "index.html"
+    index_path: typing.Final = output_dir / "index.html"
     render_index(entries, index_path, title="safecpp-reviewer — Batch Report")
     console.print(
         f"\n[bold green]✓[/] Generated index: [cyan]{index_path}[/] "

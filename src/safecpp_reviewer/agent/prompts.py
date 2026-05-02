@@ -1,8 +1,10 @@
+import typing
+
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.chunker.models import Chunk
 from safecpp_reviewer.knowledge import RuleStore
 
-SYSTEM_PROMPT = """You are a safety-critical C++ code reviewer specializing in
+SYSTEM_PROMPT: typing.Final = """You are a safety-critical C++ code reviewer specializing in
 MISRA C++, AUTOSAR, and CppCoreGuidelines.
 
 Respond ONLY with valid JSON matching this schema:
@@ -23,7 +25,7 @@ Example correct output:
 No preamble. No markdown around the JSON. Just the JSON object."""
 
 
-CHUNK_SYSTEM_PROMPT = """You are a safety-critical C++ code reviewer specializing in
+CHUNK_SYSTEM_PROMPT: typing.Final = """You are a safety-critical C++ code reviewer specializing in
 MISRA C++, AUTOSAR, and CppCoreGuidelines.
 
 Respond ONLY with valid JSON matching this schema:
@@ -52,7 +54,8 @@ No preamble. No markdown around the JSON. Just the JSON object."""
 
 
 def _violation_for_prompt(v: Violation, index: int | None = None) -> str:
-    prefix = f"[{index}] " if index is not None else ""
+
+    prefix: typing.Final = f"[{index}] " if index is not None else ""
     return f"{prefix}line {v.line}: {v.rule_id} ({v.severity})\n  message: {v.message}"
 
 
@@ -60,7 +63,13 @@ def _rule_guidance_for_prompt(rule_store: RuleStore | None, violations: list[Vio
     if rule_store is None:
         return ""
 
-    guidance = rule_store.format_for_violations(violations)
+    all_guidance_parts: list[str] = []
+    for v in violations:
+        rule = rule_store.get(v.rule_id)
+        if rule:
+            all_guidance_parts.append(rule.for_prompt())
+    guidance: typing.Final = "\n\n".join(all_guidance_parts)
+
     if not guidance:
         return ""
 
@@ -69,9 +78,11 @@ def _rule_guidance_for_prompt(rule_store: RuleStore | None, violations: list[Vio
 
 def build_user_prompt(violation: Violation, store: RuleStore) -> str:
     """Build a prompt for reviewing a single violation."""
-    rule = store.get(violation.rule_id)
-    rule_context = f"\n\nRule documentation:\n{rule.for_prompt()}\n" if rule else ""
-    snippet = f"\n\nCode context:\n{violation.code_snippet}" if violation.code_snippet else ""
+    rule: typing.Final = store.get(violation.rule_id)
+    rule_context: typing.Final = f"\n\nRule documentation:\n{rule.for_prompt()}\n" if rule else ""
+    snippet: typing.Final = (
+        f"\n\nCode context:\n{violation.code_snippet}" if violation.code_snippet else ""
+    )
     return f"""Review this C++ violation. Respond with the required JSON only.
 
 {_violation_for_prompt(violation)}{snippet}{rule_context}"""
@@ -79,7 +90,7 @@ def build_user_prompt(violation: Violation, store: RuleStore) -> str:
 
 def build_chunk_user_prompt(chunk: Chunk, violations: list[Violation], store: RuleStore) -> str:
     """Build a prompt for reviewing multiple violations in the same chunk together."""
-    blocks: list[str] = []
+    blocks: typing.Final[list[str]] = []
     for i, v in enumerate(violations):
         parts = [_violation_for_prompt(v, i)]
 
@@ -92,7 +103,7 @@ def build_chunk_user_prompt(chunk: Chunk, violations: list[Violation], store: Ru
 
         blocks.append("\n\n".join(parts))
 
-    violation_texts = "\n\n---\n\n".join(blocks)
+    violation_texts: typing.Final = "\n\n---\n\n".join(blocks)
 
     return f"""Review these C++ violations together. Consider interactions within the same function or class. Respond with the required JSON only.
 

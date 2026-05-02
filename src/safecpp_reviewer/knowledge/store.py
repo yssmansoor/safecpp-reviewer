@@ -14,6 +14,7 @@ Typical usage::
 from __future__ import annotations
 
 import logging
+import typing
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -24,7 +25,7 @@ from safecpp_reviewer.knowledge.models import Rule
 logger = logging.getLogger(__name__)
 
 # Default location: <package>/knowledge/data/
-_DEFAULT_DATA_DIR = Path(__file__).parent / "data"
+_DEFAULT_DATA_DIR: typing.Final = Path(__file__).parent / "data"
 
 
 class RuleStore:
@@ -48,7 +49,7 @@ class RuleStore:
             logger.warning("Rule directory does not exist: %s", directory)
             return cls()
 
-        all_rules: list[Rule] = []
+        all_rules: typing.Final[list[Rule]] = []
         for path in sorted(directory.glob("*.y*ml")):
             try:
                 all_rules.extend(_load_yaml_file(path))
@@ -89,7 +90,7 @@ class RuleStore:
 
 def _load_yaml_file(path: Path) -> list[Rule]:
     """Parse a single YAML file into a list of :class:`Rule` objects."""
-    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    raw: typing.Final = yaml.safe_load(path.read_text(encoding="utf-8"))
     if raw is None:
         return []
 

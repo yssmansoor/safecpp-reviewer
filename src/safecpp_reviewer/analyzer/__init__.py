@@ -6,6 +6,7 @@ cppcheck on a file and merges results into one deduplicated list.
 
 from __future__ import annotations
 
+import typing
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -15,11 +16,13 @@ from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
 from safecpp_reviewer.chunker.models import Chunk
 from safecpp_reviewer.chunker.parser import CppParser
+from safecpp_reviewer.chunker.models import Chunk
+from safecpp_reviewer.chunker.parser import CppParser
 
 if TYPE_CHECKING:
     from safecpp_reviewer.agent.reviewer import ViolationReviewer
 
-MAX_CHUNK_REVIEW_VIOLATIONS = 5
+MAX_CHUNK_REVIEW_VIOLATIONS: typing.Final = 5
 
 
 def run_all(
@@ -45,10 +48,10 @@ def run_all(
         Merged, deduplicated list of :class:`Violation` objects sorted by
         (file, line, column).
     """
-    compiler_args = extra_compiler_args or ["-std=c++17"]
+    compiler_args: typing.Final = extra_compiler_args or ["-std=c++17"]
 
-    ct_runner = ClangTidyRunner(checks=clang_tidy_checks, extra_args=compiler_args)
-    cc_runner = CppcheckRunner(enable=cppcheck_enable)
+    ct_runner: typing.Final = ClangTidyRunner(checks=clang_tidy_checks, extra_args=compiler_args)
+    cc_runner: typing.Final = CppcheckRunner(enable=cppcheck_enable)
 
     ct_violations: list[Violation] = []
     cc_violations: list[Violation] = []
@@ -67,10 +70,10 @@ def run_all(
 
         logging.getLogger(__name__).warning("cppcheck unavailable: %s", e)
 
-    all_violations = ct_violations + cc_violations
+    all_violations: typing.Final = ct_violations + cc_violations
 
     # Deduplicate
-    seen: set[tuple[str, str, int, str]] = set()
+    seen: typing.Final[set[tuple[str, str, int, str]]] = set()
     unique: list[Violation] = []
     for v in all_violations:
         key = (v.tool, str(v.file), v.line, v.rule_id)
@@ -94,7 +97,7 @@ def _review_by_chunk(
 ) -> list[Violation]:
     """Review violations with one LLM call per containing source chunk."""
     try:
-        chunks = CppParser().parse_file(source_file)
+        chunks: typing.Final = CppParser().parse_file(source_file)
     except Exception as e:
         import logging
 
@@ -104,9 +107,9 @@ def _review_by_chunk(
         )
         return [reviewer.review(v) for v in violations]
 
-    chunk_groups: list[tuple[Chunk, list[Violation]]] = []
-    standalone: list[Violation] = []
-    chunks_by_specificity = sorted(
+    chunk_groups: typing.Final[list[tuple[Chunk, list[Violation]]]] = []
+    standalone: typing.Final[list[Violation]] = []
+    chunks_by_specificity: typing.Final = sorted(
         chunks,
         key=lambda chunk: (chunk.end_line - chunk.start_line, chunk.start_line, chunk.end_line),
     )

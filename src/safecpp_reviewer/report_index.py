@@ -26,6 +26,7 @@ Typical usage::
 from __future__ import annotations
 
 import html
+import typing
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
@@ -55,7 +56,7 @@ class ReportEntry:
         return sum(1 for v in self.violations if v.fix_suggestion)
 
 
-_INDEX_CSS = """
+_INDEX_CSS: typing.Final = """
 * { box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -118,7 +119,7 @@ a.file-link:hover { text-decoration: underline; }
 .search-box:focus { outline: none; border-color: #58a6ff; }
 """
 
-_INDEX_JS = """
+_INDEX_JS: typing.Final = """
 document.addEventListener('DOMContentLoaded', () => {
     const search = document.getElementById('search');
     const rows = document.querySelectorAll('tbody tr');
@@ -135,26 +136,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 def _badge(severity: str, count: int) -> str:
-    cls = f"b-{severity}" if count > 0 else "b-zero"
+    cls: typing.Final = f"b-{severity}" if count > 0 else "b-zero"
     return f'<span class="badge {cls}">{severity[:3]} {count}</span>'
 
 
 def _row(entry: ReportEntry, root: Path) -> str:
-    rel_report = (
+    rel_report: typing.Final = (
         entry.report_path.relative_to(root)
         if root in entry.report_path.parents
         else entry.report_path
     )
-    counts = entry.severity_counts
+    counts: typing.Final = entry.severity_counts
 
-    badges = (
+    badges: typing.Final = (
         _badge("error", counts.get("error", 0))
         + _badge("warning", counts.get("warning", 0))
         + _badge("style", counts.get("style", 0))
         + _badge("note", counts.get("note", 0))
     )
 
-    fix_cell = f'<span class="fix-cell">{entry.fixed}/{entry.total}</span>' if entry.total else "—"
+    fix_cell: typing.Final = (
+        f'<span class="fix-cell">{entry.fixed}/{entry.total}</span>' if entry.total else "—"
+    )
 
     return (
         f'<tr data-file="{html.escape(str(entry.source).lower())}">'
@@ -183,10 +186,10 @@ def render_index(
         The output path (for chaining).
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    root = output_path.parent
+    root: typing.Final = output_path.parent
 
     # Sort: files with the most errors first, then by total violations
-    entries_sorted = sorted(
+    entries_sorted: typing.Final = sorted(
         entries,
         key=lambda e: (
             -e.severity_counts.get("error", 0),
@@ -195,13 +198,13 @@ def render_index(
         ),
     )
 
-    total_files = len(entries)
-    total_violations = sum(e.total for e in entries)
-    total_errors = sum(e.severity_counts.get("error", 0) for e in entries)
-    total_fixed = sum(e.fixed for e in entries)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    total_files: typing.Final = len(entries)
+    total_violations: typing.Final = sum(e.total for e in entries)
+    total_errors: typing.Final = sum(e.severity_counts.get("error", 0) for e in entries)
+    total_fixed: typing.Final = sum(e.fixed for e in entries)
+    timestamp: typing.Final = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    stats_html = "".join(
+    stats_html: typing.Final = "".join(
         f'<div class="stat">'
         f'<div class="stat-label">{label}</div>'
         f'<div class="stat-value">{value}</div>'
@@ -219,7 +222,7 @@ def render_index(
     else:
         rows_html = '<tr class="empty-row"><td colspan="4">No files analyzed.</td></tr>'
 
-    html_doc = f"""<!DOCTYPE html>
+    html_doc: typing.Final = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">

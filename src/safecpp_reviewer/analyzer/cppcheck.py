@@ -14,6 +14,7 @@ Typical usage::
 
 import logging
 import subprocess
+import typing
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Literal
@@ -23,7 +24,7 @@ from safecpp_reviewer.analyzer.models import Violation
 logger = logging.getLogger(__name__)
 
 # cppcheck severity → our normalized severity
-_SEV_MAP: dict[str, Literal["error", "warning", "note", "style"]] = {
+_SEV_MAP: typing.Final[dict[str, Literal["error", "warning", "note", "style"]]] = {
     "error": "error",
     "warning": "warning",
     "style": "style",
@@ -36,8 +37,8 @@ _SEV_MAP: dict[str, Literal["error", "warning", "note", "style"]] = {
 
 def _infer_category(rule_id: str) -> str | None:
     """Best-effort category from the cppcheck errorId."""
-    misra_prefixes = ("misra", "MISRA")
-    autosar_prefixes = ("autosar", "AUTOSAR")
+    misra_prefixes: typing.Final = ("misra", "MISRA")
+    autosar_prefixes: typing.Final = ("autosar", "AUTOSAR")
 
     if any(rule_id.startswith(p) for p in misra_prefixes):
         return "MISRA"
@@ -84,7 +85,7 @@ class CppcheckRunner:
         if not source_file.exists():
             raise FileNotFoundError(f"Source file not found: {source_file}")
 
-        cmd = [
+        cmd: typing.Final = [
             self.executable,
             "--xml",
             "--xml-version=2",
@@ -99,7 +100,7 @@ class CppcheckRunner:
         logger.debug("cppcheck cmd: %s", " ".join(cmd))
 
         try:
-            result = subprocess.run(
+            result: typing.Final = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
@@ -113,7 +114,7 @@ class CppcheckRunner:
             ) from exc
 
         # cppcheck writes XML to stderr
-        violations = self._parse_xml(result.stderr, source_file)
+        violations: typing.Final = self._parse_xml(result.stderr, source_file)
 
         logger.info(
             "cppcheck: %d violation(s) in %s (exit %d)",
@@ -124,10 +125,10 @@ class CppcheckRunner:
         return violations
 
     def _parse_xml(self, xml_output: str, source_file: Path) -> list[Violation]:
-        violations: list[Violation] = []
+        violations: typing.Final[list[Violation]] = []
 
         try:
-            root = ET.fromstring(xml_output)
+            root: typing.Final = ET.fromstring(xml_output)
         except ET.ParseError:
             logger.warning("cppcheck produced invalid XML — no violations parsed")
             return violations

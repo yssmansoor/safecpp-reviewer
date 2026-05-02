@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import typing
+
 from pydantic import BaseModel, Field
 
 
@@ -29,7 +31,7 @@ class Rule(BaseModel):
 
     def for_prompt(self) -> str:
         """Compact rule summary suitable for LLM context injection."""
-        lines = [
+        lines: typing.Final = [
             f"{self.rule_id} - {self.short_name}",
             f"Category: {self.category}",
             f"Rationale: {self.rationale}",

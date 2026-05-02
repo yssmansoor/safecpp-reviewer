@@ -1,5 +1,6 @@
 import logging
 import re
+import typing
 
 from safecpp_reviewer.chunker.models import Chunk
 from safecpp_reviewer.knowledge import RuleStore
@@ -41,7 +42,7 @@ class ViolationReviewer:
         # Try after escaping raw newlines inside string values
         try:
             # Replace literal newlines inside quoted strings with \n
-            fixed = re.sub(
+            fixed: typing.Final = re.sub(
                 r'"((?:[^"\\]|\\.)*)"',
                 lambda m: '"' + m.group(1).replace("\n", "\\n").replace("\r", "") + '"',
                 text,
@@ -52,7 +53,7 @@ class ViolationReviewer:
             pass
 
         # Last resort: regex extraction
-        m = ViolationReviewer._FENCE_RE.search(text)
+        m: typing.Final = ViolationReviewer._FENCE_RE.search(text)
         if m:
             return ReviewResponse(
                 explanation=m.group("exp").strip(),
@@ -69,7 +70,7 @@ class ViolationReviewer:
             pass
 
         try:
-            fixed = re.sub(
+            fixed: typing.Final = re.sub(
                 r'"((?:[^"\\]|\\.)*)"',
                 lambda m: '"' + m.group(1).replace("\n", "\\n").replace("\r", "") + '"',
                 text,
@@ -82,7 +83,7 @@ class ViolationReviewer:
     def _strip_fences(self, text: str) -> str:
         """Remove markdown code fences if present."""
         text = text.strip()
-        m = self._FENCE_RE.match(text)
+        m: typing.Final = self._FENCE_RE.match(text)
         return m.group(1).strip() if m else text
 
     def _strip_code_fence(self, code: str) -> str:
@@ -102,12 +103,12 @@ class ViolationReviewer:
         Returns the same violation with fix_suggestion populated.
         """
         try:
-            prompt = build_user_prompt(violation, self.rule_store)
-            result = self.client.complete(
+            prompt: typing.Final = build_user_prompt(violation, self.rule_store)
+            result: typing.Final = self.client.complete(
                 prompt, system=SYSTEM_PROMPT, temperature=0.1, max_tokens=512
             )
-            cleaned = self._strip_fences(result.text)
-            response = self._parse_review_response(cleaned)
+            cleaned: typing.Final = self._strip_fences(result.text)
+            response: typing.Final = self._parse_review_response(cleaned)
 
             if response is None:
                 logger.warning(
@@ -117,7 +118,7 @@ class ViolationReviewer:
                 )
                 return violation
 
-            fixed_code = self._strip_code_fence(response.fixed_code)
+            fixed_code: typing.Final = self._strip_code_fence(response.fixed_code)
             violation.fix_suggestion = f"{response.explanation}\n\n```cpp\n{fixed_code}\n```"
         except Exception as e:
             logger.warning("LLM review failed: %s", e)
@@ -133,12 +134,12 @@ class ViolationReviewer:
             return violations
 
         try:
-            prompt = build_chunk_user_prompt(chunk, violations, self.rule_store)
-            result = self.client.complete(
+            prompt: typing.Final = build_chunk_user_prompt(chunk, violations, self.rule_store)
+            result: typing.Final = self.client.complete(
                 prompt, system=CHUNK_SYSTEM_PROMPT, temperature=0.1, max_tokens=1024
             )
-            cleaned = self._strip_fences(result.text)
-            response = self._parse_chunk_review_response(cleaned)
+            cleaned: typing.Final = self._strip_fences(result.text)
+            response: typing.Final = self._parse_chunk_review_response(cleaned)
 
             if response is None:
                 logger.warning(
@@ -150,14 +151,16 @@ class ViolationReviewer:
                 )
                 return violations
 
-            zero_based_indexes_are_valid = all(
+            zero_based_indexes_are_valid: typing.Final = all(
                 0 <= review.violation_index < len(violations) for review in response.reviews
             )
-            one_based_indexes_are_valid = all(
+            one_based_indexes_are_valid: typing.Final = all(
                 1 <= review.violation_index <= len(violations) for review in response.reviews
             )
-            use_one_based_indexes = not zero_based_indexes_are_valid and one_based_indexes_are_valid
-            assigned_indexes: set[int] = set()
+            use_one_based_indexes: typing.Final = (
+                not zero_based_indexes_are_valid and one_based_indexes_are_valid
+            )
+            assigned_indexes: typing.Final[set[int]] = set()
             for response_position, review in enumerate(response.reviews):
                 violation_index = (
                     review.violation_index - 1 if use_one_based_indexes else review.violation_index

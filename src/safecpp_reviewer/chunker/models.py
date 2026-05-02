@@ -19,7 +19,7 @@ class Chunk(BaseModel):
         """Returns true if the chunk contains the given line number."""
         return self.start_line <= line <= self.end_line
 
-    def __contains__(self, item):
+    def __contains__(self, item: int) -> bool:
         if isinstance(item, int):
             return self.contains(item)
         raise TypeError(

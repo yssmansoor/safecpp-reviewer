@@ -8,6 +8,7 @@ injected via closures in :func:`safecpp_reviewer.agent.graph.build_graph`.
 from __future__ import annotations
 
 import logging
+import typing
 from collections.abc import Callable
 
 from safecpp_reviewer.agent.reviewer import ViolationReviewer
@@ -31,18 +32,20 @@ def make_analyze_node(
     clang_tidy_checks: str = "cppcoreguidelines-*,modernize-*,readability-*,bugprone-*",
     cppcheck_enable: str = "all",
     extra_compiler_args: list[str] | None = None,
-) -> Callable[[ReviewerState], dict]:
+) -> Callable[[ReviewerState], dict[str, list[Violation]]]:
     """Build the static-analysis node with its config bound by closure."""
-    compiler_args = extra_compiler_args or ["-std=c++17"]
+    compiler_args: typing.Final = extra_compiler_args or ["-std=c++17"]
 
-    def analyze_node(state: ReviewerState) -> dict:
-        source_file = state["source_file"]
+    def analyze_node(state: ReviewerState) -> dict[str, list[Violation]]:
+        source_file: typing.Final = state["source_file"]
         logger.info("analyze_node: running static analysis on %s", source_file)
 
-        ct_runner = ClangTidyRunner(checks=clang_tidy_checks, extra_args=compiler_args)
-        cc_runner = CppcheckRunner(enable=cppcheck_enable)
+        ct_runner: typing.Final = ClangTidyRunner(
+            checks=clang_tidy_checks, extra_args=compiler_args
+        )
+        cc_runner: typing.Final = CppcheckRunner(enable=cppcheck_enable)
 
-        violations: list[Violation] = []
+        violations: typing.Final[list[Violation]] = []
         try:
             violations.extend(ct_runner.run(source_file))
         except RuntimeError as exc:
@@ -53,8 +56,8 @@ def make_analyze_node(
             logger.warning("cppcheck unavailable: %s", exc)
 
         # Deduplicate by (tool, file, line, rule_id)
-        seen: set[tuple[str, str, int, str]] = set()
-        unique: list[Violation] = []
+        seen: typing.Final[set[tuple[str, str, int, str]]] = set()
+        unique: typing.Final[list[Violation]] = []
         for v in violations:
             key = (v.tool, str(v.file), v.line, v.rule_id)
             if key not in seen:
@@ -77,13 +80,13 @@ def make_analyze_node(
 # ---------------------------------------------------------------------------
 
 
-def chunk_node(state: ReviewerState) -> dict:
+def chunk_node(state: ReviewerState) -> dict[str, list[Chunk]]:
     """Parse the source file into function/class/namespace chunks.
 
     Returns an empty list if the chunker fails — downstream nodes treat
     that as "no chunk available" and fall back to per-violation review.
     """
-    source_file = state["source_file"]
+    source_file: typing.Final = state["source_file"]
     try:
         chunks = parse_chunks(source_file)
     except Exception as exc:
@@ -102,15 +105,15 @@ def chunk_node(state: ReviewerState) -> dict:
 def make_review_node(
     reviewer: ViolationReviewer | None,
     max_batch_size: int = 5,
-) -> Callable[[ReviewerState], dict]:
+) -> Callable[[ReviewerState], dict[str, typing.Any]]:
     """Build the review node with the reviewer bound by closure.
 
     If *reviewer* is ``None`` the node is a no-op — useful for ``--no-llm``.
     """
 
-    def review_node(state: ReviewerState) -> dict:
-        violations = state["violations"]
-        chunks = state["chunks"]
+    def review_node(state: ReviewerState) -> dict[str, typing.Any]:
+        violations: typing.Final = state["violations"]
+        chunks: typing.Final = state["chunks"]
 
         if reviewer is None:
             logger.info("review_node: no reviewer configured — skipping")
@@ -119,7 +122,7 @@ def make_review_node(
         if not violations:
             return {"failed_reviews": []}
 
-        failed: list[Violation] = []
+        failed: typing.Final[list[Violation]] = []
 
         if not chunks:
             # No chunking available — review each violation individually.
@@ -128,8 +131,8 @@ def make_review_node(
             return {"violations": violations, "failed_reviews": failed}
 
         # Group violations by chunk; track those outside any chunk as orphans.
-        chunk_groups: dict[int, tuple[Chunk, list[Violation]]] = {}
-        orphans: list[Violation] = []
+        chunk_groups: typing.Final[dict[int, tuple[Chunk, list[Violation]]]] = {}
+        orphans: typing.Final[list[Violation]] = []
 
         for v in violations:
             for i, chunk in enumerate(chunks):
@@ -193,12 +196,12 @@ def _review_single(
 def make_retry_node(
     reviewer: ViolationReviewer | None,
     max_retries: int = 2,
-) -> Callable[[ReviewerState], dict]:
+) -> Callable[[ReviewerState], dict[str, typing.Any]]:
     """Re-run review on previously-failed violations once, with bumped temp."""
 
-    def retry_node(state: ReviewerState) -> dict:
-        failed = state.get("failed_reviews", [])
-        retry_count = state.get("retry_count", 0)
+    def retry_node(state: ReviewerState) -> dict[str, typing.Any]:
+        failed: typing.Final = state.get("failed_reviews", [])
+        retry_count: typing.Final = state.get("retry_count", 0)
 
         if reviewer is None or not failed or retry_count >= max_retries:
             return {"failed_reviews": failed, "retry_count": retry_count}
@@ -210,7 +213,7 @@ def make_retry_node(
             max_retries,
         )
 
-        still_failed: list[Violation] = []
+        still_failed: typing.Final[list[Violation]] = []
         for v in failed:
             try:
                 reviewer.review(v)
@@ -229,6 +232,6 @@ def make_retry_node(
 
 def should_retry(state: ReviewerState) -> str:
     """Conditional edge: retry if there are failures and we haven't capped out."""
-    failed = state.get("failed_reviews", [])
-    retry_count = state.get("retry_count", 0)
+    failed: typing.Final = state.get("failed_reviews", [])
+    retry_count: typing.Final = state.get("retry_count", 0)
     return "retry" if failed and retry_count < 2 else "done"

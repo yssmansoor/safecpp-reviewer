@@ -8,13 +8,14 @@ from __future__ import annotations
 
 import html
 import re
+import typing
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
 from safecpp_reviewer.analyzer.models import Violation
 
-_CSS = """
+_CSS: typing.Final = """
 * { box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -153,7 +154,7 @@ def _severity_badge(severity: str) -> str:
 def _format_snippet(snippet: str | None) -> str:
     if not snippet:
         return ""
-    escaped_lines = []
+    escaped_lines: typing.Final = []
     for line in snippet.splitlines():
         escaped = html.escape(line)
         if line.startswith(">>>"):
@@ -163,11 +164,15 @@ def _format_snippet(snippet: str | None) -> str:
 
 
 def _render_violation(v: Violation) -> str:
-    file_url = f"file://{Path(v.file).resolve()}"
-    header = (
+    file_url: typing.Final = f"file://{Path(v.file).resolve()}"
+    header: typing.Final = (
         f'<div class="violation-header">'
         f"{_severity_badge(v.severity)}"
         f'<span class="tool-tag">{html.escape(v.tool)}</span>'
+        f'<a class="location" href="{html.escape(file_url)}">'
+        f"{html.escape(str(v.file))}:{v.line}"
+        f"{':' + str(v.column) if v.column else ''}"
+        f"</a>"
         f'<a class="location" href="{html.escape(file_url)}">'
         f"{html.escape(str(v.file))}:{v.line}"
         f"{':' + str(v.column) if v.column else ''}"
@@ -208,10 +213,10 @@ def render_html(
     """
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    sev_counts = Counter(v.severity for v in violations)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sev_counts: typing.Final = Counter(v.severity for v in violations)
+    timestamp: typing.Final = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    stats_html = "".join(
+    stats_html: typing.Final = "".join(
         f'<div class="stat">'
         f'<div class="stat-label">{label}</div>'
         f'<div class="stat-value">{value}</div>'
@@ -246,7 +251,7 @@ def render_html(
 </body>
 </html>
 """
-    nav_html = (
+    nav_html: typing.Final = (
         f'<a class="back-link" href="{html.escape(back_link)}">← Back to index</a>'
         if back_link
         else ""
@@ -277,10 +282,10 @@ def render_html(
 
 
 # Multi-line fenced code: ```cpp\n...\n``` or ```\n...\n```
-_FENCE_RE = re.compile(r"```(?:cpp|c\+\+)?\s*\n?(.*?)```", re.DOTALL)
+_FENCE_RE: typing.Final = re.compile(r"```(?:cpp|c\+\+)?\s*\n?(.*?)```", re.DOTALL)
 
 # Inline code with optional language tag: `cpp something` or `something`
-_INLINE_RE = re.compile(r"`(?:cpp\s+|c\+\+\s+)?([^`\n]+)`")
+_INLINE_RE: typing.Final = re.compile(r"`(?:cpp\s+|c\+\+\s+)?([^`\n]+)`")
 
 
 def _format_fix(fix: str) -> str:
@@ -288,11 +293,11 @@ def _format_fix(fix: str) -> str:
     if not fix or not fix.strip():
         return ""
 
-    parts: list[str] = []
+    parts: typing.Final[list[str]] = []
     last_end = 0
 
     # First pass: handle proper multi-line fenced blocks
-    matches = list(_FENCE_RE.finditer(fix))
+    matches: typing.Final = list(_FENCE_RE.finditer(fix))
 
     if matches:
         for m in matches:
@@ -312,10 +317,10 @@ def _format_fix(fix: str) -> str:
 
     else:
         # Fallback: handle inline `cpp ...` patterns or plain "cpp ..." text
-        cleaned = fix.strip()
+        cleaned: typing.Final = fix.strip()
 
         # Strip inline backticks if the whole thing is wrapped: `cpp something`
-        inline_match = _INLINE_RE.fullmatch(cleaned)
+        inline_match: typing.Final = _INLINE_RE.fullmatch(cleaned)
         if inline_match:
             parts.append(f'<pre class="code">{html.escape(inline_match.group(1).strip())}</pre>')
         # Detect "cpp <code>" pattern even without backticks

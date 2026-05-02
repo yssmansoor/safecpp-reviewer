@@ -1,3 +1,4 @@
+import typing
 from pathlib import Path
 
 from safecpp_reviewer.analyzer.models import Violation
@@ -17,11 +18,11 @@ def _make_violation(file: Path, line: int) -> Violation:
 
 def test_extract_snippet_marks_target_line(tmp_path: Path) -> None:
     """Test that the target line is marked with the marker symbol."""
-    src = tmp_path / "f.cpp"
+    src: typing.Final = tmp_path / "f.cpp"
     print(src)
     src.write_text("line1\nline2\nline3\nline4\nline5\n")
 
-    snippet = extract_snippet(_make_violation(src, 3), context_lines=1)
+    snippet: typing.Final = extract_snippet(_make_violation(src, 3), context_lines=1)
 
     assert snippet is not None
     assert ">>>" in snippet
@@ -32,10 +33,10 @@ def test_extract_snippet_marks_target_line(tmp_path: Path) -> None:
 
 def test_extract_snippet_clamps_at_file_start(tmp_path: Path) -> None:
     """Ensure snippet extraction clamps context at the start of the file."""
-    src = tmp_path / "f.cpp"
+    src: typing.Final = tmp_path / "f.cpp"
     src.write_text("a\nb\nc\n")
 
-    snippet = extract_snippet(_make_violation(src, 1), context_lines=5)
+    snippet: typing.Final = extract_snippet(_make_violation(src, 1), context_lines=5)
 
     assert snippet is not None
     assert "a" in snippet
@@ -45,10 +46,10 @@ def test_extract_snippet_clamps_at_file_start(tmp_path: Path) -> None:
 
 def test_extract_snippet_clamps_at_file_end(tmp_path: Path) -> None:
     """Ensure snippet extraction stops at the end of the file."""
-    src = tmp_path / "f.cpp"
+    src: typing.Final = tmp_path / "f.cpp"
     src.write_text("a\nb\nc\n")
 
-    snippet = extract_snippet(_make_violation(src, 3), context_lines=5)
+    snippet: typing.Final = extract_snippet(_make_violation(src, 3), context_lines=5)
 
     assert snippet is not None
     assert "c" in snippet
@@ -56,16 +57,16 @@ def test_extract_snippet_clamps_at_file_end(tmp_path: Path) -> None:
 
 def test_extract_snippet_returns_none_on_missing_file() -> None:
     """Test that extract_snippet returns None when the file does not exist."""
-    v = _make_violation(Path("/nonexistent/file.cpp"), 1)
+    v: typing.Final = _make_violation(Path("/nonexistent/file.cpp"), 1)
     assert extract_snippet(v) is None
 
 
 def test_extract_snippet_respects_context_size(tmp_path: Path) -> None:
     """Test that extract_snippet respects the context size."""
-    src = tmp_path / "f.cpp"
+    src: typing.Final = tmp_path / "f.cpp"
     src.write_text("\n".join(f"line{i}" for i in range(1, 11)) + "\n")
 
-    snippet = extract_snippet(_make_violation(src, 5), context_lines=2)
+    snippet: typing.Final = extract_snippet(_make_violation(src, 5), context_lines=2)
 
     assert snippet is not None
     # 2 above + target + 2 below = 5 lines

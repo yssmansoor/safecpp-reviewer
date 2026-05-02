@@ -8,8 +8,10 @@ same graph can be tested with mocks or run against a real model.
 
 from __future__ import annotations
 
+import typing
 from pathlib import Path
 
+from langchain_core.runnables import RunnableLambda
 from langgraph.graph import END, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
@@ -30,7 +32,7 @@ def build_graph(
     extra_compiler_args: list[str] | None = None,
     max_batch_size: int = 5,
     max_retries: int = 2,
-) -> CompiledStateGraph:
+) -> CompiledStateGraph[ReviewerState, None, ReviewerState, ReviewerState]:
     """Compile the review pipeline.
 
     Args:
@@ -43,18 +45,20 @@ def build_graph(
     Returns:
         A compiled graph ready to ``.invoke(initial_state)``.
     """
-    g: StateGraph = StateGraph(ReviewerState)
+    g: typing.Final[StateGraph[ReviewerState]] = StateGraph[ReviewerState](ReviewerState)
 
     g.add_node(
         "analyze",
-        make_analyze_node(
-            clang_tidy_checks=clang_tidy_checks,
-            extra_compiler_args=extra_compiler_args,
+        RunnableLambda(
+            make_analyze_node(
+                clang_tidy_checks=clang_tidy_checks,
+                extra_compiler_args=extra_compiler_args,
+            )
         ),
     )
-    g.add_node("chunk", chunk_node)
-    g.add_node("review", make_review_node(reviewer, max_batch_size=max_batch_size))
-    g.add_node("retry", make_retry_node(reviewer, max_retries=max_retries))
+    g.add_node("chunk", RunnableLambda(chunk_node))
+    g.add_node("review", RunnableLambda(make_review_node(reviewer, max_batch_size=max_batch_size)))
+    g.add_node("retry", RunnableLambda(make_retry_node(reviewer, max_retries=max_retries)))
 
     g.set_entry_point("analyze")
     g.add_edge("analyze", "chunk")
@@ -62,17 +66,21 @@ def build_graph(
     g.add_conditional_edges("review", should_retry, {"retry": "retry", "done": END})
     g.add_conditional_edges("retry", should_retry, {"retry": "retry", "done": END})
 
-    return g.compile()
+    compiled_graph: typing.Final[
+        CompiledStateGraph[ReviewerState, None, ReviewerState, ReviewerState]
+    ] = g.compile()
+    return compiled_graph
 
 
-def initial_state(source_file: Path) -> ReviewerState:  # type: ignore[name-defined]
+def initial_state(source_file: Path) -> ReviewerState:
     """Build a fresh state envelope for a single source file."""
-    from pathlib import Path  # avoid top-level cost in non-CLI contexts
 
     return ReviewerState(
-        source_file=Path(source_file),
+        source_file=source_file,
         violations=[],
         chunks=[],
         failed_reviews=[],
         retry_count=0,
+        output_formats=[],
+        output_path=None,
     )

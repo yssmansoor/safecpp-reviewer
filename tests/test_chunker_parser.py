@@ -1,13 +1,14 @@
+import typing
 from pathlib import Path
 
 from safecpp_reviewer.chunker.parser import CppParser, Parser
 
 
 def test_cpp_parser_chunks_sample_violations_fixture() -> None:
-    source_file = Path("tests/fixtures/sample_violations.cpp")
+    source_file: typing.Final = Path("tests/fixtures/sample_violations.cpp")
 
-    chunks = CppParser().parse_file(source_file)
-    by_name = {chunk.name: chunk for chunk in chunks if chunk.name is not None}
+    chunks: typing.Final = CppParser().parse_file(source_file)
+    by_name: typing.Final = {chunk.name: chunk for chunk in chunks if chunk.name is not None}
 
     assert Parser is CppParser
     assert chunks[0].chunk_type == "global"
@@ -56,10 +57,10 @@ def test_cpp_parser_chunks_sample_violations_fixture() -> None:
 
 
 def test_cpp_parser_parse_file(tmp_path: Path) -> None:
-    source_file = tmp_path / "sample.cpp"
+    source_file: typing.Final = tmp_path / "sample.cpp"
     source_file.write_text("int main() { return 0; }\n", encoding="utf-8")
 
-    chunks = CppParser().parse_file(source_file)
+    chunks: typing.Final = CppParser().parse_file(source_file)
 
     assert len(chunks) == 1
     assert chunks[0].file == source_file
@@ -68,9 +69,11 @@ def test_cpp_parser_parse_file(tmp_path: Path) -> None:
 
 
 def test_cpp_parser_keeps_out_of_class_method_scope() -> None:
-    source = "class Motor { void tick(); };\nvoid Motor::tick() {}\n"
+    source: typing.Final = "class Motor { void tick(); };\nvoid Motor::tick() {}\n"
 
-    chunks = CppParser().parse_source(source, "motor.cpp")
-    function_names = [chunk.name for chunk in chunks if chunk.chunk_type == "function"]
+    chunks: typing.Final = CppParser().parse_source(source, "motor.cpp")
+    function_names: typing.Final = [
+        chunk.name for chunk in chunks if chunk.chunk_type == "function"
+    ]
 
     assert function_names == ["Motor::tick"]

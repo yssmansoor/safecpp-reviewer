@@ -15,6 +15,7 @@ Typical usage::
 import logging
 import re
 import subprocess
+import typing
 from pathlib import Path
 
 from safecpp_reviewer.analyzer.models import Violation
@@ -23,13 +24,13 @@ logger = logging.getLogger(__name__)
 
 # clang-tidy diagnostic line:
 #   /path/to/file.cpp:12:34: warning: some message [check-name]
-_DIAG_RE = re.compile(
+_DIAG_RE: typing.Final = re.compile(
     r"^(?P<file>.+?):(?P<line>\d+):(?P<col>\d+):\s+"
     r"(?P<sev>error|warning|note|remark):\s+"
     r"(?P<msg>.+?)\s+\[(?P<rule>[^\]]+)\]$"
 )
 
-_SEV_MAP: dict[str, str] = {
+_SEV_MAP: typing.Final[dict[str, str]] = {
     "error": "error",
     "warning": "warning",
     "note": "note",
@@ -39,7 +40,7 @@ _SEV_MAP: dict[str, str] = {
 
 def _infer_category(rule_id: str) -> str | None:
     """Derive a category string from the clang-tidy check name."""
-    prefixes = {
+    prefixes: typing.Final = {
         "cppcoreguidelines": "cppcoreguidelines",
         "modernize": "modernize",
         "readability": "readability",
@@ -93,7 +94,7 @@ class ClangTidyRunner:
         if not source_file.exists():
             raise FileNotFoundError(f"Source file not found: {source_file}")
 
-        cmd = [
+        cmd: typing.Final = [
             self.executable,
             f"--checks={self.checks}",
             f"--header-filter={self.header_filter}",
@@ -105,15 +106,15 @@ class ClangTidyRunner:
         logger.debug("clang-tidy cmd: %s", " ".join(cmd))
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            result: typing.Final = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
         except FileNotFoundError as exc:
             raise RuntimeError(
                 f"clang-tidy binary not found: {self.executable!r}. "
                 "Install via `apt install clang-tidy` or `brew install llvm`."
             ) from exc
 
-        output = result.stdout + result.stderr
-        violations = self._parse(output, source_file)
+        output: typing.Final = result.stdout + result.stderr
+        violations: typing.Final = self._parse(output, source_file)
 
         logger.info(
             "clang-tidy: %d violation(s) in %s (exit %d)",
@@ -124,7 +125,7 @@ class ClangTidyRunner:
         return violations
 
     def _parse(self, output: str, source_file: Path) -> list[Violation]:
-        violations: list[Violation] = []
+        violations: typing.Final[list[Violation]] = []
         for raw_line in output.splitlines():
             m = _DIAG_RE.match(raw_line.strip())
             if not m:

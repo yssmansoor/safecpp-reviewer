@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+import typing
 from collections.abc import Callable, Generator, Iterable
 from typing import Any
 
@@ -110,13 +111,13 @@ class LlamaCppClient:
         max_tokens: int | None = None,
         **kwargs: Any,
     ) -> Any:
-        messages: list[ChatCompletionMessageParam] = []
+        messages: typing.Final[list[ChatCompletionMessageParam]] = []
         if system is not None:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
 
         def _call() -> CompletionResult:
-            response = self.client.chat.completions.create(
+            response: typing.Final = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
                 temperature=temperature,
@@ -124,18 +125,18 @@ class LlamaCppClient:
                 **kwargs,
             )
 
-            choice = response.choices[0].message
-            text: str = choice.content or ""
+            choice: typing.Final = response.choices[0].message
+            text: typing.Final[str] = choice.content or ""
 
-            usage = getattr(response, "usage", None)
-            prompt_tokens: int = getattr(usage, "prompt_tokens", 0) if usage else 0
-            completion_tokens: int = (
+            usage: typing.Final = getattr(response, "usage", None)
+            prompt_tokens: typing.Final[int] = getattr(usage, "prompt_tokens", 0) if usage else 0
+            completion_tokens: typing.Final[int] = (
                 getattr(usage, "completion_tokens", len(text.split()))
                 if usage
                 else len(text.split())
             )
-            timings: dict[str, Any] = getattr(response, "timings", {})
-            tokens_per_second = float(timings.get("predicted_per_second", 0.0))
+            timings: typing.Final[dict[str, Any]] = getattr(response, "timings", {})
+            tokens_per_second: typing.Final = float(timings.get("predicted_per_second", 0.0))
 
             return CompletionResult(
                 text=text,
@@ -162,7 +163,7 @@ class LlamaCppClient:
                 **kwargs,
             )
 
-        stream = self._with_retries(_call)
+        stream: typing.Final = self._with_retries(_call)
 
         for chunk in stream:
             delta = chunk.choices[0].delta

@@ -11,6 +11,7 @@ heavy components are replaced via monkeypatch or fake objects.
 
 from __future__ import annotations
 
+import typing
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock
@@ -87,11 +88,11 @@ def _empty_state(source: Path = Path("/tmp/sample.cpp")) -> ReviewerState:
 def test_analyze_node_collects_violations_from_both_tools(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int main() { return 0; }\n")
 
-    ct_violations = [_make_violation(line=1, rule_id="clang-tidy:foo", file=src)]
-    cc_violations = [_make_violation(line=2, rule_id="cppcheck:bar", file=src)]
+    ct_violations: typing.Final = [_make_violation(line=1, rule_id="clang-tidy:foo", file=src)]
+    cc_violations: typing.Final = [_make_violation(line=2, rule_id="cppcheck:bar", file=src)]
     cc_violations[0].tool = "cppcheck"  # type: ignore[assignment]
 
     monkeypatch.setattr(
@@ -104,21 +105,21 @@ def test_analyze_node_collects_violations_from_both_tools(
     )
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.extract_snippet", lambda v: None)
 
-    node = make_analyze_node()
-    out = node(
+    node: typing.Final = make_analyze_node()
+    out: typing.Final = node(
         {"source_file": src, "violations": [], "chunks": [], "failed_reviews": [], "retry_count": 0}
     )
 
     assert len(out["violations"]) == 2
-    rule_ids = {v.rule_id for v in out["violations"]}
+    rule_ids: typing.Final = {v.rule_id for v in out["violations"]}
     assert rule_ids == {"clang-tidy:foo", "cppcheck:bar"}
 
 
 def test_analyze_node_deduplicates(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int x;\n")
 
-    dup = _make_violation(line=1, rule_id="clang-tidy:foo", file=src)
+    dup: typing.Final = _make_violation(line=1, rule_id="clang-tidy:foo", file=src)
 
     monkeypatch.setattr(
         "safecpp_reviewer.agent.nodes.ClangTidyRunner.run",
@@ -127,8 +128,8 @@ def test_analyze_node_deduplicates(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.CppcheckRunner.run", lambda self, f: [])
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.extract_snippet", lambda v: None)
 
-    node = make_analyze_node()
-    out = node(
+    node: typing.Final = make_analyze_node()
+    out: typing.Final = node(
         {"source_file": src, "violations": [], "chunks": [], "failed_reviews": [], "retry_count": 0}
     )
 
@@ -138,7 +139,7 @@ def test_analyze_node_deduplicates(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
 def test_analyze_node_continues_when_clang_tidy_unavailable(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int x;\n")
 
     def boom(self: Any, f: Path) -> list[Violation]:
@@ -151,8 +152,8 @@ def test_analyze_node_continues_when_clang_tidy_unavailable(
     )
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.extract_snippet", lambda v: None)
 
-    node = make_analyze_node()
-    out = node(
+    node: typing.Final = make_analyze_node()
+    out: typing.Final = node(
         {"source_file": src, "violations": [], "chunks": [], "failed_reviews": [], "retry_count": 0}
     )
 
@@ -166,10 +167,10 @@ def test_analyze_node_continues_when_clang_tidy_unavailable(
 
 
 def test_chunk_node_calls_parser(monkeypatch: pytest.MonkeyPatch) -> None:
-    chunks = [_make_chunk("a"), _make_chunk("b", start=30, end=40)]
+    chunks: typing.Final = [_make_chunk("a"), _make_chunk("b", start=30, end=40)]
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.parse_chunks", lambda f: chunks)
 
-    out = chunk_node(_empty_state())
+    out: typing.Final = chunk_node(_empty_state())
     assert out["chunks"] == chunks
 
 
@@ -181,7 +182,7 @@ def test_chunk_node_returns_empty_on_parse_failure(
 
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.parse_chunks", boom)
 
-    out = chunk_node(_empty_state())
+    out: typing.Final = chunk_node(_empty_state())
     assert out["chunks"] == []
 
 
@@ -191,16 +192,16 @@ def test_chunk_node_returns_empty_on_parse_failure(
 
 
 def test_review_node_no_op_when_reviewer_is_none() -> None:
-    node = make_review_node(reviewer=None)
-    state = _empty_state()
+    node: typing.Final = make_review_node(reviewer=None)
+    state: typing.Final = _empty_state()
     state["violations"] = [_make_violation()]
 
-    out = node(state)
+    out: typing.Final = node(state)
     assert out["failed_reviews"] == []
 
 
 def test_review_node_falls_back_to_individual_when_no_chunks() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
 
     # Reviewer "succeeds" by setting fix_suggestion
     def fake_review(v: Violation) -> Violation:
@@ -209,11 +210,11 @@ def test_review_node_falls_back_to_individual_when_no_chunks() -> None:
 
     reviewer.review.side_effect = fake_review
 
-    node = make_review_node(reviewer=reviewer)
-    state = _empty_state()
+    node: typing.Final = make_review_node(reviewer=reviewer)
+    state: typing.Final = _empty_state()
     state["violations"] = [_make_violation(line=10), _make_violation(line=20)]
 
-    out = node(state)
+    out: typing.Final = node(state)
 
     assert reviewer.review.call_count == 2
     reviewer.review_chunk.assert_not_called()
@@ -221,7 +222,7 @@ def test_review_node_falls_back_to_individual_when_no_chunks() -> None:
 
 
 def test_review_node_batches_violations_in_same_chunk() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
 
     def fake_chunk_review(chunk: Chunk, vs: list[Violation]) -> list[Violation]:
         for v in vs:
@@ -230,8 +231,8 @@ def test_review_node_batches_violations_in_same_chunk() -> None:
 
     reviewer.review_chunk.side_effect = fake_chunk_review
 
-    chunk = _make_chunk("process", start=5, end=20)
-    state = _empty_state()
+    chunk: typing.Final = _make_chunk("process", start=5, end=20)
+    state: typing.Final = _empty_state()
     state["chunks"] = [chunk]
     state["violations"] = [
         _make_violation(line=10),
@@ -239,8 +240,8 @@ def test_review_node_batches_violations_in_same_chunk() -> None:
         _make_violation(line=18),
     ]
 
-    node = make_review_node(reviewer=reviewer)
-    out = node(state)
+    node: typing.Final = make_review_node(reviewer=reviewer)
+    out: typing.Final = node(state)
 
     # All three violations sit in the same chunk → exactly one batched call
     reviewer.review_chunk.assert_called_once()
@@ -249,15 +250,15 @@ def test_review_node_batches_violations_in_same_chunk() -> None:
 
 
 def test_review_node_falls_back_when_batch_too_large() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     reviewer.review.side_effect = lambda v: setattr(v, "fix_suggestion", "fix") or v
 
-    chunk = _make_chunk(start=1, end=100)
-    state = _empty_state()
+    chunk: typing.Final = _make_chunk(start=1, end=100)
+    state: typing.Final = _empty_state()
     state["chunks"] = [chunk]
     state["violations"] = [_make_violation(line=i) for i in range(1, 8)]  # 7 > 5
 
-    node = make_review_node(reviewer=reviewer, max_batch_size=5)
+    node: typing.Final = make_review_node(reviewer=reviewer, max_batch_size=5)
     node(state)
 
     reviewer.review_chunk.assert_not_called()
@@ -265,34 +266,34 @@ def test_review_node_falls_back_when_batch_too_large() -> None:
 
 
 def test_review_node_records_failures() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     # Reviewer never sets fix_suggestion → counts as failure
     reviewer.review.side_effect = lambda v: v
 
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     state["violations"] = [_make_violation(line=10)]
 
-    node = make_review_node(reviewer=reviewer)
-    out = node(state)
+    node: typing.Final = make_review_node(reviewer=reviewer)
+    out: typing.Final = node(state)
 
     assert len(out["failed_reviews"]) == 1
 
 
 def test_review_node_handles_orphan_violations() -> None:
     """Violations outside any chunk should fall through to individual review."""
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     reviewer.review.side_effect = lambda v: setattr(v, "fix_suggestion", "fix") or v
     reviewer.review_chunk.side_effect = lambda c, vs: vs
 
-    chunk = _make_chunk(start=10, end=20)
-    state = _empty_state()
+    chunk: typing.Final = _make_chunk(start=10, end=20)
+    state: typing.Final = _empty_state()
     state["chunks"] = [chunk]
     state["violations"] = [
         _make_violation(line=15),  # in chunk
         _make_violation(line=100),  # orphan
     ]
 
-    node = make_review_node(reviewer=reviewer)
+    node: typing.Final = make_review_node(reviewer=reviewer)
     node(state)
 
     reviewer.review_chunk.assert_called_once()
@@ -305,35 +306,35 @@ def test_review_node_handles_orphan_violations() -> None:
 
 
 def test_should_retry_returns_done_when_no_failures() -> None:
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     assert should_retry(state) == "done"
 
 
 def test_should_retry_returns_retry_when_failures_under_cap() -> None:
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     state["failed_reviews"] = [_make_violation()]
     state["retry_count"] = 0
     assert should_retry(state) == "retry"
 
 
 def test_should_retry_returns_done_when_cap_reached() -> None:
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     state["failed_reviews"] = [_make_violation()]
     state["retry_count"] = 2
     assert should_retry(state) == "done"
 
 
 def test_retry_node_increments_count_and_re_reviews() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     reviewer.review.side_effect = lambda v: setattr(v, "fix_suggestion", "fixed") or v
 
-    failed = _make_violation()
-    state = _empty_state()
+    failed: typing.Final = _make_violation()
+    state: typing.Final = _empty_state()
     state["failed_reviews"] = [failed]
     state["retry_count"] = 0
 
-    node = make_retry_node(reviewer=reviewer)
-    out = node(state)
+    node: typing.Final = make_retry_node(reviewer=reviewer)
+    out: typing.Final = node(state)
 
     reviewer.review.assert_called_once_with(failed)
     assert out["retry_count"] == 1
@@ -341,33 +342,33 @@ def test_retry_node_increments_count_and_re_reviews() -> None:
 
 
 def test_retry_node_no_op_when_reviewer_is_none() -> None:
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     state["failed_reviews"] = [_make_violation()]
 
-    node = make_retry_node(reviewer=None)
-    out = node(state)
+    node: typing.Final = make_retry_node(reviewer=None)
+    out: typing.Final = node(state)
 
     assert out["retry_count"] == 0  # untouched
 
 
 def test_retry_node_no_op_when_no_failures() -> None:
-    reviewer = MagicMock()
-    state = _empty_state()
+    reviewer: typing.Final = MagicMock()
+    state: typing.Final = _empty_state()
 
-    node = make_retry_node(reviewer=reviewer)
+    node: typing.Final = make_retry_node(reviewer=reviewer)
     node(state)
 
     reviewer.review.assert_not_called()
 
 
 def test_retry_node_caps_at_max_retries() -> None:
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
 
-    state = _empty_state()
+    state: typing.Final = _empty_state()
     state["failed_reviews"] = [_make_violation()]
     state["retry_count"] = 2  # already at max
 
-    node = make_retry_node(reviewer=reviewer, max_retries=2)
+    node: typing.Final = make_retry_node(reviewer=reviewer, max_retries=2)
     node(state)
 
     reviewer.review.assert_not_called()
@@ -381,7 +382,7 @@ def test_retry_node_caps_at_max_retries() -> None:
 def test_graph_runs_end_to_end_with_mocked_deps(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int main() { return 0; }\n")
 
     monkeypatch.setattr(
@@ -392,11 +393,11 @@ def test_graph_runs_end_to_end_with_mocked_deps(
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.extract_snippet", lambda v: None)
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.parse_chunks", lambda f: [])
 
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     reviewer.review.side_effect = lambda v: setattr(v, "fix_suggestion", "fixed") or v
 
-    graph = build_graph(reviewer=reviewer)
-    final = graph.invoke(initial_state(src))
+    graph: typing.Final = build_graph(reviewer=reviewer)
+    final: typing.Final = graph.invoke(initial_state(src))
 
     assert len(final["violations"]) == 1
     assert final["violations"][0].fix_suggestion == "fixed"
@@ -407,10 +408,10 @@ def test_graph_routes_through_retry_then_terminates(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """Reviewer fails twice then succeeds — retry node fires, then terminates."""
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int x;\n")
 
-    v = _make_violation(line=1, file=src)
+    v: typing.Final = _make_violation(line=1, file=src)
 
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.ClangTidyRunner.run", lambda self, f: [v])
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.CppcheckRunner.run", lambda self, f: [])
@@ -418,7 +419,7 @@ def test_graph_routes_through_retry_then_terminates(
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.parse_chunks", lambda f: [])
 
     # Reviewer fails on first call, succeeds on second.
-    call_count = {"n": 0}
+    call_count: typing.Final = {"n": 0}
 
     def flaky_review(violation: Violation) -> Violation:
         call_count["n"] += 1
@@ -426,11 +427,11 @@ def test_graph_routes_through_retry_then_terminates(
             violation.fix_suggestion = "eventually fixed"
         return violation
 
-    reviewer = MagicMock()
+    reviewer: typing.Final = MagicMock()
     reviewer.review.side_effect = flaky_review
 
-    graph = build_graph(reviewer=reviewer)
-    final = graph.invoke(initial_state(src))
+    graph: typing.Final = build_graph(reviewer=reviewer)
+    final: typing.Final = graph.invoke(initial_state(src))
 
     assert final["violations"][0].fix_suggestion == "eventually fixed"
     assert final["failed_reviews"] == []
@@ -440,7 +441,7 @@ def test_graph_routes_through_retry_then_terminates(
 def test_graph_skips_review_when_no_reviewer(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    src = tmp_path / "x.cpp"
+    src: typing.Final = tmp_path / "x.cpp"
     src.write_text("int x;\n")
 
     monkeypatch.setattr(
@@ -451,8 +452,8 @@ def test_graph_skips_review_when_no_reviewer(
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.extract_snippet", lambda v: None)
     monkeypatch.setattr("safecpp_reviewer.agent.nodes.parse_chunks", lambda f: [])
 
-    graph = build_graph(reviewer=None)
-    final = graph.invoke(initial_state(src))
+    graph: typing.Final = build_graph(reviewer=None)
+    final: typing.Final = graph.invoke(initial_state(src))
 
     assert len(final["violations"]) == 1
     assert final["violations"][0].fix_suggestion is None

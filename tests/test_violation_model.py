@@ -1,11 +1,12 @@
+import typing
 from pathlib import Path
 
-from safecpp_reviewer.analyzer.models import Violation
+from safecpp_reviewer.analyzer.models import Violation  # type: ignore
 
 
-def test_violation_serialization():
+def test_violation_serialization() -> None:
     """Test that Violation objects are serialized correctly."""
-    v = Violation(
+    v: typing.Final = Violation(
         tool="clang-tidy",
         file=Path("main.cpp"),
         line=10,
@@ -15,7 +16,7 @@ def test_violation_serialization():
         message="Avoid raw pointers",
     )
 
-    data = v.model_dump()
+    data: typing.Final = v.model_dump()
 
     assert data["tool"] == "clang-tidy"
     assert data["line"] == 10

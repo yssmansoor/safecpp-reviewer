@@ -1,5 +1,6 @@
 """Core data models for static analysis violations."""
 
+import typing
 from pathlib import Path
 from typing import Literal
 
@@ -68,7 +69,7 @@ class Violation(BaseModel):
         Args:
             color: If True, wrap severity and rule_id in rich markup tags.
         """
-        sev_colors = {
+        sev_colors: typing.Final = {
             "error": "bold red",
             "warning": "yellow",
             "style": "cyan",
@@ -84,11 +85,11 @@ class Violation(BaseModel):
             rule = self.rule_id
             tool = self.tool
 
-        col = f":{self.column}" if self.column else ""
-        category = f" <{self.category}>" if self.category else ""
+        col: typing.Final = f":{self.column}" if self.column else ""
+        category: typing.Final = f" <{self.category}>" if self.category else ""
 
-        header = f"{sev} [{tool}]{category} {self.file}:{self.line}{col}"
-        body = f"  → {rule}\n  {self.message}"
+        header: typing.Final = f"{sev} [{tool}]{category} {self.file}:{self.line}{col}"
+        body: typing.Final = f"  → {rule}\n  {self.message}"
 
         out = f"{header}\n{body}"
         if self.code_snippet:

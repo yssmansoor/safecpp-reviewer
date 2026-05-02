@@ -1,3 +1,4 @@
+import typing
 from pathlib import Path
 
 import pytest
@@ -73,9 +74,9 @@ def _violation(line: int, rule_id: str = "test:rule") -> Violation:
 
 def test_review_chunk_uses_one_llm_call_for_multiple_violations() -> None:
     """Test that review_chunk uses one LLM call for multiple violations."""
-    client = FakeClient()
-    reviewer = ViolationReviewer(client)  # type: ignore[arg-type]
-    chunk = Chunk(
+    client: typing.Final = FakeClient()
+    reviewer: typing.Final = ViolationReviewer(client)  # type: ignore[arg-type]
+    chunk: typing.Final = Chunk(
         file=Path("sample.cpp"),
         start_line=10,
         end_line=18,
@@ -84,9 +85,9 @@ def test_review_chunk_uses_one_llm_call_for_multiple_violations() -> None:
         name="process",
         token_estimate=10,
     )
-    violations = [_violation(11, "rule:a"), _violation(12, "rule:b")]
+    violations: typing.Final = [_violation(11, "rule:a"), _violation(12, "rule:b")]
 
-    reviewed = reviewer.review_chunk(chunk, violations)
+    reviewed: typing.Final = reviewer.review_chunk(chunk, violations)
 
     assert reviewed == violations
     assert len(client.prompts) == 1
@@ -100,8 +101,8 @@ def test_review_chunk_uses_one_llm_call_for_multiple_violations() -> None:
 
 def test_review_chunk_prompt_includes_rule_store_guidance() -> None:
     """Test that the review chunk prompt includes rule store guidance."""
-    client = FakeClient()
-    rule_store = RuleStore(
+    client: typing.Final = FakeClient()
+    rule_store: typing.Final = RuleStore(
         [
             Rule(
                 rule_id="rule:a",
@@ -113,8 +114,8 @@ def test_review_chunk_prompt_includes_rule_store_guidance() -> None:
             )
         ]
     )
-    reviewer = ViolationReviewer(client, rule_store=rule_store)  # type: ignore[arg-type]
-    chunk = Chunk(
+    reviewer: typing.Final = ViolationReviewer(client, rule_store=rule_store)  # type: ignore[arg-type]
+    chunk: typing.Final = Chunk(
         file=Path("sample.cpp"),
         start_line=10,
         end_line=18,
@@ -135,11 +136,11 @@ def test_review_chunk_prompt_includes_rule_store_guidance() -> None:
 
 def test_review_chunk_accepts_one_based_index_when_model_returns_one_for_single_violation() -> None:
     """Test that review_chunk accepts a one-based index."""
-    client = FakeClient(
+    client: typing.Final = FakeClient(
         '{"reviews":[{"violation_index":1,"explanation":"Fix only.","fixed_code":"int only = 1;"}]}'
     )
-    reviewer = ViolationReviewer(client)  # type: ignore[arg-type]
-    chunk = Chunk(
+    reviewer: typing.Final = ViolationReviewer(client)  # type: ignore[arg-type]
+    chunk: typing.Final = Chunk(
         file=Path("sample.cpp"),
         start_line=24,
         end_line=25,
@@ -148,9 +149,9 @@ def test_review_chunk_accepts_one_based_index_when_model_returns_one_for_single_
         name=None,
         token_estimate=4,
     )
-    violations = [_violation(25, "rule:only")]
+    violations: typing.Final = [_violation(25, "rule:only")]
 
-    reviewed = reviewer.review_chunk(chunk, violations)
+    reviewed: typing.Final = reviewer.review_chunk(chunk, violations)
 
     assert reviewed == violations
     assert "Fix only." in (violations[0].fix_suggestion or "")
@@ -161,14 +162,14 @@ def test_review_chunk_skips_duplicate_extra_review_for_single_violation_without_
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that review_chunk skips duplicate extra reviews for a single violation."""
-    client = FakeClient(
+    client: typing.Final = FakeClient(
         '{"reviews":['
         '{"violation_index":0,"explanation":"Fix only.","fixed_code":"int only = 1;"},'
         '{"violation_index":1,"explanation":"Duplicate.","fixed_code":"int duplicate = 2;"}'
         "]}"
     )
-    reviewer = ViolationReviewer(client)  # type: ignore[arg-type]
-    chunk = Chunk(
+    reviewer: typing.Final = ViolationReviewer(client)  # type: ignore[arg-type]
+    chunk: typing.Final = Chunk(
         file=Path("tests/fixtures/sample_violations.cpp"),
         start_line=24,
         end_line=25,
@@ -177,10 +178,10 @@ def test_review_chunk_skips_duplicate_extra_review_for_single_violation_without_
         name=None,
         token_estimate=12,
     )
-    violations = [_violation(25, "rule:only")]
+    violations: typing.Final = [_violation(25, "rule:only")]
 
     with caplog.at_level("WARNING"):
-        reviewed = reviewer.review_chunk(chunk, violations)
+        reviewed: typing.Final = reviewer.review_chunk(chunk, violations)
 
     assert reviewed == violations
     assert "Fix only." in (violations[0].fix_suggestion or "")
@@ -189,10 +190,14 @@ def test_review_chunk_skips_duplicate_extra_review_for_single_violation_without_
 
 def test_review_by_chunk_batches_violations_by_containing_chunk() -> None:
     """Test that _review_by_chunk batches violations by their containing chunk."""
-    reviewer = FakeBatchReviewer()
-    violations = [_violation(11, "rule:a"), _violation(12, "rule:b"), _violation(22, "rule:c")]
+    reviewer: typing.Final = FakeBatchReviewer()
+    violations: typing.Final = [
+        _violation(11, "rule:a"),
+        _violation(12, "rule:b"),
+        _violation(22, "rule:c"),
+    ]
 
-    reviewed = _review_by_chunk(
+    reviewed: typing.Final = _review_by_chunk(
         Path("tests/fixtures/sample_violations.cpp"),
         violations,
         reviewer,  # type: ignore[arg-type]
@@ -210,10 +215,10 @@ def test_review_by_chunk_batches_violations_by_containing_chunk() -> None:
 
 def test_review_by_chunk_falls_back_to_individual_review_for_many_violations() -> None:
     """Test that _review_by_chunk falls back to individual review when a chunk has too many violations."""
-    reviewer = FakeBatchReviewer()
-    violations = [_violation(11, f"rule:{index}") for index in range(6)]
+    reviewer: typing.Final = FakeBatchReviewer()
+    violations: typing.Final = [_violation(11, f"rule:{index}") for index in range(6)]
 
-    reviewed = _review_by_chunk(
+    reviewed: typing.Final = _review_by_chunk(
         Path("tests/fixtures/sample_violations.cpp"),
         violations,
         reviewer,  # type: ignore[arg-type]
