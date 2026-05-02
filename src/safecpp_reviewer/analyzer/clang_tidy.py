@@ -143,7 +143,7 @@ class ClangTidyRunner:
             violations.append(
                 Violation(
                     file=diag_file,
-                    line=int(m.group("line")) - 1,
+                    line=max(1, int(m.group("line"))),
                     column=int(m.group("col")),
                     rule_id=rule_id,
                     severity=severity,  # type: ignore[arg-type]

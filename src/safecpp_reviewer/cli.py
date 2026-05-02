@@ -31,7 +31,9 @@ from rich.table import Table
 
 from safecpp_reviewer.agent.graph import build_graph, initial_state
 from safecpp_reviewer.agent.reviewer import ViolationReviewer
+from safecpp_reviewer.agent.verifier import FixVerifier
 from safecpp_reviewer.analyzer import run_all
+from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.llm.client import LlamaCppClient
 from safecpp_reviewer.report import render_html
@@ -139,11 +141,12 @@ def _run_graph(
     source: Path,
     reviewer: ViolationReviewer | None,
     checks: str,
+    verifier: FixVerifier | None = None,  # NEW
 ) -> tuple[list[Violation], float]:
-    graph: typing.Final = build_graph(reviewer=reviewer, clang_tidy_checks=checks)
-    start: typing.Final = time.perf_counter()
-    final_state: typing.Final = graph.invoke(initial_state(source))
-    elapsed: typing.Final = time.perf_counter() - start
+    graph = build_graph(reviewer=reviewer, verifier=verifier, clang_tidy_checks=checks)
+    start = time.perf_counter()
+    final_state = graph.invoke(initial_state(source))
+    elapsed = time.perf_counter() - start
     return final_state["violations"], elapsed
 
 
@@ -250,6 +253,14 @@ def review(
             help="Run the LangGraph pipeline instead of the legacy run_all.",
         ),
     ] = False,
+    verify: Annotated[
+        bool,
+        typer.Option(
+            "--verify",
+            help="Re-run clang-tidy on each LLM fix to verify it resolves the violation. "
+            "Slower but produces a measurable success metric.",
+        ),
+    ] = False,
     compare: Annotated[
         bool,
         typer.Option(
@@ -262,6 +273,17 @@ def review(
     """Run static analysis + (optional) LLM review on a C++ file."""
     if verbose:
         logging.getLogger().setLevel(logging.INFO)
+
+    verifier: FixVerifier | None = None
+    if verify and not no_llm:
+        verifier = FixVerifier(clang_tidy=ClangTidyRunner(checks=checks))
+        err_console.print("[dim]Verification enabled — fixes will be re-checked.[/]")
+        # Verification only makes sense with the graph pipeline
+        if not use_graph:
+            err_console.print(
+                "[yellow]⚠[/] --verify requires --use-graph; enabling graph pipeline."
+            )
+            use_graph = True
 
     if fmt is None:
         fmt = [OutputFormat.terminal]
@@ -284,11 +306,11 @@ def review(
 
     if compare:
         legacy_violations, legacy_t = _run_legacy(source, reviewer, checks)
-        graph_violations, graph_t = _run_graph(source, reviewer, checks)
+        graph_violations, graph_t = _run_graph(source, reviewer, checks, verifier)
         _print_comparison(legacy_violations, graph_violations, legacy_t, graph_t)
         violations = graph_violations  # default to graph output for rendering
     elif use_graph:
-        violations, elapsed = _run_graph(source, reviewer, checks)
+        violations, elapsed = _run_graph(source, reviewer, checks, verifier)
         err_console.print(f"[dim]Graph pipeline: {elapsed:.2f}s[/]")
     else:
         violations, elapsed = _run_legacy(source, reviewer, checks)
@@ -308,6 +330,20 @@ def review(
     error_count: typing.Final = sum(1 for v in violations if v.severity == "error")
     if error_count > 0:
         raise typer.Exit(code=1)
+
+    if verifier is not None:
+        verified = sum(1 for v in violations if v.fix_suggestion)
+        total_with_attempted_fix = sum(
+            1
+            for v in violations
+            if v.severity in ("error", "warning")  # rough proxy
+        )
+        if total_with_attempted_fix > 0:
+            pct = 100 * verified / total_with_attempted_fix
+            console.print(
+                f"\n[bold]Verification:[/] {verified}/{total_with_attempted_fix} "
+                f"fixes resolved their violation ([green]{pct:.0f}%[/])"
+            )
 
 
 @app.command()
@@ -346,6 +382,14 @@ def batch(
     use_graph: Annotated[
         bool, typer.Option("--use-graph", help="Use the LangGraph pipeline.")
     ] = False,
+    verify: Annotated[
+        bool,
+        typer.Option(
+            "--verify",
+            help="Re-run clang-tidy on each LLM fix to verify it resolves the violation. "
+            "Slower but produces a measurable success metric.",
+        ),
+    ] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
 ) -> None:
     """Analyze multiple files and generate an indexed HTML report."""
@@ -354,6 +398,17 @@ def batch(
         logging.getLogger().setLevel(logging.INFO)
 
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    verifier: FixVerifier | None = None
+    if verify and not no_llm:
+        verifier = FixVerifier(clang_tidy=ClangTidyRunner(checks=checks))
+        err_console.print("[dim]Verification enabled — fixes will be re-checked.[/]")
+        # Verification only makes sense with the graph pipeline
+        if not use_graph:
+            err_console.print(
+                "[yellow]⚠[/] --verify requires --use-graph; enabling graph pipeline."
+            )
+            use_graph = True
 
     # ---- Set up reviewer (shared across all files)
     reviewer: ViolationReviewer | None = None
@@ -374,7 +429,7 @@ def batch(
     for src in sources:
         err_console.print(f"[dim]Analyzing {src}...[/]")
         try:
-            violations, elapsed = runner(src, reviewer, checks)
+            violations, elapsed = runner(src, reviewer, checks, verifier)
         except Exception as exc:
             err_console.print(f"[red]✗[/] Failed on {src}: {exc}")
             continue
@@ -401,6 +456,20 @@ def batch(
 
     if total_errors > 0:
         raise typer.Exit(code=1)
+
+    if verifier is not None:
+        verified = sum(1 for v in violations if v.fix_suggestion)
+        total_with_attempted_fix = sum(
+            1
+            for v in violations
+            if v.severity in ("error", "warning")  # rough proxy
+        )
+        if total_with_attempted_fix > 0:
+            pct = 100 * verified / total_with_attempted_fix
+            console.print(
+                f"\n[bold]Verification:[/] {verified}/{total_with_attempted_fix} "
+                f"fixes resolved their violation ([green]{pct:.0f}%[/])"
+            )
 
 
 def _safe_name(path: Path) -> str:

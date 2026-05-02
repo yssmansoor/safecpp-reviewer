@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 
 from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.cppcheck import CppcheckRunner
+from safecpp_reviewer.analyzer.filter import filter_real_violations
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
 from safecpp_reviewer.chunker.models import Chunk
@@ -21,6 +22,17 @@ if TYPE_CHECKING:
     from safecpp_reviewer.agent.reviewer import ViolationReviewer
 
 MAX_CHUNK_REVIEW_VIOLATIONS: typing.Final = 5
+
+_META_RULES = {
+    "clang-tidy:clang-diagnostic-error",
+    "clang-tidy:clang-tidy-nolint",
+    "clang-tidy:bugprone-reserved-identifier",  # often noise on system headers
+    "clang-tidy:clang-diagnostic-fatal-error",
+}
+
+
+def _is_real_violation(v: Violation) -> bool:
+    return v.rule_id not in _META_RULES
 
 
 def run_all(
@@ -78,6 +90,8 @@ def run_all(
         if key not in seen:
             seen.add(key)
             unique.append(v)
+
+    unique = filter_real_violations(unique)
 
     for v in unique:
         v.code_snippet = extract_snippet(v)

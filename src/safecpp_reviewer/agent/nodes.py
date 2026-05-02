@@ -13,8 +13,10 @@ from collections.abc import Callable
 
 from safecpp_reviewer.agent.reviewer import ViolationReviewer
 from safecpp_reviewer.agent.state import ReviewerState
+from safecpp_reviewer.agent.verifier import FixVerifier
 from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.cppcheck import CppcheckRunner
+from safecpp_reviewer.analyzer.filter import filter_real_violations
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
 from safecpp_reviewer.chunker import parse_chunks
@@ -63,6 +65,9 @@ def make_analyze_node(
             if key not in seen:
                 seen.add(key)
                 unique.append(v)
+
+        # NEW: drop meta-diagnostics (clang-diagnostic-error etc.)
+        unique = filter_real_violations(unique)
 
         # Populate code_snippet now so downstream nodes have it
         for v in unique:
@@ -235,3 +240,79 @@ def should_retry(state: ReviewerState) -> str:
     failed: typing.Final = state.get("failed_reviews", [])
     retry_count: typing.Final = state.get("retry_count", 0)
     return "retry" if failed and retry_count < 2 else "done"
+
+
+def make_verify_node(
+    verifier: FixVerifier | None,
+) -> Callable[[ReviewerState], dict[str, typing.Any]]:
+    """Build the verification node.
+
+    For each violation that has a ``fix_suggestion``, apply the fix and
+    re-run clang-tidy.  Violations whose fix doesn't resolve the original
+    rule_id are added to ``failed_reviews`` so the retry node can try again.
+    """
+
+    def verify_node(state: ReviewerState) -> dict[str, typing.Any]:
+        if verifier is None:
+            return {"failed_reviews": state.get("failed_reviews", [])}
+
+        violations = state["violations"]
+        chunks = state["chunks"]
+        existing_failed = list(state.get("failed_reviews", []))
+
+        unresolved: list[Violation] = []
+        regression_count = 0
+        partial_fix_rejections = 0
+
+        for v in violations:
+            if v.fix_suggestion is None:
+                continue
+
+            chunk = next((c for c in chunks if v.line in c), None)
+            result = verifier.verify(v, chunk=chunk)
+
+            if not result.resolved:
+                # Per-violation failures get INFO; the summary below gets WARNING
+                logger.info(
+                    "verify_node: fix did not resolve %s (error=%s)",
+                    v.rule_id,
+                    result.error,
+                )
+                if result.error and "partial fix" in result.error:
+                    partial_fix_rejections += 1
+
+                # Drop the unverified fix so the retry node tries again
+                v.fix_suggestion = None
+                unresolved.append(v)
+
+            if result.regressed:
+                regression_count += len(result.new_violations)
+                # Per-fix regressions also INFO — the summary tells the story
+                logger.info(
+                    "verify_node: fix for %s introduced %d new violation(s)",
+                    v.rule_id,
+                    len(result.new_violations),
+                )
+
+        # ---- Single summary line at WARNING level if anything went wrong
+        total = sum(1 for v in violations if v.fix_suggestion or v in unresolved)
+        if unresolved or regression_count:
+            logger.warning(
+                "verify_node: %d/%d fix(es) verified, %d unresolved "
+                "(%d rejected as partial), %d total regression(s)",
+                total - len(unresolved),
+                total,
+                len(unresolved),
+                partial_fix_rejections,
+                regression_count,
+            )
+        else:
+            logger.info(
+                "verify_node: all %d fix(es) verified clean",
+                total,
+            )
+
+        all_failed = existing_failed + [v for v in unresolved if v not in existing_failed]
+        return {"failed_reviews": all_failed}
+
+    return verify_node

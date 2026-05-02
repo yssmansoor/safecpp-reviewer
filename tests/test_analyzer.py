@@ -100,7 +100,7 @@ def test_clang_tidy_parses_warning() -> None:
     assert len(violations) == 2
 
     warning: typing.Final = violations[0]
-    assert warning.line == 9
+    assert warning.line == 10
     assert warning.column == 5
     assert warning.severity == "warning"
     assert warning.rule_id == "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast"
@@ -114,7 +114,7 @@ def test_clang_tidy_parses_error() -> None:
     violations: typing.Final = runner._parse(CLANG_TIDY_OUTPUT, FAKE_CPP)
 
     error: typing.Final = violations[1]
-    assert error.line == 19
+    assert error.line == 20
     assert error.severity == "error"
 
 
