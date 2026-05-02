@@ -16,8 +16,6 @@ from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
 from safecpp_reviewer.chunker.models import Chunk
 from safecpp_reviewer.chunker.parser import CppParser
-from safecpp_reviewer.chunker.models import Chunk
-from safecpp_reviewer.chunker.parser import CppParser
 
 if TYPE_CHECKING:
     from safecpp_reviewer.agent.reviewer import ViolationReviewer
