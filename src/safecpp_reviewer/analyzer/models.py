@@ -13,6 +13,20 @@ class ReviewResponse(BaseModel):
     fixed_code: str  # the corrected snippet
 
 
+class ChunkReview(BaseModel):
+    """LLM review for one violation inside a chunk response."""
+
+    violation_index: int = Field(ge=0)
+    explanation: str
+    fixed_code: str
+
+
+class ChunkReviewResponse(BaseModel):
+    """LLM chunk review response containing one review per violation."""
+
+    reviews: list[ChunkReview]
+
+
 class Violation(BaseModel):
     """A single static analysis violation found in a C++ source file.
 

@@ -1,0 +1,62 @@
+rules:
+  - rule_id: "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast"
+    short_name: "Avoid C-style casts"
+    category: "cppcoreguidelines"
+    rationale: >
+      C-style casts (e.g. (int)x) silently combine static_cast, const_cast,
+      and reinterpret_cast.  This obscures intent and can hide undefined
+      behavior.  Use the named C++ casts so reviewers can tell which kind of
+      conversion is happening.
+    bad_example: |
+      int x = (int)y;
+    good_example: |
+      int x = static_cast<int>(y);
+    references:
+      - "CppCoreGuidelines ES.49"
+      - "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es49-if-you-must-use-a-cast-use-a-named-cast"
+
+  - rule_id: "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast"
+    short_name: "Avoid reinterpret_cast"
+    category: "cppcoreguidelines"
+    rationale: >
+      reinterpret_cast bypasses the type system and is a frequent source of
+      undefined behavior in safety-critical code.  Prefer std::bit_cast,
+      std::memcpy, or a redesign that doesn't require pointer punning.
+    references:
+      - "CppCoreGuidelines Type.1"
+
+  - rule_id: "clang-tidy:cppcoreguidelines-avoid-magic-numbers"
+    short_name: "Avoid unnamed numeric literals in code"
+    category: "cppcoreguidelines"
+    rationale: >
+      Numeric literals embedded in expressions are hard to maintain and
+      review.  Replace with named constexpr constants so the meaning is
+      explicit and the value can be changed in one place.
+    bad_example: |
+      return 3.14159 * 42;
+    good_example: |
+      constexpr double kPi = 3.14159;
+      constexpr int kCount = 42;
+      return kPi * kCount;
+    references:
+      - "CppCoreGuidelines ES.45"
+
+  - rule_id: "clang-tidy:cppcoreguidelines-owning-memory"
+    short_name: "Use smart pointers for ownership"
+    category: "cppcoreguidelines"
+    rationale: >
+      Raw owning pointers make ownership unclear and leak on exception.
+      Prefer std::unique_ptr or std::shared_ptr; mark non-owning raw
+      pointers with gsl::not_null or just use references.
+    references:
+      - "CppCoreGuidelines R.3"
+
+  - rule_id: "clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay"
+    short_name: "Avoid implicit array-to-pointer decay"
+    category: "cppcoreguidelines"
+    rationale: >
+      Passing arrays to functions that take pointers loses size information
+      and enables out-of-bounds access.  Use std::array, std::span, or
+      gsl::span which carry size with them.
+    references:
+      - "CppCoreGuidelines Bounds.3"

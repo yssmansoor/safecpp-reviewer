@@ -103,7 +103,7 @@ class CppcheckRunner:
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=120,
+                timeout=300,
                 check=True,
             )
         except FileNotFoundError as exc:

@@ -1,0 +1,44 @@
+rules:
+  - rule_id: "clang-tidy:modernize-use-nullptr"
+    short_name: "Use nullptr instead of NULL or 0"
+    category: "modernize"
+    rationale: >
+      NULL is a macro that expands to 0 in C++, an integer literal.  This
+      causes overload-resolution surprises and hides type errors.  nullptr
+      has its own type (std::nullptr_t) and only converts to pointer types.
+    bad_example: |
+      int* ptr = NULL;
+    good_example: |
+      int* ptr = nullptr;
+    references:
+      - "C++11 [conv.ptr]"
+
+  - rule_id: "clang-tidy:modernize-use-override"
+    short_name: "Mark overriding virtual methods with 'override'"
+    category: "modernize"
+    rationale: >
+      The override keyword tells the compiler to verify that the function
+      actually overrides a base class virtual.  Without it, a typo or a
+      changed base signature silently creates a new function instead of
+      overriding, which is a classic source of bugs.
+    bad_example: |
+      class Derived : public Base {
+        void tick() {}
+      };
+    good_example: |
+      class Derived : public Base {
+        void tick() override {}
+      };
+    references:
+      - "C++11 [class.virtual]"
+
+  - rule_id: "clang-tidy:modernize-use-trailing-return-type"
+    short_name: "Use trailing return type syntax"
+    category: "modernize"
+    rationale: >
+      Trailing return types (auto f() -> int) line up consistently in
+      function listings and are required for return types that depend on
+      parameters (decltype).  This is a stylistic check; safety impact is
+      low but readability improves in template-heavy code.
+    references:
+      - "C++11 [dcl.fct]"

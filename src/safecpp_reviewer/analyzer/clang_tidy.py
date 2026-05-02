@@ -105,7 +105,7 @@ class ClangTidyRunner:
         logger.debug("clang-tidy cmd: %s", " ".join(cmd))
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
         except FileNotFoundError as exc:
             raise RuntimeError(
                 f"clang-tidy binary not found: {self.executable!r}. "

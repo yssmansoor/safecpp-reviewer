@@ -13,9 +13,13 @@ from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.cppcheck import CppcheckRunner
 from safecpp_reviewer.analyzer.models import Violation
 from safecpp_reviewer.analyzer.snippet import extract_snippet
+from safecpp_reviewer.chunker.models import Chunk
+from safecpp_reviewer.chunker.parser import CppParser
 
 if TYPE_CHECKING:
     from safecpp_reviewer.agent.reviewer import ViolationReviewer
+
+MAX_CHUNK_REVIEW_VIOLATIONS = 5
 
 
 def run_all(
@@ -78,9 +82,61 @@ def run_all(
         v.code_snippet = extract_snippet(v)
 
     if reviewer is not None:
-        unique = [reviewer.review(v) for v in unique]
+        unique = _review_by_chunk(source_file, unique, reviewer)
 
     return sorted(unique, key=lambda v: (str(v.file), v.line, v.column or 0))
+
+
+def _review_by_chunk(
+    source_file: Path,
+    violations: list[Violation],
+    reviewer: ViolationReviewer,
+) -> list[Violation]:
+    """Review violations with one LLM call per containing source chunk."""
+    try:
+        chunks = CppParser().parse_file(source_file)
+    except Exception as e:
+        import logging
+
+        logging.getLogger(__name__).warning(
+            "Tree-sitter chunking failed; falling back to per-violation review: %s",
+            e,
+        )
+        return [reviewer.review(v) for v in violations]
+
+    chunk_groups: list[tuple[Chunk, list[Violation]]] = []
+    standalone: list[Violation] = []
+    chunks_by_specificity = sorted(
+        chunks,
+        key=lambda chunk: (chunk.end_line - chunk.start_line, chunk.start_line, chunk.end_line),
+    )
+
+    for violation in violations:
+        chunk = next(
+            (candidate for candidate in chunks_by_specificity if violation.line in candidate), None
+        )
+        if chunk is None:
+            standalone.append(violation)
+            continue
+
+        group = next((group for group in chunk_groups if group[0] is chunk), None)
+        if group is None:
+            chunk_groups.append((chunk, [violation]))
+        else:
+            group[1].append(violation)
+
+    for chunk, grouped_violations in chunk_groups:
+        if len(grouped_violations) > MAX_CHUNK_REVIEW_VIOLATIONS:
+            for violation in grouped_violations:
+                reviewer.review(violation)
+            continue
+
+        reviewer.review_chunk(chunk, grouped_violations)
+
+    for violation in standalone:
+        reviewer.review(violation)
+
+    return violations
 
 
 __all__ = ["run_all", "Violation", "ClangTidyRunner", "CppcheckRunner"]

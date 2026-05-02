@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>published_time_publisher.hpp</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
+.subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+.summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem 1.25rem;
+    min-width: 120px;
+}
+.stat-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; }
+.stat-value { font-size: 1.5rem; font-weight: 600; color: #f0f6fc; }
+.violation {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+.violation-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.badge {
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.sev-error   { background: #5a1d1d; color: #ff7b72; }
+.sev-warning { background: #5a4a1d; color: #d29922; }
+.sev-style   { background: #1d3a5a; color: #58a6ff; }
+.sev-note    { background: #30363d; color: #8b949e; }
+.tool-tag { color: #8b949e; font-size: 0.85rem; }
+.rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
+.violation-body { padding: 1rem; }
+.message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
+.code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    white-space: pre;
+    color: #c9d1d9;
+}
+.code .marker { color: #ff7b72; font-weight: 700; }
+.fix-section {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #0f2419;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+.fix-text { color: #c9d1d9; white-space: pre-wrap; font-size: 0.9rem; }
+.empty {
+    text-align: center;
+    padding: 3rem;
+    color: #8b949e;
+}
+.fix-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1a2820;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+.fix-prose {
+    color: #c9d1d9;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.fix-section .code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← Back to index</a>
+<h1>published_time_publisher.hpp</h1>
+<div class="subtitle">Generated 2026-05-02 10:36:18</div>
+<div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">5</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">3</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">2</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">0</div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp:15:9</a><span class="rule-id">clang-tidy:bugprone-reserved-identifier</span></div><div class="violation-body"><div class="message">declaration uses identifier &#x27;AUTOWARE_UTILS__ROS__PUBLISHED_TIME_PUBLISHER_HPP_&#x27;, which is a reserved identifier</div><pre class="code">      13 | // limitations under the License.
+      14 |
+      15 | #ifndef AUTOWARE_UTILS__ROS__PUBLISHED_TIME_PUBLISHER_HPP_
+<span class="marker">&gt;&gt;&gt;   16 | #define AUTOWARE_UTILS__ROS__PUBLISHED_TIME_PUBLISHER_HPP_</span>
+      17 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The macro name uses a reserved identifier prefix.</div>
+<pre class="code">#ifndef AUTOWARE_UTILS_ROS_PUBLISHED_TIME_PUBLISHER_HPP_
+#define AUTOWARE_UTILS_ROS_PUBLISHED_TIME_PUBLISHER_HPP_</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp:17:4</a><span class="rule-id">clang-tidy:clang-tidy-nolint</span></div><div class="violation-body"><div class="message">unmatched &#x27;NOLINTBEGIN&#x27; comment without a subsequent &#x27;NOLINTEND&#x27; comment</div><pre class="code">      15 | #ifndef AUTOWARE_UTILS__ROS__PUBLISHED_TIME_PUBLISHER_HPP_
+      16 | #define AUTOWARE_UTILS__ROS__PUBLISHED_TIME_PUBLISHER_HPP_
+      17 |
+<span class="marker">&gt;&gt;&gt;   18 | // NOLINTBEGIN(build/namespaces, whitespace/line_length)</span>
+      19 | // clang-format off</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">There is an unmatched &#x27;NOLINTBEGIN&#x27; comment without a corresponding &#x27;NOLINTEND&#x27; comment.</div>
+<pre class="code">// NOLINTBEGIN(build/namespaces, whitespace/line_length)
+// clang-format off
+
+// NOLINTEND(build/namespaces, whitespace/line_length)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp:20:10</a><span class="rule-id">clang-tidy:clang-diagnostic-error</span></div><div class="violation-body"><div class="message">&#x27;autoware_utils_debug/published_time_publisher.hpp&#x27; file not found</div><pre class="code">      18 | // NOLINTBEGIN(build/namespaces, whitespace/line_length)
+      19 | // clang-format off
+      20 |
+<span class="marker">&gt;&gt;&gt;   21 | #include &lt;autoware_utils_debug/published_time_publisher.hpp&gt;</span>
+      22 | namespace autoware_utils { using namespace autoware_utils_debug; }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The included header file &#x27;autoware_utils_debug/published_time_publisher.hpp&#x27; is not found.</div>
+<pre class="code">// #include &lt;autoware_utils_debug/published_time_publisher.hpp&gt;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp:21:28</a><span class="rule-id">clang-tidy:google-build-using-namespace</span></div><div class="violation-body"><div class="message">do not use namespace using-directives; use using-declarations instead</div><pre class="code">      19 | // clang-format off
+      20 |
+      21 | #include &lt;autoware_utils_debug/published_time_publisher.hpp&gt;
+<span class="marker">&gt;&gt;&gt;   22 | namespace autoware_utils { using namespace autoware_utils_debug; }</span>
+      23 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Using namespace directives are discouraged; use using declarations instead.</div>
+<pre class="code">namespace autoware_utils {
+using autoware_utils_debug::published_time_publisher;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils/include/autoware_utils/ros/published_time_publisher.hpp:24:4</a><span class="rule-id">clang-tidy:clang-tidy-nolint</span></div><div class="violation-body"><div class="message">unmatched &#x27;NOLINTEND&#x27; comment without a previous &#x27;NOLINTBEGIN&#x27; comment</div><pre class="code">      22 | namespace autoware_utils { using namespace autoware_utils_debug; }
+      23 |
+      24 | // clang-format on
+<span class="marker">&gt;&gt;&gt;   25 | // NOLINTEND</span>
+      26 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The &#x27;NOLINTEND&#x27; comment is unmatched because there is no preceding &#x27;NOLINTBEGIN&#x27; comment.</div></div></div></div>
+</div>
+</body>
+</html>

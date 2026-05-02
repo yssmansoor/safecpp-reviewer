@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>polling_subscriber.hpp</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
+.subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+.summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem 1.25rem;
+    min-width: 120px;
+}
+.stat-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; }
+.stat-value { font-size: 1.5rem; font-weight: 600; color: #f0f6fc; }
+.violation {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+.violation-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.badge {
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.sev-error   { background: #5a1d1d; color: #ff7b72; }
+.sev-warning { background: #5a4a1d; color: #d29922; }
+.sev-style   { background: #1d3a5a; color: #58a6ff; }
+.sev-note    { background: #30363d; color: #8b949e; }
+.tool-tag { color: #8b949e; font-size: 0.85rem; }
+.rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
+.violation-body { padding: 1rem; }
+.message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
+.code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    white-space: pre;
+    color: #c9d1d9;
+}
+.code .marker { color: #ff7b72; font-weight: 700; }
+.fix-section {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #0f2419;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+.fix-text { color: #c9d1d9; white-space: pre-wrap; font-size: 0.9rem; }
+.empty {
+    text-align: center;
+    padding: 3rem;
+    color: #8b949e;
+}
+.fix-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1a2820;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+.fix-prose {
+    color: #c9d1d9;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.fix-section .code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← Back to index</a>
+<h1>polling_subscriber.hpp</h1>
+<div class="subtitle">Generated 2026-05-02 10:23:27</div>
+<div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">23</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">18</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">4</div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:14:9</a><span class="rule-id">clang-tidy:bugprone-reserved-identifier</span></div><div class="violation-body"><div class="message">declaration uses identifier &#x27;AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_&#x27;, which is a reserved identifier</div><pre class="code">      12 | // See the License for the specific language governing permissions and
+      13 | // limitations under the License.
+      14 | #ifndef AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_
+<span class="marker">&gt;&gt;&gt;   15 | #define AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_</span>
+      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The identifier &#x27;AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_&#x27; is a reserved identifier in C++.</div>
+<pre class="code">#ifndef AUTOWARE_UTILS_RCLCPP_POLLING_SUBSCRIBER_HPP_
+#define AUTOWARE_UTILS_RCLCPP_POLLING_SUBSCRIBER_HPP_</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:16:10</a><span class="rule-id">clang-tidy:clang-diagnostic-error</span></div><div class="violation-body"><div class="message">&#x27;rclcpp/rclcpp.hpp&#x27; file not found</div><pre class="code">      14 | #ifndef AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_
+      15 | #define AUTOWARE_UTILS_RCLCPP__POLLING_SUBSCRIBER_HPP_
+      16 |
+<span class="marker">&gt;&gt;&gt;   17 | #include &lt;rclcpp/rclcpp.hpp&gt;</span>
+      18 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The file &#x27;rclcpp/rclcpp.hpp&#x27; could not be found, which is likely due to a missing dependency or incorrect include path.</div>
+<pre class="code">#include &lt;rclcpp/rclcpp.hpp&gt;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:31:30</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      29 |  * @brief Creates a SensorDataQoS profile with a single depth.
+      30 |  * @return rclcpp::SensorDataQoS The QoS profile with depth set to 1.
+      31 |  */
+<span class="marker">&gt;&gt;&gt;   32 | inline rclcpp::SensorDataQoS single_depth_sensor_qos()</span>
+      33 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;single_depth_sensor_qos&#x27; has a trailing return type which is not necessary in this case.</div>
+<pre class="code">inline rclcpp::SensorDataQoS single_depth_sensor_qos()
+{
+  rclcpp::SensorDataQoS qos;
+  qos.get_rmw_qos_profile().depth = 1;
+  return qos;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:80:37</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      78 |    *
+      79 |    * @return typename MessageT::ConstSharedPtr The latest data.
+      80 |    */
+<span class="marker">&gt;&gt;&gt;   81 |   typename MessageT::ConstSharedPtr take_data();</span>
+      82 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;take_data&#x27; should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto take_data() -&gt; typename MessageT::ConstSharedPtr;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:91:3</a><span class="rule-id">clang-tidy:modernize-use-nodiscard</span></div><div class="violation-body"><div class="message">function &#x27;last_taken_data_timestamp&#x27; should be marked [[nodiscard]]</div><pre class="code">      89 |    * received.
+      90 |    */
+      91 |
+<span class="marker">&gt;&gt;&gt;   92 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+      93 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; should be marked with [[nodiscard]] to indicate that the return value should not be ignored.</div>
+<pre class="code">[[nodiscard]] std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:91:31</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      89 |    * received.
+      90 |    */
+      91 |
+<span class="marker">&gt;&gt;&gt;   92 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+      93 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto last_taken_data_timestamp() const -&gt; std::optional&lt;rclcpp::Time&gt;;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:127:37</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     125 |    *
+     126 |    * @return typename MessageT::ConstSharedPtr The newest data.
+     127 |    */
+<span class="marker">&gt;&gt;&gt;  128 |   typename MessageT::ConstSharedPtr take_data();</span>
+     129 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;take_data&#x27; should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto take_data() -&gt; typename MessageT::ConstSharedPtr;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:137:3</a><span class="rule-id">clang-tidy:modernize-use-nodiscard</span></div><div class="violation-body"><div class="message">function &#x27;last_taken_data_timestamp&#x27; should be marked [[nodiscard]]</div><pre class="code">     135 |    * @return std::optional&lt;rclcpp::Time&gt; The last timestamp. std::nullopt if no message has been
+     136 |    * received in the most recent take_data() call.
+     137 |    */
+<span class="marker">&gt;&gt;&gt;  138 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+     139 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; should be marked with [[nodiscard]] to indicate that the return value should not be ignored.</div>
+<pre class="code">[[nodiscard]] std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:137:31</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     135 |    * @return std::optional&lt;rclcpp::Time&gt; The last timestamp. std::nullopt if no message has been
+     136 |    * received in the most recent take_data() call.
+     137 |    */
+<span class="marker">&gt;&gt;&gt;  138 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+     139 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto last_taken_data_timestamp() const -&gt; std::optional&lt;rclcpp::Time&gt;;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:157:37</a><span class="rule-id">clang-tidy:readability-named-parameter</span></div><div class="violation-body"><div class="message">all parameters should be named in a function</div><pre class="code">     155 |    *
+     156 |    * @param qos The QoS profile to check.
+     157 |    */
+<span class="marker">&gt;&gt;&gt;  158 |   void check_qos(const rclcpp::QoS &amp;) {}</span>
+     159 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function parameter &#x27;qos&#x27; should be named for clarity.</div>
+<pre class="code">void check_qos(const rclcpp::QoS &amp;qos) {}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:165:50</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     163 |    *
+     164 |    * @return std::vector&lt;typename MessageT::ConstSharedPtr&gt; The list of all received data.
+     165 |    */
+<span class="marker">&gt;&gt;&gt;  166 |   std::vector&lt;typename MessageT::ConstSharedPtr&gt; take_data();</span>
+     167 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability.</div>
+<pre class="code">auto take_data() -&gt; std::vector&lt;typename MessageT::ConstSharedPtr&gt;;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:175:3</a><span class="rule-id">clang-tidy:modernize-use-nodiscard</span></div><div class="violation-body"><div class="message">function &#x27;last_taken_data_timestamp&#x27; should be marked [[nodiscard]]</div><pre class="code">     173 |    * @return std::optional&lt;rclcpp::Time&gt; The last timestamp. std::nullopt if no messages have been
+     174 |    * received in the most recent take_data() call.
+     175 |    */
+<span class="marker">&gt;&gt;&gt;  176 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+     177 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; should be marked with [[nodiscard]] to indicate that the return value should not be ignored.</div>
+<pre class="code">auto last_taken_data_timestamp() const -&gt; std::optional&lt;rclcpp::Time&gt; [[nodiscard]] { return timestamp_; }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:175:31</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     173 |    * @return std::optional&lt;rclcpp::Time&gt; The last timestamp. std::nullopt if no messages have been
+     174 |    * received in the most recent take_data() call.
+     175 |    */
+<span class="marker">&gt;&gt;&gt;  176 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+     177 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability.</div>
+<pre class="code">auto last_taken_data_timestamp() const -&gt; std::optional&lt;rclcpp::Time&gt; [[nodiscard]] { return timestamp_; }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:205:26</a><span class="rule-id">clang-tidy:bugprone-easily-swappable-parameters</span></div><div class="violation-body"><div class="message">2 adjacent parameters of &#x27;InterProcessPollingSubscriber&lt;MessageT, PollingPolicy&gt;&#x27; of similar type are easily swapped by mistake</div><pre class="code">     203 |    * @param qos The QoS profile to use for the subscription.
+     204 |    */
+     205 |   explicit InterProcessPollingSubscriber(
+<span class="marker">&gt;&gt;&gt;  206 |     rclcpp::Node * node, const std::string &amp; topic_name, const rclcpp::QoS &amp; qos = rclcpp::QoS{1})</span>
+     207 |   {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameters &#x27;node&#x27; and &#x27;qos&#x27; are of similar type and are adjacent, making them easily swapped by mistake.</div>
+<pre class="code">explicit InterProcessPollingSubscriber(
+    rclcpp::Node * node, const rclcpp::QoS &amp; qos, const std::string &amp; topic_name = &quot;&quot;)
+  {
+    this-&gt;check_qos(qos);
+
+    auto noexec_callback_group =
+      node-&gt;create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
+
+    auto noexec_subscription_options = rclcpp::SubscriptionOptions();
+    noexec_subscription_options.callback_group = noexec_callback_group;
+
+    subscriber_ = node-&gt;create_subscription&lt;MessageT&gt;(
+      topic_name, qos,
+      [node]([[maybe_unused]] const typename MessageT::ConstSharedPtr msg) { assert(false); },
+      noexec_subscription_options);
+  }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:229:20</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     227 |    * @param qos The QoS profile to use for the subscription.
+     228 |    * @return SharedPtr The created subscription.
+     229 |    */
+<span class="marker">&gt;&gt;&gt;  230 |   static SharedPtr create_subscription(</span>
+     231 |     rclcpp::Node * node, const std::string &amp; topic_name, const rclcpp::QoS &amp; qos = rclcpp::QoS{1})</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;create_subscription&#x27; should use a trailing return type for better readability and consistency.</div>
+<pre class="code">static auto create_subscription(
+    rclcpp::Node * node, const std::string &amp; topic_name, const rclcpp::QoS &amp; qos = rclcpp::QoS{1}) -&gt; SharedPtr
+  {
+    return std::make_shared&lt;InterProcessPollingSubscriber&lt;MessageT, PollingPolicy&gt;&gt;(
+      node, topic_name, qos);
+  }</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:230:26</a><span class="rule-id">clang-tidy:bugprone-easily-swappable-parameters</span></div><div class="violation-body"><div class="message">2 adjacent parameters of &#x27;create_subscription&#x27; of similar type are easily swapped by mistake</div><pre class="code">     228 |    * @return SharedPtr The created subscription.
+     229 |    */
+     230 |   static SharedPtr create_subscription(
+<span class="marker">&gt;&gt;&gt;  231 |     rclcpp::Node * node, const std::string &amp; topic_name, const rclcpp::QoS &amp; qos = rclcpp::QoS{1})</span>
+     232 |   {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameters &#x27;node&#x27; and &#x27;qos&#x27; are of similar type and are adjacent, making it easy to swap them by mistake.</div>
+<pre class="code">static SharedPtr create_subscription(
+    rclcpp::Node * node, const rclcpp::QoS &amp; qos = rclcpp::QoS{1}, const std::string &amp; topic_name)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:243:53</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     241 | {
+     242 |
+     243 | template &lt;typename MessageT&gt;
+<span class="marker">&gt;&gt;&gt;  244 | typename MessageT::ConstSharedPtr Latest&lt;MessageT&gt;::take_data()</span>
+     245 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;take_data&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:259:53</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     257 | }
+     258 |
+     259 | template &lt;typename MessageT&gt;
+<span class="marker">&gt;&gt;&gt;  260 | typename MessageT::ConstSharedPtr Newest&lt;MessageT&gt;::take_data()</span>
+     261 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use a trailing return type for this function.</div>
+<pre class="code">template &lt;typename MessageT&gt; auto Latest&lt;MessageT&gt;::take_data() -&gt; typename MessageT::ConstSharedPtr
+{
+  auto &amp; subscriber =
+    static_cast&lt;InterProcessPollingSubscriber&lt;MessageT, Latest&gt; *&gt;(this)-&gt;subscriber_;
+  auto new_data = std::make_shared&lt;MessageT&gt;();
+  rclcpp::MessageInfo message_info;
+  const bool success = subscriber-&gt;take(*new_data, message_info);
+  if (success) {
+    data_ = new_data;
+    timestamp_ = rclcpp::Time(message_info.get_rmw_message_info().source_timestamp, RCL_ROS_TIME);
+  }
+
+  return data_;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:275:63</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     273 | }
+     274 |
+     275 | template &lt;typename MessageT&gt;
+<span class="marker">&gt;&gt;&gt;  276 | std::vector&lt;typename MessageT::ConstSharedPtr&gt; All&lt;MessageT&gt;::take_data()</span>
+     277 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use a trailing return type for this function.</div>
+<pre class="code">template &lt;typename MessageT&gt; auto Newest&lt;MessageT&gt;::take_data() -&gt; typename MessageT::ConstSharedPtr
+{
+  auto &amp; subscriber =
+    static_cast&lt;InterProcessPollingSubscriber&lt;MessageT, Newest&gt; *&gt;(this)-&gt;subscriber_;
+  auto new_data = std::make_shared&lt;MessageT&gt;();
+  rclcpp::MessageInfo message_info;
+  const bool success = subscriber-&gt;take(*new_data, message_info);
+  if (success) {
+    timestamp_ = rclcpp::Time(message_info.get_rmw_message_info().source_timestamp, RCL_ROS_TIME);
+    return new_data;
+  }
+  timestamp_ = std::nullopt;
+  return nullptr;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:31</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;single_depth_sensor_qos&#x27; is never used.</div><pre class="code">      29 |  * @brief Creates a SensorDataQoS profile with a single depth.
+      30 |  * @return rclcpp::SensorDataQoS The QoS profile with depth set to 1.
+      31 |  */
+<span class="marker">&gt;&gt;&gt;   32 | inline rclcpp::SensorDataQoS single_depth_sensor_qos()</span>
+      33 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;single_depth_sensor_qos&#x27; is never used and can be removed.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:91</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;last_taken_data_timestamp&#x27; is never used.</div><pre class="code">      89 |    * received.
+      90 |    */
+      91 |
+<span class="marker">&gt;&gt;&gt;   92 |   std::optional&lt;rclcpp::Time&gt; last_taken_data_timestamp() const { return timestamp_; }</span>
+      93 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;last_taken_data_timestamp&#x27; is never used and should be removed to clean up the code.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:236</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;subscriber&#x27; is never used.</div><pre class="code">     234 |       node, topic_name, qos);
+     235 |   }
+     236 |
+<span class="marker">&gt;&gt;&gt;  237 |   typename rclcpp::Subscription&lt;MessageT&gt;::SharedPtr subscriber() { return subscriber_; }</span>
+     238 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;subscriber&#x27; is never used and should be removed to clean up the code.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp">deps/autoware/autoware_utils_rclcpp/include/autoware_utils_rclcpp/polling_subscriber.hpp:243</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;take_data&#x27; is never used.</div><pre class="code">     241 | {
+     242 |
+     243 | template &lt;typename MessageT&gt;
+<span class="marker">&gt;&gt;&gt;  244 | typename MessageT::ConstSharedPtr Latest&lt;MessageT&gt;::take_data()</span>
+     245 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use a trailing return type for this function.</div>
+<pre class="code">template &lt;typename MessageT&gt; auto All&lt;MessageT&gt;::take_data() -&gt; std::vector&lt;typename MessageT::ConstSharedPtr&gt;
+{
+  auto &amp; subscriber =
+    static_cast&lt;InterProcessPollingSubscriber&lt;MessageT, All&gt; *&gt;(this)-&gt;subscriber_;
+  std::vector&lt;typename MessageT::ConstSharedPtr&gt; data;
+  rclcpp::MessageInfo message_info;
+  for (;;) {
+    auto datum = std::make_shared&lt;MessageT&gt;();
+    if (subscriber-&gt;take(*datum, message_info)) {
+      data.push_back(datum);
+      timestamp_ = rclcpp::Time(message_info.get_rmw_message_info().source_timestamp, RCL_ROS_TIME);
+    } else {
+      break;
+    }
+  }
+  if (data.empty()) {
+    timestamp_ = std::nullopt;
+  }
+  return data;
+}</pre></div></div></div>
+</div>
+</body>
+</html>

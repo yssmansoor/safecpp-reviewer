@@ -1,0 +1,42 @@
+rules:
+  - rule_id: "cppcheck:nullPointer"
+    short_name: "Possible null pointer dereference"
+    category: "cppcheck"
+    rationale: >
+      Dereferencing a pointer that may be null causes undefined behavior
+      and typically a crash.  Either ensure the pointer is non-null before
+      use, or design the API to take a reference instead.
+    bad_example: |
+      int* ptr = nullptr;
+      *ptr = 42;  // crash
+    good_example: |
+      int value = 42;
+      int* ptr = &value;
+      if (ptr != nullptr) {
+        *ptr = 42;
+      }
+
+  - rule_id: "cppcheck:unusedFunction"
+    short_name: "Function is never called"
+    category: "cppcheck"
+    rationale: >
+      Unused functions add maintenance burden and may indicate dead code
+      from a refactor.  Either remove the function or, if it is part of a
+      public API, suppress this check at the declaration.
+
+  - rule_id: "cppcheck:unusedVariable"
+    short_name: "Variable is assigned but never read"
+    category: "cppcheck"
+    rationale: >
+      Unused variables waste stack space and often indicate a logic error
+      (e.g. forgetting to use a return value).  Remove the variable or,
+      if intentional, use [[maybe_unused]].
+
+  - rule_id: "clang-tidy:bugprone-not-null-terminated-result"
+    short_name: "String operation may produce a non-null-terminated result"
+    category: "bugprone"
+    rationale: >
+      Functions like strncpy do not guarantee null termination if the
+      source is longer than the buffer.  Subsequent string operations
+      then read past the buffer, causing undefined behavior.  Prefer
+      std::string or carefully-sized snprintf.

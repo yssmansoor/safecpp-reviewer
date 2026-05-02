@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>operation.hpp</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
+.subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+.summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem 1.25rem;
+    min-width: 120px;
+}
+.stat-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; }
+.stat-value { font-size: 1.5rem; font-weight: 600; color: #f0f6fc; }
+.violation {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+.violation-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.badge {
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.sev-error   { background: #5a1d1d; color: #ff7b72; }
+.sev-warning { background: #5a4a1d; color: #d29922; }
+.sev-style   { background: #1d3a5a; color: #58a6ff; }
+.sev-note    { background: #30363d; color: #8b949e; }
+.tool-tag { color: #8b949e; font-size: 0.85rem; }
+.rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
+.violation-body { padding: 1rem; }
+.message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
+.code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    white-space: pre;
+    color: #c9d1d9;
+}
+.code .marker { color: #ff7b72; font-weight: 700; }
+.fix-section {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #0f2419;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+.fix-text { color: #c9d1d9; white-space: pre-wrap; font-size: 0.9rem; }
+.empty {
+    text-align: center;
+    padding: 3rem;
+    color: #8b949e;
+}
+.fix-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1a2820;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+.fix-prose {
+    color: #c9d1d9;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.fix-section .code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← Back to index</a>
+<h1>operation.hpp</h1>
+<div class="subtitle">Generated 2026-05-02 10:45:14</div>
+<div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">10</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">8</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">0</div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:15:9</a><span class="rule-id">clang-tidy:bugprone-reserved-identifier</span></div><div class="violation-body"><div class="message">declaration uses identifier &#x27;AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_&#x27;, which is a reserved identifier</div><pre class="code">      13 | // limitations under the License.
+      14 |
+      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_
+<span class="marker">&gt;&gt;&gt;   16 | #define AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_</span>
+      17 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:17:10</a><span class="rule-id">clang-tidy:clang-diagnostic-error</span></div><div class="violation-body"><div class="message">&#x27;geometry_msgs/msg/quaternion.hpp&#x27; file not found</div><pre class="code">      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_
+      16 | #define AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_
+      17 |
+<span class="marker">&gt;&gt;&gt;   18 | #include &quot;geometry_msgs/msg/quaternion.hpp&quot;</span>
+      19 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:20:1</a><span class="rule-id">clang-tidy:modernize-concat-nested-namespaces</span></div><div class="violation-body"><div class="message">nested namespaces can be concatenated</div><pre class="code">      18 | #include &quot;geometry_msgs/msg/quaternion.hpp&quot;
+      19 |
+      20 | // NOTE: Do not use autoware_utils namespace
+<span class="marker">&gt;&gt;&gt;   21 | namespace geometry_msgs</span>
+      22 | {</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:24:12</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      22 | {
+      23 | namespace msg
+      24 | {
+<span class="marker">&gt;&gt;&gt;   25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;</span>
+      26 | Quaternion operator-(Quaternion a) noexcept;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:24:33</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">      22 | {
+      23 | namespace msg
+      24 | {
+<span class="marker">&gt;&gt;&gt;   25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;</span>
+      26 | Quaternion operator-(Quaternion a) noexcept;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:25:12</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      23 | namespace msg
+      24 | {
+      25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;
+<span class="marker">&gt;&gt;&gt;   26 | Quaternion operator-(Quaternion a) noexcept;</span>
+      27 | Quaternion operator-(Quaternion a, Quaternion b) noexcept;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:25:33</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">      23 | namespace msg
+      24 | {
+      25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;
+<span class="marker">&gt;&gt;&gt;   26 | Quaternion operator-(Quaternion a) noexcept;</span>
+      27 | Quaternion operator-(Quaternion a, Quaternion b) noexcept;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:26:12</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      24 | {
+      25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;
+      26 | Quaternion operator-(Quaternion a) noexcept;
+<span class="marker">&gt;&gt;&gt;   27 | Quaternion operator-(Quaternion a, Quaternion b) noexcept;</span>
+      28 | }  // namespace msg</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:26:33</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">      24 | {
+      25 | Quaternion operator+(Quaternion a, Quaternion b) noexcept;
+      26 | Quaternion operator-(Quaternion a) noexcept;
+<span class="marker">&gt;&gt;&gt;   27 | Quaternion operator-(Quaternion a, Quaternion b) noexcept;</span>
+      28 | }  // namespace msg</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-note">note</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/msg/operation.hpp:17</a><span class="rule-id">cppcheck:missingInclude</span></div><div class="violation-body"><div class="message">Include file: &quot;geometry_msgs/msg/quaternion.hpp&quot; not found.</div><pre class="code">      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_
+      16 | #define AUTOWARE_UTILS_GEOMETRY__MSG__OPERATION_HPP_
+      17 |
+<span class="marker">&gt;&gt;&gt;   18 | #include &quot;geometry_msgs/msg/quaternion.hpp&quot;</span>
+      19 | </pre></div></div>
+</div>
+</body>
+</html>

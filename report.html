@@ -123,73 +123,59 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
 <body>
 <div class="container">
 <h1>safecpp-reviewer — sample_violations.cpp</h1>
-<div class="subtitle">Generated 2026-05-01 23:34:39</div>
+<div class="subtitle">Generated 2026-05-02 08:44:46</div>
 <div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">19</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">12</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">6</div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:9:5</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
 <span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency with modern C++ practices.</div>
-<pre class="code">int process(int a, int b) -&gt; int {
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;process&#x27; is never used.</div>
+<pre class="code">// cppcheck:unusedFunction
+void process(int a, int b) {
     int* ptr = nullptr;
-    return a + b;
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:9:17</span><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
 <span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;a&#x27; is too short, expected at least 3 characters according to the readability-identifier-length rule.</div>
-<pre class="code">int process(int arg1, int arg2) {
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Parameter name &#x27;a&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">int process(int arg1, int b) {
     int* ptr = nullptr;
-    return arg1 + arg2;
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:16</span><span class="rule-id">clang-tidy:modernize-use-nullptr</span></div><div class="violation-body"><div class="message">use nullptr</div><pre class="code">       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
       10 | int process(int a, int b) {
 <span class="marker">&gt;&gt;&gt;   11 |     int* ptr = NULL;                   // modernize-use-nullptr</span>
-      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The use of NULL is deprecated in C++ and should be replaced with nullptr for better type safety and readability.</div>
-<pre class="code">int process(int a, int b) {
-    int* ptr = nullptr;
-    int result = static_cast&lt;int&gt;(a + b);
-    return result;
-}</pre></div></div></div>
+      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use nullptr instead of NULL.</div>
+<pre class="code">int* ptr = nullptr;</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:11:18</span><span class="rule-id">clang-tidy:readability-redundant-casting</span></div><div class="violation-body"><div class="message">redundant explicit casting to the same type &#x27;int&#x27; as the sub-expression, remove this casting</div><pre class="code">       9 | // [modernize-use-nullptr] NULL instead of nullptr
       10 | int process(int a, int b) {
       11 |     int* ptr = NULL;                   // modernize-use-nullptr
 <span class="marker">&gt;&gt;&gt;   12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</span>
-      13 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The cast is redundant since a + b is already an int.</div>
-<pre class="code">int result = a + b;
-return result;</pre></div></div></div>
+      13 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Redundant explicit casting to the same type &#x27;int&#x27; as the sub-expression, remove this casting.</div>
+<pre class="code">int result = a + b;</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:14:10</span><span class="rule-id">clang-tidy:clang-analyzer-core.NullDereference</span></div><div class="violation-body"><div class="message">Dereference of null pointer (loaded from variable &#x27;ptr&#x27;)</div><pre class="code">      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
       13 |
       14 |     // [cppcheck: nullPointer] — ptr is never assigned a valid address
 <span class="marker">&gt;&gt;&gt;   15 |     *ptr = result;</span>
-      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The pointer &#x27;ptr&#x27; is dereferenced without being assigned a valid address, leading to a null pointer dereference.</div>
-<pre class="code">int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
-
-// Ensure ptr is assigned a valid address before dereferencing
-if (ptr != nullptr) {
-    *ptr = result;
-} else {
-    // Handle the error case where ptr is null
-    // For example, log an error or throw an exception
-}</pre></div></div></div>
+      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Dereference of null pointer (loaded from variable &#x27;ptr&#x27;).</div>
+<pre class="code">// [cppcheck: nullPointer] — ptr is never assigned a valid address
+// *ptr = result;</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:20:8</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      18 | }
       19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
 <span class="marker">&gt;&gt;&gt;   21 | double magic() {</span>
-      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; should use a trailing return type for better readability and consistency.</div>
-<pre class="code">double magic() -&gt; double {
+      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; has a trailing return type that is not necessary and can be simplified.</div>
+<pre class="code">double magic() {
     return 3.14159 * 42;
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:21:12</span><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">3.14159 is a magic number; consider replacing it with a named constant</div><pre class="code">      19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
       21 | double magic() {
 <span class="marker">&gt;&gt;&gt;   22 |     return 3.14159 * 42;</span>
-      23 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 3.14159 is a magic number; consider replacing it with a named constant.</div>
+      23 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">3.14159 is a magic number; consider replacing it with a named constant.</div>
 <pre class="code">const double PI = 3.14159;
 
-// [cppcoreguidelines-avoid-magic-numbers]
 double magic() {
     return PI * 42;
 }</pre></div></div></div>
@@ -197,7 +183,7 @@ double magic() {
       24 |
       25 | // [modernize-use-override] missing override keyword
 <span class="marker">&gt;&gt;&gt;   26 | class Base {</span>
-      27 | public:</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The class &#x27;Base&#x27; defines a default destructor but does not define any special member functions such as a copy constructor, copy assignment operator, move constructor, or move assignment operator. According to the CppCoreGuidelines, classes with a user-defined destructor should also define all other special member functions to avoid undefined behavior.</div>
+      27 | public:</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The class &#x27;Base&#x27; defines a default destructor but does not define a copy constructor, a copy assignment operator, a move constructor, or a move assignment operator, which violates the cppcoreguidelines-special-member-functions rule.</div>
 <pre class="code">class Base {
 public:
     Base() = default;
@@ -211,16 +197,13 @@ public:
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; in the Derived class should be annotated with &#x27;override&#x27; to indicate that it is intended to override a virtual function from the Base class. This helps catch errors if the function signature in the Base class changes in the future.</div>
-<pre class="code">class Derived : public Base {
-public:
-    void tick() override {}
-};</pre></div></div></div>
+      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier.</div>
+<pre class="code">void tick() override {}</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:38:5</span><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays</span></div><div class="violation-body"><div class="message">do not declare C-style arrays, use std::array&lt;&gt; instead</div><pre class="code">      36 |
       37 | // [cppcheck: unusedFunction]
       38 | static void unused_helper() {
 <span class="marker">&gt;&gt;&gt;   39 |     char buf[16];</span>
-      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The code declares a C-style array, which is not recommended. Instead, it should use std::array&lt;&gt; for safer and more modern C++ code.</div>
+      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function uses a C-style array, which is deprecated. It should use std::array&lt;&gt; instead.</div>
 <pre class="code">static void unused_helper() {
     std::array&lt;char, 16&gt; buf;
     strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
@@ -229,90 +212,64 @@ public:
       37 | // [cppcheck: unusedFunction]
       38 | static void unused_helper() {
 <span class="marker">&gt;&gt;&gt;   39 |     char buf[16];</span>
-      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 16 is a magic number; consider replacing it with a named constant to improve readability and maintainability.</div>
-<pre class="code">static const size_t BUFFER_SIZE = 16;
+      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 16 is a magic number. It should be replaced with a named constant.</div>
+<pre class="code">#define BUFFER_SIZE 16
 
 static void unused_helper() {
-    char buf[BUFFER_SIZE];
-    strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
+    std::array&lt;char, BUFFER_SIZE&gt; buf;
+    strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:12</span><span class="rule-id">clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay</span></div><div class="violation-body"><div class="message">do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead</div><pre class="code">      37 | // [cppcheck: unusedFunction]
       38 | static void unused_helper() {
       39 |     char buf[16];
 <span class="marker">&gt;&gt;&gt;   40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</span>
-      41 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The use of strcpy is deprecated and can lead to buffer overflow. Additionally, the array buf is implicitly decayed into a pointer, which is not recommended.</div>
-<pre class="code">#include &lt;cstring&gt;
-#include &lt;array&gt;
-
-static void unused_helper() {
+      41 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The array is implicitly decayed into a pointer, which loses size information. It should use std::array::data() to get the pointer.</div>
+<pre class="code">static void unused_helper() {
     std::array&lt;char, 16&gt; buf;
-    std::strcpy(buf.data(), &quot;hello world!!!&quot;);  // Use std::strcpy with array data()
+    strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:9</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;process&#x27; is never used.</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
 <span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;process&#x27; is defined but never used, which is unnecessary and can lead to confusion.</div>
-<pre class="code">// [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
-// [modernize-use-nullptr] NULL instead of nullptr
-int process(int a, int b) {
-    int* ptr = nullptr;                   // modernize-use-nullptr
-    return a + b;
-}
-
-int main() {
-    int result = process(3, 4);
-    return 0;
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use trailing return type syntax for better readability.</div>
+<pre class="code">auto process(int arg1, int b) -&gt; int {
+    int* ptr = nullptr;
+    return arg1 + b;
 }</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:14:6</span><span class="rule-id">cppcheck:nullPointer</span></div><div class="violation-body"><div class="message">Null pointer dereference: ptr</div><pre class="code">      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
       13 |
       14 |     // [cppcheck: nullPointer] — ptr is never assigned a valid address
 <span class="marker">&gt;&gt;&gt;   15 |     *ptr = result;</span>
-      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The pointer &#x27;ptr&#x27; is dereferenced without being assigned a valid address, leading to a null pointer dereference.</div>
-<pre class="code">int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
-
-// Ensure ptr is properly initialized before dereferencing
-int* ptr = new int;
-*ptr = result;
-
-// Don&#x27;t forget to free the allocated memory when done
-delete ptr;</pre></div></div></div>
+      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Null pointer dereference: ptr.</div>
+<pre class="code">// [cppcheck: nullPointer] — ptr is never assigned a valid address
+// *ptr = result;</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:20</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;magic&#x27; is never used.</div><pre class="code">      18 | }
       19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
 <span class="marker">&gt;&gt;&gt;   21 | double magic() {</span>
-      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; is never used.</div>
-<pre class="code">// [cppcoreguidelines-avoid-magic-numbers]
-// double magic() {
-//     return 3.14159 * 42;
-// }</pre></div></div></div>
+      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; is never used and should be removed to clean up the codebase.</div></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:27</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; is never used.</div><pre class="code">      25 | // [modernize-use-override] missing override keyword
       26 | class Base {
       27 | public:
 <span class="marker">&gt;&gt;&gt;   28 |     virtual void tick() {}</span>
-      29 |     virtual ~Base() = default;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; is never used, which makes it unnecessary and potentially confusing.</div>
+      29 |     virtual ~Base() = default;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; is never used.</div>
 <pre class="code">class Base {
 public:
+    // cppcheck-suppress unusedFunction
+    virtual void tick() {}
     virtual ~Base() = default;
-};</pre></div></div></div>
+}</pre></div></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:33:10</span><span class="rule-id">cppcheck:missingOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier.</div><pre class="code">      31 |
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier. This can lead to errors if the base class function signature changes in the future, as the compiler will not warn about the override being incorrect.</div>
-<pre class="code">class Derived : public Base {
-public:
-    void tick() override {}
-};</pre></div></div></div>
+      35 | };</pre></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:33:10</span><span class="rule-id">cppcheck:uselessOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function</div><pre class="code">      31 |
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function. This is redundant and can be fixed by removing the override keyword.</div>
-<pre class="code">class Derived : public Base {
-public:
-    void tick() {}
-};</pre></div></div></div>
+      35 | };</pre></div></div>
 <div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:37</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;unused_helper&#x27; is never used.</div><pre class="code">      35 | };
       36 |
       37 | // [cppcheck: unusedFunction]

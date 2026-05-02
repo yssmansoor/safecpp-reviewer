@@ -69,7 +69,6 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
 .sev-style   { background: #1d3a5a; color: #58a6ff; }
 .sev-note    { background: #30363d; color: #8b949e; }
 .tool-tag { color: #8b949e; font-size: 0.85rem; }
-.location { color: #58a6ff; font-family: monospace; font-size: 0.85rem; }
 .rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
 .violation-body { padding: 1rem; }
 .message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
@@ -129,6 +128,21 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
 """
 
 
@@ -149,12 +163,15 @@ def _format_snippet(snippet: str | None) -> str:
 
 
 def _render_violation(v: Violation) -> str:
+    file_url = f"file://{Path(v.file).resolve()}"
     header = (
         f'<div class="violation-header">'
         f"{_severity_badge(v.severity)}"
         f'<span class="tool-tag">{html.escape(v.tool)}</span>'
-        f'<span class="location">{html.escape(str(v.file))}:{v.line}'
-        f"{':' + str(v.column) if v.column else ''}</span>"
+        f'<a class="location" href="{html.escape(file_url)}">'
+        f"{html.escape(str(v.file))}:{v.line}"
+        f"{':' + str(v.column) if v.column else ''}"
+        f"</a>"
         f'<span class="rule-id">{html.escape(v.rule_id)}</span>'
         f"</div>"
     )
@@ -177,6 +194,7 @@ def render_html(
     violations: list[Violation],
     output_path: Path,
     title: str = "safecpp-reviewer Report",
+    back_link: str | None = None,  # NEW
 ) -> Path:
     """Write *violations* as a self-contained HTML report to *output_path*.
 
@@ -188,6 +206,8 @@ def render_html(
     Returns:
         The output path (for chaining).
     """
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     sev_counts = Counter(v.severity for v in violations)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -226,8 +246,33 @@ def render_html(
 </body>
 </html>
 """
+    nav_html = (
+        f'<a class="back-link" href="{html.escape(back_link)}">← Back to index</a>'
+        if back_link
+        else ""
+    )
 
+    html_doc = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{html.escape(title)}</title>
+<style>{_CSS}</style>
+</head>
+<body>
+<div class="container">
+{nav_html}
+<h1>{html.escape(title)}</h1>
+<div class="subtitle">Generated {timestamp}</div>
+<div class="summary">{stats_html}</div>
+{body_html}
+</div>
+</body>
+</html>
+"""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html_doc, encoding="utf-8")
+
     return output_path
 
 

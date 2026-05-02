@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>geometry.hpp</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
+.subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+.summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem 1.25rem;
+    min-width: 120px;
+}
+.stat-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; }
+.stat-value { font-size: 1.5rem; font-weight: 600; color: #f0f6fc; }
+.violation {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+.violation-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.badge {
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.sev-error   { background: #5a1d1d; color: #ff7b72; }
+.sev-warning { background: #5a4a1d; color: #d29922; }
+.sev-style   { background: #1d3a5a; color: #58a6ff; }
+.sev-note    { background: #30363d; color: #8b949e; }
+.tool-tag { color: #8b949e; font-size: 0.85rem; }
+.rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
+.violation-body { padding: 1rem; }
+.message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
+.code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    white-space: pre;
+    color: #c9d1d9;
+}
+.code .marker { color: #ff7b72; font-weight: 700; }
+.fix-section {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #0f2419;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+.fix-text { color: #c9d1d9; white-space: pre-wrap; font-size: 0.9rem; }
+.empty {
+    text-align: center;
+    padding: 3rem;
+    color: #8b949e;
+}
+.fix-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1a2820;
+    border-left: 3px solid #2ea043;
+    border-radius: 4px;
+}
+.fix-label {
+    color: #2ea043;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+.fix-prose {
+    color: #c9d1d9;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.fix-section .code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← Back to index</a>
+<h1>geometry.hpp</h1>
+<div class="subtitle">Generated 2026-05-02 10:30:53</div>
+<div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">151</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">132</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">14</div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:15:9</a><span class="rule-id">clang-tidy:bugprone-reserved-identifier</span></div><div class="violation-body"><div class="message">declaration uses identifier &#x27;AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_&#x27;, which is a reserved identifier</div><pre class="code">      13 | // limitations under the License.
+      14 |
+      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+<span class="marker">&gt;&gt;&gt;   16 | #define AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_</span>
+      17 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The identifier &#x27;AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_&#x27; uses an underscore prefix, which is reserved in C++ for the implementation.</div>
+<pre class="code">#ifndef AUTOWARE_UTILS_GEOMETRY_GEOMETRY_HPP_
+#define AUTOWARE_UTILS_GEOMETRY_GEOMETRY_HPP_</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:17:10</a><span class="rule-id">clang-tidy:clang-diagnostic-error</span></div><div class="violation-body"><div class="message">&#x27;autoware_utils_geometry/boost_geometry.hpp&#x27; file not found</div><pre class="code">      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+      16 | #define AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+      17 |
+<span class="marker">&gt;&gt;&gt;   18 | #include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;</span>
+      19 | #include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The header file &#x27;autoware_utils_geometry/boost_geometry.hpp&#x27; is not found. This could be due to a missing dependency or incorrect include path.</div>
+<pre class="code">#include &lt;boost/geometry.hpp&gt;
+#include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:47:6</a><span class="rule-id">clang-tidy:readability-identifier-naming</span></div><div class="violation-body"><div class="message">invalid case style for function &#x27;fromMsg&#x27;</div><pre class="code">      45 | //              after they are implemented in ros2 geometry2.
+      46 | namespace tf2
+      47 | {
+<span class="marker">&gt;&gt;&gt;   48 | void fromMsg(const geometry_msgs::msg::PoseStamped &amp; msg, tf2::Stamped&lt;tf2::Transform&gt; &amp; out);</span>
+      49 | #ifdef ROS_DISTRO_GALACTIC</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function name &#x27;fromMsg&#x27; does not follow the MISRA C++ naming convention for functions, which recommends using lower case with underscores.</div>
+<pre class="code">void from_msg(const geometry_msgs::msg::PoseStamped &amp; msg, tf2::Stamped&lt;tf2::Transform&gt; &amp; out);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:105:27</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     103 | using autoware_utils_math::pi;
+     104 |
+     105 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  106 | geometry_msgs::msg::Point get_point(const T &amp; p)</span>
+     107 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class T&gt;
+geometry_msgs::msg::Point get_point(const T &amp; p) -&gt; geometry_msgs::msg::Point
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:105:47</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     103 | using autoware_utils_math::pi;
+     104 |
+     105 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  106 | geometry_msgs::msg::Point get_point(const T &amp; p)</span>
+     107 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+geometry_msgs::msg::Point get_point(const T &amp; point)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:111:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     109 | }
+     110 |
+     111 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  112 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Point &amp; p)</span>
+     113 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const geometry_msgs::msg::Point &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    return p;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:111:78</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     109 | }
+     110 |
+     111 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  112 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Point &amp; p)</span>
+     113 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Point &amp; point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:117:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     115 | }
+     116 |
+     117 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  118 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Pose &amp; p)</span>
+     119 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const geometry_msgs::msg::Pose &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:117:77</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     115 | }
+     116 |
+     117 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  118 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Pose &amp; p)</span>
+     119 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::Pose &amp; pose)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:123:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     121 | }
+     122 |
+     123 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  124 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseStamped &amp; p)</span>
+     125 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const geometry_msgs::msg::PoseStamped &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:123:84</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     121 | }
+     122 |
+     123 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  124 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseStamped &amp; p)</span>
+     125 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseStamped &amp; pose)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:129:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     127 | }
+     128 |
+     129 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  130 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; p)</span>
+     131 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:129:98</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     127 | }
+     128 |
+     129 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  130 | inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; p)</span>
+     131 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:135:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     133 | }
+     134 |
+     135 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  136 | inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     137 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const autoware_planning_msgs::msg::PathPoint &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:135:91</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     133 | }
+     134 |
+     135 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  136 | inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     137 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::PathPoint &amp; point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:141:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     139 | }
+     140 |
+     141 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  142 | inline geometry_msgs::msg::Point get_point(</span>
+     143 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p) -&gt; geometry_msgs::msg::Point
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:142:69</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     140 |
+     141 | template &lt;&gt;
+     142 | inline geometry_msgs::msg::Point get_point(
+<span class="marker">&gt;&gt;&gt;  143 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</span>
+     144 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; path_point</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:148:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     146 | }
+     147 |
+     148 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  149 | inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     150 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_point(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p) -&gt; geometry_msgs::msg::Point
+{
+    return geometry_msgs::msg::Point();
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:148:97</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     146 | }
+     147 |
+     148 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  149 | inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     150 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Point get_point(const autoware_planning_msgs::msg::TrajectoryPoint &amp; point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:154:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     152 | }
+     153 |
+     154 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  155 | geometry_msgs::msg::Pose get_pose([[maybe_unused]] const T &amp; p)</span>
+     156 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class T&gt;
+geometry_msgs::msg::Pose get_pose([[maybe_unused]] const T &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:154:62</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     152 | }
+     153 |
+     154 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  155 | geometry_msgs::msg::Pose get_pose([[maybe_unused]] const T &amp; p)</span>
+     156 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+gometry_msgs::msg::Pose get_pose([[maybe_unused]] const T &amp; pose)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:161:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     159 | }
+     160 |
+     161 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  162 | inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::Pose &amp; p)</span>
+     163 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_pose(const geometry_msgs::msg::Pose &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+    return p;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:161:75</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     159 | }
+     160 |
+     161 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  162 | inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::Pose &amp; p)</span>
+     163 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::Pose &amp; pose)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:167:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     165 | }
+     166 |
+     167 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  168 | inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::PoseStamped &amp; p)</span>
+     169 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_pose(const geometry_msgs::msg::PoseStamped &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:167:82</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     165 | }
+     166 |
+     167 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  168 | inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::PoseStamped &amp; p)</span>
+     169 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Pose get_pose(const geometry_msgs::msg::PoseStamped &amp; pose)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:173:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     171 | }
+     172 |
+     173 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  174 | inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     175 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_pose(const autoware_planning_msgs::msg::PathPoint &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:173:89</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     171 | }
+     172 |
+     173 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  174 | inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     175 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::PathPoint &amp; path_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:179:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     177 | }
+     178 |
+     179 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  180 | inline geometry_msgs::msg::Pose get_pose(</span>
+     181 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_pose(const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:180:69</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     178 |
+     179 | template &lt;&gt;
+     180 | inline geometry_msgs::msg::Pose get_pose(
+<span class="marker">&gt;&gt;&gt;  181 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</span>
+     182 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline geometry_msgs::msg::Pose get_pose(const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; path_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:186:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     184 | }
+     185 |
+     186 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  187 | inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     188 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; auto get_pose(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p) -&gt; geometry_msgs::msg::Pose
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:186:95</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     184 | }
+     185 |
+     186 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  187 | inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     188 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline geometry_msgs::msg::Pose get_pose(const autoware_planning_msgs::msg::TrajectoryPoint &amp; point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:192:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     190 | }
+     191 |
+     192 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  193 | double get_longitudinal_velocity([[maybe_unused]] const T &amp; p)</span>
+     194 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class T&gt;
+auto get_longitudinal_velocity([[maybe_unused]] const T &amp; p) -&gt; double
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:192:61</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     190 | }
+     191 |
+     192 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  193 | double get_longitudinal_velocity([[maybe_unused]] const T &amp; p)</span>
+     194 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+double get_longitudinal_velocity([[maybe_unused]] const T &amp; point)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:199:15</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     197 | }
+     198 |
+     199 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  200 | inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     201 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and readability, especially in template-heavy code.</div>
+<pre class="code">template &lt;&gt; inline auto get_longitudinal_velocity(const autoware_planning_msgs::msg::PathPoint &amp; p) -&gt; double
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:199:88</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     197 | }
+     198 |
+     199 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  200 | inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     201 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::PathPoint &amp; path_point)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:205:15</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     203 | }
+     204 |
+     205 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  206 | inline double get_longitudinal_velocity(</span>
+     207 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; inline auto get_longitudinal_velocity(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p) -&gt; double
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:206:69</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     204 |
+     205 | template &lt;&gt;
+     206 | inline double get_longitudinal_velocity(
+<span class="marker">&gt;&gt;&gt;  207 |   const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</span>
+     208 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">const autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; path_point</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:212:15</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     210 | }
+     211 |
+     212 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  213 | inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     214 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;&gt; inline auto get_longitudinal_velocity(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p) -&gt; double
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:212:94</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     210 | }
+     211 |
+     212 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  213 | inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     214 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline double get_longitudinal_velocity(const autoware_planning_msgs::msg::TrajectoryPoint &amp; point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:218:92</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     216 | }
+     217 |
+     218 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  219 | void set_pose([[maybe_unused]] const geometry_msgs::msg::Pose &amp; pose, [[maybe_unused]] T &amp; p)</span>
+     220 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+void set_pose([[maybe_unused]] const geometry_msgs::msg::Pose &amp; pose, [[maybe_unused]] T &amp; position)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:225:88</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     223 | }
+     224 |
+     225 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  226 | inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, geometry_msgs::msg::Pose &amp; p)</span>
+     227 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, geometry_msgs::msg::Pose &amp; pose_target)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:231:95</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     229 | }
+     230 |
+     231 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;  232 | inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, geometry_msgs::msg::PoseStamped &amp; p)</span>
+     233 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;&gt; inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, geometry_msgs::msg::PoseStamped &amp; poseStamped)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:238:83</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     236 |
+     237 | template &lt;&gt;
+     238 | inline void set_pose(
+<span class="marker">&gt;&gt;&gt;  239 |   const geometry_msgs::msg::Pose &amp; pose, autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     240 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, autoware_planning_msgs::msg::PathPoint &amp; path_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:246:63</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     244 | template &lt;&gt;
+     245 | inline void set_pose(
+     246 |   const geometry_msgs::msg::Pose &amp; pose,
+<span class="marker">&gt;&gt;&gt;  247 |   autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</span>
+     248 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; path_point_with_lane_id</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:253:89</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     251 |
+     252 | template &lt;&gt;
+     253 | inline void set_pose(
+<span class="marker">&gt;&gt;&gt;  254 |   const geometry_msgs::msg::Pose &amp; pose, autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     255 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline void set_pose(const geometry_msgs::msg::Pose &amp; pose, autoware_planning_msgs::msg::TrajectoryPoint &amp; trajectory_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:259:85</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     257 | }
+     258 |
+     259 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  260 | inline void set_orientation(const geometry_msgs::msg::Quaternion &amp; orientation, T &amp; p)</span>
+     261 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+inline void set_orientation(const geometry_msgs::msg::Quaternion &amp; orientation, T &amp; pose)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:267:92</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     265 | }
+     266 |
+     267 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  268 | void set_longitudinal_velocity([[maybe_unused]] const float velocity, [[maybe_unused]] T &amp; p)</span>
+     269 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">template &lt;class T&gt;
+void set_longitudinal_velocity([[maybe_unused]] const float velocity, [[maybe_unused]] T &amp; longitudinal_position)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:275:72</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     273 |
+     274 | template &lt;&gt;
+     275 | inline void set_longitudinal_velocity(
+<span class="marker">&gt;&gt;&gt;  276 |   const float velocity, autoware_planning_msgs::msg::TrajectoryPoint &amp; p)</span>
+     277 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline void set_longitudinal_velocity(const float velocity, autoware_planning_msgs::msg::TrajectoryPoint &amp; trajectory_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:282:66</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     280 |
+     281 | template &lt;&gt;
+     282 | inline void set_longitudinal_velocity(
+<span class="marker">&gt;&gt;&gt;  283 |   const float velocity, autoware_planning_msgs::msg::PathPoint &amp; p)</span>
+     284 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline void set_longitudinal_velocity(const float velocity, autoware_planning_msgs::msg::PathPoint &amp; path_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:289:85</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     287 |
+     288 | template &lt;&gt;
+     289 | inline void set_longitudinal_velocity(
+<span class="marker">&gt;&gt;&gt;  290 |   const float velocity, autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; p)</span>
+     291 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline void set_longitudinal_velocity(const float velocity, autoware_internal_planning_msgs::msg::PathPointWithLaneId &amp; path_point)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:294:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     292 |   p.point.longitudinal_velocity_mps = velocity;
+     293 | }
+     294 |
+<span class="marker">&gt;&gt;&gt;  295 | inline geometry_msgs::msg::Point create_point(const double x, const double y, const double z)</span>
+     296 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function can use a trailing return type for better readability and consistency.</div>
+<pre class="code">inline auto create_point(const double x, const double y, const double z) -&gt; geometry_msgs::msg::Point
+{
+  geometry_msgs::msg::Point p;
+  p.x = x;
+  p.y = y;
+  p.z = z;
+  return p;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:294:47</a><span class="rule-id">clang-tidy:bugprone-easily-swappable-parameters</span></div><div class="violation-body"><div class="message">3 adjacent parameters of &#x27;create_point&#x27; of similar type (&#x27;const double&#x27;) are easily swapped by mistake</div><pre class="code">     292 |   p.point.longitudinal_velocity_mps = velocity;
+     293 | }
+     294 |
+<span class="marker">&gt;&gt;&gt;  295 | inline geometry_msgs::msg::Point create_point(const double x, const double y, const double z)</span>
+     296 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The three adjacent parameters of type &#x27;const double&#x27; in &#x27;create_point&#x27; are easily swapped by mistake.</div>
+<pre class="code">inline geometry_msgs::msg::Point create_point(const double x, const double z, const double y)
+{
+  geometry_msgs::msg::Point p;
+  p.x = x;
+  p.y = y;
+  p.z = z;
+  return p;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:294:60</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;x&#x27; is too short, expected at least 3 characters</div><pre class="code">     292 |   p.point.longitudinal_velocity_mps = velocity;
+     293 | }
+     294 |
+<span class="marker">&gt;&gt;&gt;  295 | inline geometry_msgs::msg::Point create_point(const double x, const double y, const double z)</span>
+     296 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;x&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline geometry_msgs::msg::Point create_point(const double longitudinal_velocity, const double y, const double z)
+{
+  geometry_msgs::msg::Point p;
+  p.x = longitudinal_velocity;
+  p.y = y;
+  p.z = z;
+  return p;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:296:29</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     294 |
+     295 | inline geometry_msgs::msg::Point create_point(const double x, const double y, const double z)
+     296 | {
+<span class="marker">&gt;&gt;&gt;  297 |   geometry_msgs::msg::Point p;</span>
+     298 |   p.x = x;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">geometry_msgs::msg::Point point;
+point.x = x;
+point.y = y;
+point.z = z;
+return point;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:303:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     301 |   return p;
+     302 | }
+     303 |
+<span class="marker">&gt;&gt;&gt;  304 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::Quaternion &amp; quat);</span>
+     305 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto get_rpy(const geometry_msgs::msg::Quaternion &amp; quat) -&gt; geometry_msgs::msg::Vector3;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:305:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     303 |
+     304 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::Quaternion &amp; quat);
+     305 |
+<span class="marker">&gt;&gt;&gt;  306 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::Pose &amp; pose);</span>
+     307 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto get_rpy(const geometry_msgs::msg::Pose &amp; pose) -&gt; geometry_msgs::msg::Vector3;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:307:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     305 |
+     306 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::Pose &amp; pose);
+     307 |
+<span class="marker">&gt;&gt;&gt;  308 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseStamped &amp; pose);</span>
+     309 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto get_rpy(const geometry_msgs::msg::PoseStamped &amp; pose) -&gt; geometry_msgs::msg::Vector3;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:309:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     307 |
+     308 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseStamped &amp; pose);
+     309 |
+<span class="marker">&gt;&gt;&gt;  310 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose);</span>
+     311 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto get_rpy(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose) -&gt; geometry_msgs::msg::Vector3;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:311:32</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     309 |
+     310 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose);
+     311 |
+<span class="marker">&gt;&gt;&gt;  312 | geometry_msgs::msg::Quaternion create_quaternion(</span>
+     313 |   const double x, const double y, const double z, const double w);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto create_quaternion(const double x, const double y, const double z, const double w) -&gt; geometry_msgs::msg::Quaternion;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:312:3</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;x&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     310 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose);
+     311 |
+     312 | geometry_msgs::msg::Quaternion create_quaternion(
+<span class="marker">&gt;&gt;&gt;  313 |   const double x, const double y, const double z, const double w);</span>
+     314 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The const-qualification of parameters &#x27;x&#x27;, &#x27;y&#x27;, &#x27;z&#x27;, and &#x27;w&#x27; in the function declaration has no effect. This should be addressed in the function definition.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion(
+  double x, double y, double z, double w);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:312:16</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;x&#x27; is too short, expected at least 3 characters</div><pre class="code">     310 | geometry_msgs::msg::Vector3 get_rpy(const geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose);
+     311 |
+     312 | geometry_msgs::msg::Quaternion create_quaternion(
+<span class="marker">&gt;&gt;&gt;  313 |   const double x, const double y, const double z, const double w);</span>
+     314 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;x&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion(
+  const double x_value, const double y_value, const double z_value, const double w_value);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:314:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     312 | geometry_msgs::msg::Quaternion create_quaternion(
+     313 |   const double x, const double y, const double z, const double w);
+     314 |
+<span class="marker">&gt;&gt;&gt;  315 | geometry_msgs::msg::Vector3 create_translation(const double x, const double y, const double z);</span>
+     316 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency with the rest of the codebase and to improve readability.</div>
+<pre class="code">auto create_translation(const double x, const double y, const double z) -&gt; geometry_msgs::msg::Vector3;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:314:48</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;x&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     312 | geometry_msgs::msg::Quaternion create_quaternion(
+     313 |   const double x, const double y, const double z, const double w);
+     314 |
+<span class="marker">&gt;&gt;&gt;  315 | geometry_msgs::msg::Vector3 create_translation(const double x, const double y, const double z);</span>
+     316 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The const-qualification of parameters only has an effect in function definitions, not in declarations.</div>
+<pre class="code">geometry_msgs::msg::Vector3 create_translation(double x, double y, double z);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:314:61</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;x&#x27; is too short, expected at least 3 characters</div><pre class="code">     312 | geometry_msgs::msg::Quaternion create_quaternion(
+     313 |   const double x, const double y, const double z, const double w);
+     314 |
+<span class="marker">&gt;&gt;&gt;  315 | geometry_msgs::msg::Vector3 create_translation(const double x, const double y, const double z);</span>
+     316 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;x&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">geometry_msgs::msg::Vector3 create_translation(const double translation_x, const double translation_y, const double translation_z);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:318:32</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     316 |
+     317 | // Revival of tf::create_quaternion_from_rpy
+     318 | // https://answers.ros.org/question/304397/recommended-way-to-construct-quaternion-from-rollpitchyaw-with-tf2/
+<span class="marker">&gt;&gt;&gt;  319 | geometry_msgs::msg::Quaternion create_quaternion_from_rpy(</span>
+     320 |   const double roll, const double pitch, const double yaw);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion_from_rpy(
+  const double roll, const double pitch, const double yaw) -&gt; geometry_msgs::msg::Quaternion;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:319:3</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;roll&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     317 | // Revival of tf::create_quaternion_from_rpy
+     318 | // https://answers.ros.org/question/304397/recommended-way-to-construct-quaternion-from-rollpitchyaw-with-tf2/
+     319 | geometry_msgs::msg::Quaternion create_quaternion_from_rpy(
+<span class="marker">&gt;&gt;&gt;  320 |   const double roll, const double pitch, const double yaw);</span>
+     321 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The const-qualification of parameters only has an effect in function definitions, not in declarations.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion_from_rpy(
+  double roll, double pitch, double yaw);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:321:32</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     319 | geometry_msgs::msg::Quaternion create_quaternion_from_rpy(
+     320 |   const double roll, const double pitch, const double yaw);
+     321 |
+<span class="marker">&gt;&gt;&gt;  322 | geometry_msgs::msg::Quaternion create_quaternion_from_yaw(const double yaw);</span>
+     323 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency with the other functions in the listing.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion_from_yaw(const double yaw) -&gt; geometry_msgs::msg::Quaternion;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:321:59</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;yaw&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     319 | geometry_msgs::msg::Quaternion create_quaternion_from_rpy(
+     320 |   const double roll, const double pitch, const double yaw);
+     321 |
+<span class="marker">&gt;&gt;&gt;  322 | geometry_msgs::msg::Quaternion create_quaternion_from_yaw(const double yaw);</span>
+     323 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter &#x27;yaw&#x27; is const-qualified in the function declaration, but const-qualification has no effect in function declarations. It should be removed.</div>
+<pre class="code">geometry_msgs::msg::Quaternion create_quaternion_from_yaw(double yaw);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:324:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     322 | geometry_msgs::msg::Quaternion create_quaternion_from_yaw(const double yaw);
+     323 |
+     324 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  325 | double calc_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)</span>
+     326 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Point1, class Point2&gt;
+auto calc_distance2d(const Point1 &amp; point1, const Point2 &amp; point2) -&gt; double
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:326:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p1&#x27; is too short, expected at least 3 characters</div><pre class="code">     324 | template &lt;class Point1, class Point2&gt;
+     325 | double calc_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)
+     326 | {
+<span class="marker">&gt;&gt;&gt;  327 |   const auto p1 = get_point(point1);</span>
+     328 |   const auto p2 = get_point(point2);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Variable names &#x27;p1&#x27; and &#x27;p2&#x27; are too short, expected at least 3 characters.</div>
+<pre class="code">const auto point1_converted = get_point(point1);
+const auto point2_converted = get_point(point2);
+return std::hypot(point1_converted.x - point2_converted.x, point1_converted.y - point2_converted.y);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:327:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p2&#x27; is too short, expected at least 3 characters</div><pre class="code">     325 | double calc_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)
+     326 | {
+     327 |   const auto p1 = get_point(point1);
+<span class="marker">&gt;&gt;&gt;  328 |   const auto p2 = get_point(point2);</span>
+     329 |   return std::hypot(p1.x - p2.x, p1.y - p2.y);</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:332:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     330 | }
+     331 |
+     332 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  333 | double calc_squared_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)</span>
+     334 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Point1, class Point2&gt;
+auto calc_squared_distance2d(const Point1 &amp; point1, const Point2 &amp; point2) -&gt; double
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:334:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p1&#x27; is too short, expected at least 3 characters</div><pre class="code">     332 | template &lt;class Point1, class Point2&gt;
+     333 | double calc_squared_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)
+     334 | {
+<span class="marker">&gt;&gt;&gt;  335 |   const auto p1 = get_point(point1);</span>
+     336 |   const auto p2 = get_point(point2);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Variable name &#x27;p1&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">const auto point1_ = get_point(point1);
+const auto point2_ = get_point(point2);
+const auto dx_ = point1_.x - point2_.x;
+const auto dy_ = point1_.y - point2_.y;
+return dx_ * dx_ + dy_ * dy_;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:335:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p2&#x27; is too short, expected at least 3 characters</div><pre class="code">     333 | double calc_squared_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)
+     334 | {
+     335 |   const auto p1 = get_point(point1);
+<span class="marker">&gt;&gt;&gt;  336 |   const auto p2 = get_point(point2);</span>
+     337 |   const auto dx = p1.x - p2.x;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:336:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;dx&#x27; is too short, expected at least 3 characters</div><pre class="code">     334 | {
+     335 |   const auto p1 = get_point(point1);
+     336 |   const auto p2 = get_point(point2);
+<span class="marker">&gt;&gt;&gt;  337 |   const auto dx = p1.x - p2.x;</span>
+     338 |   const auto dy = p1.y - p2.y;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:337:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;dy&#x27; is too short, expected at least 3 characters</div><pre class="code">     335 |   const auto p1 = get_point(point1);
+     336 |   const auto p2 = get_point(point2);
+     337 |   const auto dx = p1.x - p2.x;
+<span class="marker">&gt;&gt;&gt;  338 |   const auto dy = p1.y - p2.y;</span>
+     339 |   return dx * dx + dy * dy;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:342:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     340 | }
+     341 |
+     342 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  343 | double calc_distance3d(const Point1 &amp; point1, const Point2 &amp; point2)</span>
+     344 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Point1, class Point2&gt;
+auto calc_distance3d(const Point1 &amp; point1, const Point2 &amp; point2) -&gt; double
+{
+    // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:344:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p1&#x27; is too short, expected at least 3 characters</div><pre class="code">     342 | template &lt;class Point1, class Point2&gt;
+     343 | double calc_distance3d(const Point1 &amp; point1, const Point2 &amp; point2)
+     344 | {
+<span class="marker">&gt;&gt;&gt;  345 |   const auto p1 = get_point(point1);</span>
+     346 |   const auto p2 = get_point(point2);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Variable name &#x27;p1&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">const auto point1_ = get_point(point1);
+const auto point2_ = get_point(point2);
+// To be replaced by std::hypot(dx, dy, dz) in C++17
+return std::hypot(std::hypot(point1_.x - point2_.x, point1_.y - point2_.y), point1_.z - point2_.z);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:345:14</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;p2&#x27; is too short, expected at least 3 characters</div><pre class="code">     343 | double calc_distance3d(const Point1 &amp; point1, const Point2 &amp; point2)
+     344 | {
+     345 |   const auto p1 = get_point(point1);
+<span class="marker">&gt;&gt;&gt;  346 |   const auto p2 = get_point(point2);</span>
+     347 |   // To be replaced by std::hypot(dx, dy, dz) in C++17</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:359:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     357 |  * @param p_to target point
+     358 |  * @return -pi/2 &lt;= elevation angle &lt;= pi/2
+     359 |  */
+<span class="marker">&gt;&gt;&gt;  360 | double calc_elevation_angle(</span>
+     361 |   const geometry_msgs::msg::Point &amp; p_from, const geometry_msgs::msg::Point &amp; p_to);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">double calc_elevation_angle(
+  const geometry_msgs::msg::Point &amp; p_from, const geometry_msgs::msg::Point &amp; p_to) -&gt; double;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:371:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     369 |  * @param p_to target point
+     370 |  * @return -pi &lt; azimuth angle &lt; pi.
+     371 |  */
+<span class="marker">&gt;&gt;&gt;  372 | double calc_azimuth_angle(</span>
+     373 |   const geometry_msgs::msg::Point &amp; p_from, const geometry_msgs::msg::Point &amp; p_to);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">double calc_azimuth_angle(
+  const geometry_msgs::msg::Point &amp; p_from, const geometry_msgs::msg::Point &amp; p_to) -&gt; double;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:374:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     372 | double calc_azimuth_angle(
+     373 |   const geometry_msgs::msg::Point &amp; p_from, const geometry_msgs::msg::Point &amp; p_to);
+     374 |
+<span class="marker">&gt;&gt;&gt;  375 | geometry_msgs::msg::Pose transform2pose(const geometry_msgs::msg::Transform &amp; transform);</span>
+     376 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto transform2pose(const geometry_msgs::msg::Transform &amp; transform) -&gt; geometry_msgs::msg::Pose;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:376:33</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     374 |
+     375 | geometry_msgs::msg::Pose transform2pose(const geometry_msgs::msg::Transform &amp; transform);
+     376 |
+<span class="marker">&gt;&gt;&gt;  377 | geometry_msgs::msg::PoseStamped transform2pose(</span>
+     378 |   const geometry_msgs::msg::TransformStamped &amp; transform);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto transform2pose(const geometry_msgs::msg::TransformStamped &amp; transform) -&gt; geometry_msgs::msg::PoseStamped;
+
+geometry_msgs::msg::PoseStamped transform2pose(const geometry_msgs::msg::TransformStamped &amp; transform) {
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:379:31</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     377 | geometry_msgs::msg::PoseStamped transform2pose(
+     378 |   const geometry_msgs::msg::TransformStamped &amp; transform);
+     379 |
+<span class="marker">&gt;&gt;&gt;  380 | geometry_msgs::msg::Transform pose2transform(const geometry_msgs::msg::Pose &amp; pose);</span>
+     381 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto pose2transform(const geometry_msgs::msg::Pose &amp; pose) -&gt; geometry_msgs::msg::Transform;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:381:38</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     379 |
+     380 | geometry_msgs::msg::Transform pose2transform(const geometry_msgs::msg::Pose &amp; pose);
+     381 |
+<span class="marker">&gt;&gt;&gt;  382 | geometry_msgs::msg::TransformStamped pose2transform(</span>
+     383 |   const geometry_msgs::msg::PoseStamped &amp; pose, const std::string &amp; child_frame_id);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and readability.</div>
+<pre class="code">geometry_msgs::msg::TransformStamped pose2transform(const geometry_msgs::msg::PoseStamped &amp; pose, const std::string &amp; child_frame_id) -&gt; geometry_msgs::msg::TransformStamped
+{
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:385:14</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     383 |   const geometry_msgs::msg::PoseStamped &amp; pose, const std::string &amp; child_frame_id);
+     384 |
+     385 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  386 | tf2::Vector3 point_2_tf_vector(const Point1 &amp; src, const Point2 &amp; dst)</span>
+     387 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Point1, class Point2&gt;
+auto point_2_tf_vector(const Point1 &amp; src, const Point2 &amp; dst) -&gt; tf2::Vector3
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:390:10</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;dx&#x27; is too short, expected at least 3 characters</div><pre class="code">     388 |   const auto src_p = get_point(src);
+     389 |   const auto dst_p = get_point(dst);
+     390 |
+<span class="marker">&gt;&gt;&gt;  391 |   double dx = dst_p.x - src_p.x;</span>
+     392 |   double dy = dst_p.y - src_p.y;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Variable names &#x27;dx&#x27;, &#x27;dy&#x27;, and &#x27;dz&#x27; are too short. They should be at least 3 characters long.</div>
+<pre class="code">double delta_x = dst_p.x - src_p.x;
+double delta_y = dst_p.y - src_p.y;
+double delta_z = dst_p.z - src_p.z;
+return tf2::Vector3(delta_x, delta_y, delta_z);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:391:10</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;dy&#x27; is too short, expected at least 3 characters</div><pre class="code">     389 |   const auto dst_p = get_point(dst);
+     390 |
+     391 |   double dx = dst_p.x - src_p.x;
+<span class="marker">&gt;&gt;&gt;  392 |   double dy = dst_p.y - src_p.y;</span>
+     393 |   double dz = dst_p.z - src_p.z;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:392:10</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">variable name &#x27;dz&#x27; is too short, expected at least 3 characters</div><pre class="code">     390 |
+     391 |   double dx = dst_p.x - src_p.x;
+     392 |   double dy = dst_p.y - src_p.y;
+<span class="marker">&gt;&gt;&gt;  393 |   double dz = dst_p.z - src_p.z;</span>
+     394 |   return tf2::Vector3(dx, dy, dz);</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:396:9</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     394 |   return tf2::Vector3(dx, dy, dz);
+     395 | }
+     396 |
+<span class="marker">&gt;&gt;&gt;  397 | Point3d transform_point(const Point3d &amp; point, const geometry_msgs::msg::Transform &amp; transform);</span>
+     398 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto transform_point(const Point3d &amp; point, const geometry_msgs::msg::Transform &amp; transform) -&gt; Point3d
+{
+  return tf2::Vector3(dx, dy, dz);
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:398:9</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     396 |
+     397 | Point3d transform_point(const Point3d &amp; point, const geometry_msgs::msg::Transform &amp; transform);
+     398 |
+<span class="marker">&gt;&gt;&gt;  399 | Point2d transform_point(const Point2d &amp; point, const geometry_msgs::msg::Transform &amp; transform);</span>
+     400 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto transform_point(const Point2d &amp; point, const geometry_msgs::msg::Transform &amp; transform) -&gt; Point2d;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:400:17</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     398 |
+     399 | Point2d transform_point(const Point2d &amp; point, const geometry_msgs::msg::Transform &amp; transform);
+     400 |
+<span class="marker">&gt;&gt;&gt;  401 | Eigen::Vector3d transform_point(</span>
+     402 |   const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto transform_point(const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose) -&gt; Eigen::Vector3d
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:403:27</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     401 | Eigen::Vector3d transform_point(
+     402 |   const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose);
+     403 |
+<span class="marker">&gt;&gt;&gt;  404 | geometry_msgs::msg::Point transform_point(</span>
+     405 |   const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">geometry_msgs::msg::Point transform_point(
+  const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose) -&gt; geometry_msgs::msg::Point
+{
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:406:29</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     404 | geometry_msgs::msg::Point transform_point(
+     405 |   const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose);
+     406 |
+<span class="marker">&gt;&gt;&gt;  407 | geometry_msgs::msg::Point32 transform_point(</span>
+     408 |   const geometry_msgs::msg::Point32 &amp; point32, const geometry_msgs::msg::Pose &amp; pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">geometry_msgs::msg::Point32 transform_point(
+  const geometry_msgs::msg::Point32 &amp; point32, const geometry_msgs::msg::Pose &amp; pose) -&gt; geometry_msgs::msg::Point32
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:410:3</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     408 |   const geometry_msgs::msg::Point32 &amp; point32, const geometry_msgs::msg::Pose &amp; pose);
+     409 |
+     410 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  411 | T transform_vector(const T &amp; points, const geometry_msgs::msg::Transform &amp; transform)</span>
+     412 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class T&gt;
+T transform_vector(const T &amp; points, const geometry_msgs::msg::Transform &amp; transform) -&gt; decltype(points)</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:419:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     417 |   return transformed;
+     418 | }
+     419 |
+<span class="marker">&gt;&gt;&gt;  420 | geometry_msgs::msg::Pose transform_pose(</span>
+     421 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::TransformStamped &amp; transform);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto transform_pose(const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::TransformStamped &amp; transform) -&gt; geometry_msgs::msg::Pose
+{
+  // function body
+  return transformed;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:422:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     420 | geometry_msgs::msg::Pose transform_pose(
+     421 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::TransformStamped &amp; transform);
+     422 |
+<span class="marker">&gt;&gt;&gt;  423 | geometry_msgs::msg::Pose transform_pose(</span>
+     424 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto transform_pose(
+  const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform) -&gt; geometry_msgs::msg::Pose;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:425:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     423 | geometry_msgs::msg::Pose transform_pose(
+     424 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform);
+     425 |
+<span class="marker">&gt;&gt;&gt;  426 | geometry_msgs::msg::Pose transform_pose(</span>
+     427 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Pose &amp; pose_transform);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto transform_pose(
+  const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Pose &amp; pose_transform) -&gt; geometry_msgs::msg::Pose;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:435:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     433 | */
+     434 |
+     435 | // Transform pose in world coordinates to local coordinates
+<span class="marker">&gt;&gt;&gt;  436 | geometry_msgs::msg::Pose inverse_transform_pose(</span>
+     437 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">geometry_msgs::msg::Pose inverse_transform_pose(
+  const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform) -&gt; geometry_msgs::msg::Pose;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:439:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     437 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Transform &amp; transform);
+     438 |
+     439 | // Transform pose in world coordinates to local coordinates
+<span class="marker">&gt;&gt;&gt;  440 | geometry_msgs::msg::Pose inverse_transform_pose(</span>
+     441 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Pose &amp; transform_pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto inverse_transform_pose(const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Pose &amp; transform_pose) -&gt; geometry_msgs::msg::Pose
+{
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:443:17</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     441 |   const geometry_msgs::msg::Pose &amp; pose, const geometry_msgs::msg::Pose &amp; transform_pose);
+     442 |
+     443 | // Transform point in world coordinates to local coordinates
+<span class="marker">&gt;&gt;&gt;  444 | Eigen::Vector3d inverse_transform_point(</span>
+     445 |   const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">Eigen::Vector3d inverse_transform_point(
+  const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose) -&gt; Eigen::Vector3d;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:447:27</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     445 |   const Eigen::Vector3d &amp; point, const geometry_msgs::msg::Pose &amp; pose);
+     446 |
+     447 | // Transform point in world coordinates to local coordinates
+<span class="marker">&gt;&gt;&gt;  448 | geometry_msgs::msg::Point inverse_transform_point(</span>
+     449 |   const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">geometry_msgs::msg::Point inverse_transform_point(auto point, auto pose) -&gt; geometry_msgs::msg::Point
+{
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:450:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     448 | geometry_msgs::msg::Point inverse_transform_point(
+     449 |   const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose);
+     450 |
+<span class="marker">&gt;&gt;&gt;  451 | double calc_curvature(</span>
+     452 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto calc_curvature(const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2) -&gt; double
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:451:37</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p1&#x27; is too short, expected at least 3 characters</div><pre class="code">     449 |   const geometry_msgs::msg::Point &amp; point, const geometry_msgs::msg::Pose &amp; pose);
+     450 |
+     451 | double calc_curvature(
+<span class="marker">&gt;&gt;&gt;  452 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,</span>
+     453 |   const geometry_msgs::msg::Point &amp; p3);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p1&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">double calc_curvature(
+  const geometry_msgs::msg::Point &amp; point1, const geometry_msgs::msg::Point &amp; point2,
+  const geometry_msgs::msg::Point &amp; point3);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:452:37</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p3&#x27; is too short, expected at least 3 characters</div><pre class="code">     450 |
+     451 | double calc_curvature(
+     452 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,
+<span class="marker">&gt;&gt;&gt;  453 |   const geometry_msgs::msg::Point &amp; p3);</span>
+     454 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p3&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">double calc_curvature(
+  const geometry_msgs::msg::Point &amp; point1, const geometry_msgs::msg::Point &amp; point2,
+  const geometry_msgs::msg::Point &amp; point3);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:455:6</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     453 |   const geometry_msgs::msg::Point &amp; p3);
+     454 |
+     455 | template &lt;class Pose1, class Pose2&gt;
+<span class="marker">&gt;&gt;&gt;  456 | bool is_driving_forward(const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose)</span>
+     457 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function can benefit from a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Pose1, class Pose2&gt;
+bool is_driving_forward(const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose) -&gt; bool
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:458:16</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;src_yaw&#x27; is not initialized</div><pre class="code">     456 | bool is_driving_forward(const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose)
+     457 | {
+     458 |   // check the first point direction
+<span class="marker">&gt;&gt;&gt;  459 |   const double src_yaw = tf2::getYaw(get_pose(src_pose).orientation);</span>
+     460 |   const double pose_direction_yaw = calc_azimuth_angle(get_point(src_pose), get_point(dst_pose));</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;src_yaw&#x27; is not initialized. It is assigned a value in the next line, but the initialization is redundant.</div>
+<pre class="code">const double src_yaw = tf2::getYaw(get_pose(src_pose).orientation);
+const double pose_direction_yaw = calc_azimuth_angle(get_point(src_pose), get_point(dst_pose));
+return std::fabs(normalize_radian(src_yaw - pose_direction_yaw)) &lt; pi / 2.0;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:459:16</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;pose_direction_yaw&#x27; is not initialized</div><pre class="code">     457 | {
+     458 |   // check the first point direction
+     459 |   const double src_yaw = tf2::getYaw(get_pose(src_pose).orientation);
+<span class="marker">&gt;&gt;&gt;  460 |   const double pose_direction_yaw = calc_azimuth_angle(get_point(src_pose), get_point(dst_pose));</span>
+     461 |   return std::fabs(normalize_radian(src_yaw - pose_direction_yaw)) &lt; pi / 2.0;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;pose_direction_yaw&#x27; is not initialized. It is assigned a value in the next line, but the initialization is redundant.</div>
+<pre class="code">const double src_yaw = tf2::getYaw(get_pose(src_pose).orientation);
+const double pose_direction_yaw = calc_azimuth_angle(get_point(src_pose), get_point(dst_pose));
+return std::fabs(normalize_radian(src_yaw - pose_direction_yaw)) &lt; pi / 2.0;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:467:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     465 |  * @brief Calculate offset pose. The offset values are defined in the local coordinate of the input
+     466 |  * pose.
+     467 |  */
+<span class="marker">&gt;&gt;&gt;  468 | geometry_msgs::msg::Pose calc_offset_pose(</span>
+     469 |   const geometry_msgs::msg::Pose &amp; p, const double x, const double y, const double z,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto calc_offset_pose(const geometry_msgs::msg::Pose &amp; p, const double x, const double y, const double z) -&gt; geometry_msgs::msg::Pose
+{
+  // Function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:468:36</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p&#x27; is too short, expected at least 3 characters</div><pre class="code">     466 |  * pose.
+     467 |  */
+     468 | geometry_msgs::msg::Pose calc_offset_pose(
+<span class="marker">&gt;&gt;&gt;  469 |   const geometry_msgs::msg::Pose &amp; p, const double x, const double y, const double z,</span>
+     470 |   const double yaw = 0.0);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">geometry_msgs::msg::Pose calc_offset_pose(
+  const geometry_msgs::msg::Pose &amp; pose, const double x, const double y, const double z,
+  const double yaw = 0.0);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:468:39</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;x&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     466 |  * pose.
+     467 |  */
+     468 | geometry_msgs::msg::Pose calc_offset_pose(
+<span class="marker">&gt;&gt;&gt;  469 |   const geometry_msgs::msg::Pose &amp; p, const double x, const double y, const double z,</span>
+     470 |   const double yaw = 0.0);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The const-qualification of parameters &#x27;x&#x27;, &#x27;y&#x27;, and &#x27;z&#x27; only has an effect in the function definition, not in the declaration.</div>
+<pre class="code">geometry_msgs::msg::Pose calc_offset_pose(
+  const geometry_msgs::msg::Pose &amp; p, double x, double y, double z,
+  double yaw = 0.0);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:469:3</a><span class="rule-id">clang-tidy:readability-avoid-const-params-in-decls</span></div><div class="violation-body"><div class="message">parameter &#x27;yaw&#x27; is const-qualified in the function declaration; const-qualification of parameters only has an effect in function definitions</div><pre class="code">     467 |  */
+     468 | geometry_msgs::msg::Pose calc_offset_pose(
+     469 |   const geometry_msgs::msg::Pose &amp; p, const double x, const double y, const double z,
+<span class="marker">&gt;&gt;&gt;  470 |   const double yaw = 0.0);</span>
+     471 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The const-qualification of parameters only has an effect in function definitions, not in declarations.</div>
+<pre class="code">geometry_msgs::msg::Pose calc_offset_pose(
+  geometry_msgs::msg::Pose &amp; p, double x, double y, double z,
+  double yaw = 0.0);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:479:27</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     477 |  * @return interpolated point
+     478 |  */
+     479 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  480 | geometry_msgs::msg::Point calc_interpolated_point(</span>
+     481 |   const Point1 &amp; src, const Point2 &amp; dst, const double ratio)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency, especially in template-heavy code.</div>
+<pre class="code">template &lt;class Point1, class Point2&gt;
+geometry_msgs::msg::Point calc_interpolated_point(const Point1 &amp; src, const Point2 &amp; dst, const double ratio) -&gt; geometry_msgs::msg::Point
+{
+  // function implementation
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:496:16</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;clamped_ratio&#x27; is not initialized</div><pre class="code">     494 |   dst_vec.setZ(dst_point.z);
+     495 |
+     496 |   // Get pose by linear interpolation
+<span class="marker">&gt;&gt;&gt;  497 |   const double clamped_ratio = std::clamp(ratio, 0.0, 1.0);</span>
+     498 |   const auto &amp; vec = tf2::lerp(src_vec, dst_vec, clamped_ratio);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;clamped_ratio&#x27; is not initialized, but it is initialized in the next line. This is a warning from clang-tidy, but it is not a critical error in this context.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:519:26</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     517 |  * @return interpolated point
+     518 |  */
+     519 | template &lt;class Pose1, class Pose2&gt;
+<span class="marker">&gt;&gt;&gt;  520 | geometry_msgs::msg::Pose calc_interpolated_pose(</span>
+     521 |   const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose, const double ratio,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">template &lt;class Pose1, class Pose2&gt;
+geometry_msgs::msg::Pose calc_interpolated_pose(
+  const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose, const double ratio) -&gt; geometry_msgs::msg::Pose
+{
+  // function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:523:16</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;clamped_ratio&#x27; is not initialized</div><pre class="code">     521 |   const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose, const double ratio,
+     522 |   const bool set_orientation_from_position_direction = true)
+     523 | {
+<span class="marker">&gt;&gt;&gt;  524 |   const double clamped_ratio = std::clamp(ratio, 0.0, 1.0);</span>
+     525 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;clamped_ratio&#x27; is not initialized before use.</div>
+<pre class="code">const double clamped_ratio = std::clamp(ratio, 0.0, 1.0);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:530:18</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;input_poses_dist&#x27; is not initialized</div><pre class="code">     528 |     calc_interpolated_point(get_point(src_pose), get_point(dst_pose), clamped_ratio);
+     529 |
+     530 |   if (set_orientation_from_position_direction) {
+<span class="marker">&gt;&gt;&gt;  531 |     const double input_poses_dist = calc_distance2d(get_point(src_pose), get_point(dst_pose));</span>
+     532 |     const bool is_driving_forward_flag = is_driving_forward(src_pose, dst_pose);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;input_poses_dist&#x27; is not initialized before use.</div>
+<pre class="code">const double input_poses_dist = calc_distance2d(get_point(src_pose), get_point(dst_pose));
+const bool is_driving_forward_flag = is_driving_forward(src_pose, dst_pose);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:534:60</a><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">1e-6 is a magic number; consider replacing it with a named constant</div><pre class="code">     532 |     const bool is_driving_forward_flag = is_driving_forward(src_pose, dst_pose);
+     533 |
+     534 |     // Get orientation from interpolated point and src_pose
+<span class="marker">&gt;&gt;&gt;  535 |     if ((is_driving_forward_flag &amp;&amp; clamped_ratio &gt; 1.0 - (1e-6)) || input_poses_dist &lt; 1e-3) {</span>
+     536 |       output_pose.orientation = get_pose(dst_pose).orientation;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">1e-6 and 1e-3 are magic numbers; consider replacing them with named constants.</div>
+<pre class="code">const double kEpsilon = 1e-6;
+const double kSmallDistanceThreshold = 1e-3;
+
+// Get orientation from interpolated point and src_pose
+if ((is_driving_forward_flag &amp;&amp; clamped_ratio &gt; 1.0 - kEpsilon) || input_poses_dist &lt; kSmallDistanceThreshold) {
+  output_pose.orientation = get_pose(dst_pose).orientation;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:534:95</a><span class="rule-id">clang-tidy:bugprone-branch-clone</span></div><div class="violation-body"><div class="message">repeated branch body in conditional chain</div><pre class="code">     532 |     const bool is_driving_forward_flag = is_driving_forward(src_pose, dst_pose);
+     533 |
+     534 |     // Get orientation from interpolated point and src_pose
+<span class="marker">&gt;&gt;&gt;  535 |     if ((is_driving_forward_flag &amp;&amp; clamped_ratio &gt; 1.0 - (1e-6)) || input_poses_dist &lt; 1e-3) {</span>
+     536 |       output_pose.orientation = get_pose(dst_pose).orientation;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The branch body in the conditional chain is repeated. The second condition can be merged into the first one.</div>
+<pre class="code">if ((is_driving_forward_flag &amp;&amp; (clamped_ratio &gt; 1.0 - (1e-6) || input_poses_dist &lt; 1e-3))) {
+  output_pose.orientation = get_pose(dst_pose).orientation;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:536:60</a><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">1e-6 is a magic number; consider replacing it with a named constant</div><pre class="code">     534 |     // Get orientation from interpolated point and src_pose
+     535 |     if ((is_driving_forward_flag &amp;&amp; clamped_ratio &gt; 1.0 - (1e-6)) || input_poses_dist &lt; 1e-3) {
+     536 |       output_pose.orientation = get_pose(dst_pose).orientation;
+<span class="marker">&gt;&gt;&gt;  537 |     } else if (!is_driving_forward_flag &amp;&amp; clamped_ratio &lt; 1e-6) {</span>
+     538 |       output_pose.orientation = get_pose(src_pose).orientation;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">1e-6 is a magic number; consider replacing it with a named constant</div>
+<pre class="code">const double kEpsilon = 1e-6;
+
+// Get orientation from interpolated point and src_pose
+if ((is_driving_forward_flag &amp;&amp; clamped_ratio &gt; 1.0 - kEpsilon) || input_poses_dist &lt; 1e-3) {
+  output_pose.orientation = get_pose(dst_pose).orientation;
+} else if (!is_driving_forward_flag &amp;&amp; clamped_ratio &lt; kEpsilon) {
+  output_pose.orientation = get_pose(src_pose).orientation;
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:540:20</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;pitch&#x27; is not initialized</div><pre class="code">     538 |       output_pose.orientation = get_pose(src_pose).orientation;
+     539 |     } else {
+     540 |       const auto &amp; base_pose = is_driving_forward_flag ? dst_pose : src_pose;
+<span class="marker">&gt;&gt;&gt;  541 |       const double pitch = calc_elevation_angle(get_point(output_pose), get_point(base_pose));</span>
+     542 |       const double yaw = calc_azimuth_angle(get_point(output_pose), get_point(base_pose));</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;pitch&#x27; is not initialized. It should be initialized to a default value or calculated before use.</div>
+<pre class="code">const double pitch = is_driving_forward_flag ? calc_elevation_angle(get_point(output_pose), get_point(base_pose)) : 0.0;
+const double yaw = calc_azimuth_angle(get_point(output_pose), get_point(base_pose));</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:541:20</a><span class="rule-id">clang-tidy:cppcoreguidelines-init-variables</span></div><div class="violation-body"><div class="message">variable &#x27;yaw&#x27; is not initialized</div><pre class="code">     539 |     } else {
+     540 |       const auto &amp; base_pose = is_driving_forward_flag ? dst_pose : src_pose;
+     541 |       const double pitch = calc_elevation_angle(get_point(output_pose), get_point(base_pose));
+<span class="marker">&gt;&gt;&gt;  542 |       const double yaw = calc_azimuth_angle(get_point(output_pose), get_point(base_pose));</span>
+     543 |       output_pose.orientation = create_quaternion_from_rpy(0.0, pitch, yaw);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The variable &#x27;yaw&#x27; is not initialized before use.</div>
+<pre class="code">const double yaw = calc_azimuth_angle(get_point(output_pose), get_point(base_pose));
+output_pose.orientation = create_quaternion_from_rpy(0.0, pitch, yaw);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:557:36</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     555 |   return output_pose;
+     556 | }
+     557 |
+<span class="marker">&gt;&gt;&gt;  558 | inline geometry_msgs::msg::Vector3 create_vector3(const double x, double y, double z)</span>
+     559 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">inline auto create_vector3(const double x, double y, double z) -&gt; geometry_msgs::msg::Vector3
+{
+  return geometry_msgs::msg::Vector3{x, y, z};
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:557:64</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;x&#x27; is too short, expected at least 3 characters</div><pre class="code">     555 |   return output_pose;
+     556 | }
+     557 |
+<span class="marker">&gt;&gt;&gt;  558 | inline geometry_msgs::msg::Vector3 create_vector3(const double x, double y, double z)</span>
+     559 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;x&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline geometry_msgs::msg::Vector3 create_vector3(const double xAxis, double yAxis, double zAxis)
+{
+  // Function body
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:557:67</a><span class="rule-id">clang-tidy:bugprone-easily-swappable-parameters</span></div><div class="violation-body"><div class="message">2 adjacent parameters of &#x27;create_vector3&#x27; of similar type (&#x27;double&#x27;) are easily swapped by mistake</div><pre class="code">     555 |   return output_pose;
+     556 | }
+     557 |
+<span class="marker">&gt;&gt;&gt;  558 | inline geometry_msgs::msg::Vector3 create_vector3(const double x, double y, double z)</span>
+     559 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameters &#x27;y&#x27; and &#x27;z&#x27; of type &#x27;double&#x27; are easily swapped by mistake.</div>
+<pre class="code">inline geometry_msgs::msg::Vector3 create_vector3(const double x, const double y, const double z)
+{
+  return {x, y, z};
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:562:34</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     560 |   return geometry_msgs::build&lt;geometry_msgs::msg::Vector3&gt;().x(x).y(y).z(z);
+     561 | }
+     562 |
+<span class="marker">&gt;&gt;&gt;  563 | inline geometry_msgs::msg::Twist create_twist(</span>
+     564 |   const geometry_msgs::msg::Vector3 &amp; velocity, geometry_msgs::msg::Vector3 &amp; angular)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">inline auto create_twist(const geometry_msgs::msg::Vector3 &amp; velocity, geometry_msgs::msg::Vector3 &amp; angular) -&gt; geometry_msgs::msg::Twist</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:568:15</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     566 |   return geometry_msgs::build&lt;geometry_msgs::msg::Twist&gt;().linear(velocity).angular(angular);
+     567 | }
+     568 |
+<span class="marker">&gt;&gt;&gt;  569 | inline double calc_norm(const geometry_msgs::msg::Vector3 &amp; v)</span>
+     570 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and readability.</div>
+<pre class="code">auto calc_norm(const geometry_msgs::msg::Vector3 &amp; v) -&gt; double
+{
+  return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:568:61</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;v&#x27; is too short, expected at least 3 characters</div><pre class="code">     566 |   return geometry_msgs::build&lt;geometry_msgs::msg::Twist&gt;().linear(velocity).angular(angular);
+     567 | }
+     568 |
+<span class="marker">&gt;&gt;&gt;  569 | inline double calc_norm(const geometry_msgs::msg::Vector3 &amp; v)</span>
+     570 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;v&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">inline double calc_norm(const geometry_msgs::msg::Vector3 &amp; vector)
+{</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:580:6</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     578 |  * @return If all element of covariance is 0, return false.
+     579 |  */
+     580 | //
+<span class="marker">&gt;&gt;&gt;  581 | bool is_twist_covariance_valid(</span>
+     582 |   const geometry_msgs::msg::TwistWithCovariance &amp; twist_with_covariance);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">bool is_twist_covariance_valid(
+  const geometry_msgs::msg::TwistWithCovariance &amp; twist_with_covariance) -&gt; bool;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:584:42</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     582 |   const geometry_msgs::msg::TwistWithCovariance &amp; twist_with_covariance);
+     583 |
+     584 | // NOTE: much faster than boost::geometry::intersects()
+<span class="marker">&gt;&gt;&gt;  585 | std::optional&lt;geometry_msgs::msg::Point&gt; intersect(</span>
+     586 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for better readability and consistency.</div>
+<pre class="code">auto intersect(
+  const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,
+  const geometry_msgs::msg::TwistWithCovariance &amp; twist_with_covariance) -&gt; std::optional&lt;geometry_msgs::msg::Point&gt;;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:585:37</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p1&#x27; is too short, expected at least 3 characters</div><pre class="code">     583 |
+     584 | // NOTE: much faster than boost::geometry::intersects()
+     585 | std::optional&lt;geometry_msgs::msg::Point&gt; intersect(
+<span class="marker">&gt;&gt;&gt;  586 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,</span>
+     587 |   const geometry_msgs::msg::Point &amp; p3, const geometry_msgs::msg::Point &amp; p4);</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p1&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">std::optional&lt;geometry_msgs::msg::Point&gt; intersect(
+  const geometry_msgs::msg::Point &amp; point1, const geometry_msgs::msg::Point &amp; point2,
+  const geometry_msgs::msg::Point &amp; point3, const geometry_msgs::msg::Point &amp; point4);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:586:37</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;p3&#x27; is too short, expected at least 3 characters</div><pre class="code">     584 | // NOTE: much faster than boost::geometry::intersects()
+     585 | std::optional&lt;geometry_msgs::msg::Point&gt; intersect(
+     586 |   const geometry_msgs::msg::Point &amp; p1, const geometry_msgs::msg::Point &amp; p2,
+<span class="marker">&gt;&gt;&gt;  587 |   const geometry_msgs::msg::Point &amp; p3, const geometry_msgs::msg::Point &amp; p4);</span>
+     588 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The parameter name &#x27;p3&#x27; is too short, expected at least 3 characters.</div>
+<pre class="code">std::optional&lt;geometry_msgs::msg::Point&gt; intersect(
+  const geometry_msgs::msg::Point &amp; point1, const geometry_msgs::msg::Point &amp; point2,
+  const geometry_msgs::msg::Point &amp; point3, const geometry_msgs::msg::Point &amp; point4);</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">/home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:592:6</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">     590 |  * @brief Check if 2 convex polygons intersect using the GJK algorithm
+     591 |  * @details much faster than boost::geometry::intersects()
+     592 |  */
+<span class="marker">&gt;&gt;&gt;  593 | bool intersects_convex(const Polygon2d &amp; convex_polygon1, const Polygon2d &amp; convex_polygon2);</span>
+     594 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function should use a trailing return type for consistency and potential future flexibility.</div>
+<pre class="code">auto intersects_convex(const Polygon2d &amp; convex_polygon1, const Polygon2d &amp; convex_polygon2) -&gt; bool;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-note">note</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:17</a><span class="rule-id">cppcheck:missingInclude</span></div><div class="violation-body"><div class="message">Include file: &quot;autoware_utils_geometry/boost_geometry.hpp&quot; not found.</div><pre class="code">      15 | #ifndef AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+      16 | #define AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+      17 |
+<span class="marker">&gt;&gt;&gt;   18 | #include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;</span>
+      19 | #include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The include file &#x27;autoware_utils_geometry/boost_geometry.hpp&#x27; is not found.</div>
+<pre class="code">#include &lt;boost/geometry.hpp&gt;
+
+#include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-note">note</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:18</a><span class="rule-id">cppcheck:missingInclude</span></div><div class="violation-body"><div class="message">Include file: &quot;autoware_utils_geometry/msg/covariance.hpp&quot; not found.</div><pre class="code">      16 | #define AUTOWARE_UTILS_GEOMETRY__GEOMETRY_HPP_
+      17 |
+      18 | #include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;
+<span class="marker">&gt;&gt;&gt;   19 | #include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;</span>
+      20 | #include &quot;autoware_utils_math/constants.hpp&quot;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The include file &#x27;autoware_utils_geometry/msg/covariance.hpp&#x27; is not found.</div>
+<pre class="code">#include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;
+#include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;
+#include &quot;autoware_utils_math/constants.hpp&quot;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-note">note</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:19</a><span class="rule-id">cppcheck:missingInclude</span></div><div class="violation-body"><div class="message">Include file: &quot;autoware_utils_math/constants.hpp&quot; not found.</div><pre class="code">      17 |
+      18 | #include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;
+      19 | #include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;
+<span class="marker">&gt;&gt;&gt;   20 | #include &quot;autoware_utils_math/constants.hpp&quot;</span>
+      21 | #include &quot;autoware_utils_math/normalization.hpp&quot;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The include file &#x27;autoware_utils_math/constants.hpp&#x27; is not found.</div>
+<pre class="code">#include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;
+#include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;
+#include &quot;autoware_utils_math/constants.hpp&quot;
+#include &quot;autoware_utils_math/normalization.hpp&quot;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-note">note</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:20</a><span class="rule-id">cppcheck:missingInclude</span></div><div class="violation-body"><div class="message">Include file: &quot;autoware_utils_math/normalization.hpp&quot; not found.</div><pre class="code">      18 | #include &quot;autoware_utils_geometry/boost_geometry.hpp&quot;
+      19 | #include &quot;autoware_utils_geometry/msg/covariance.hpp&quot;
+      20 | #include &quot;autoware_utils_math/constants.hpp&quot;
+<span class="marker">&gt;&gt;&gt;   21 | #include &quot;autoware_utils_math/normalization.hpp&quot;</span>
+      22 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The include file &#x27;autoware_utils_math/normalization.hpp&#x27; is not found.</div>
+<pre class="code">#include &quot;autoware_utils_math/normalization.hpp&quot;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:67</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;doTransform&#x27; is never used.</div><pre class="code">      65 | }
+      66 |
+      67 | template &lt;&gt;
+<span class="marker">&gt;&gt;&gt;   68 | inline void doTransform(</span>
+      69 |   const geometry_msgs::msg::Point &amp; t_in, geometry_msgs::msg::Point &amp; t_out,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;doTransform&#x27; is never used, which can lead to maintenance overhead and potential dead code.</div>
+<pre class="code">// cppcheck-suppress unusedFunction
+template &lt;&gt;
+inline void doTransform(
+  const geometry_msgs::msg::Point &amp; t_in, geometry_msgs::msg::Point &amp; t_out,
+  const geometry_msgs::msg::TransformStamped &amp; transform)
+{
+  tf2::Transform t;
+  fromMsg(transform.transform, t);
+  tf2::Vector3 v_in;
+  fromMsg(t_in, v_in);
+  tf2::Vector3 v_out = t * v_in;
+  toMsg(v_out, t_out);
+}
+
+// cppcheck-suppress unusedFunction
+template &lt;&gt;
+inline void doTransform(
+  const geometry_msgs::msg::Pose &amp; t_in, geometry_msgs::msg::Pose &amp; t_out,
+  const geometry_msgs::msg::TransformStamped &amp; transform)
+{
+  tf2::Vector3 v;
+  fromMsg(t_in.position, v);
+  tf2::Quaternion r;
+  fromMsg(t_in.orientation, r);
+
+  tf2::Transform t;
+  fromMsg(transform.transform, t);
+  tf2::Transform v_out = t * tf2::Transform(r, v);
+  toMsg(v_out, t_out);
+}</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:192</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;get_longitudinal_velocity&#x27; is never used.</div><pre class="code">     190 | }
+     191 |
+     192 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  193 | double get_longitudinal_velocity([[maybe_unused]] const T &amp; p)</span>
+     194 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;get_longitudinal_velocity&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:259</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;set_orientation&#x27; is never used.</div><pre class="code">     257 | }
+     258 |
+     259 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  260 | inline void set_orientation(const geometry_msgs::msg::Quaternion &amp; orientation, T &amp; p)</span>
+     261 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;set_orientation&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:267</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;set_longitudinal_velocity&#x27; is never used.</div><pre class="code">     265 | }
+     266 |
+     267 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  268 | void set_longitudinal_velocity([[maybe_unused]] const float velocity, [[maybe_unused]] T &amp; p)</span>
+     269 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;set_longitudinal_velocity&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:294</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;create_point&#x27; is never used.</div><pre class="code">     292 |   p.point.longitudinal_velocity_mps = velocity;
+     293 | }
+     294 |
+<span class="marker">&gt;&gt;&gt;  295 | inline geometry_msgs::msg::Point create_point(const double x, const double y, const double z)</span>
+     296 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;create_point&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:332</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;calc_squared_distance2d&#x27; is never used.</div><pre class="code">     330 | }
+     331 |
+     332 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  333 | double calc_squared_distance2d(const Point1 &amp; point1, const Point2 &amp; point2)</span>
+     334 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;calc_squared_distance2d&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:342</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;calc_distance3d&#x27; is never used.</div><pre class="code">     340 | }
+     341 |
+     342 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  343 | double calc_distance3d(const Point1 &amp; point1, const Point2 &amp; point2)</span>
+     344 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;calc_distance3d&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:385</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;point_2_tf_vector&#x27; is never used.</div><pre class="code">     383 |   const geometry_msgs::msg::PoseStamped &amp; pose, const std::string &amp; child_frame_id);
+     384 |
+     385 | template &lt;class Point1, class Point2&gt;
+<span class="marker">&gt;&gt;&gt;  386 | tf2::Vector3 point_2_tf_vector(const Point1 &amp; src, const Point2 &amp; dst)</span>
+     387 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;point_2_tf_vector&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:410</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;transform_vector&#x27; is never used.</div><pre class="code">     408 |   const geometry_msgs::msg::Point32 &amp; point32, const geometry_msgs::msg::Pose &amp; pose);
+     409 |
+     410 | template &lt;class T&gt;
+<span class="marker">&gt;&gt;&gt;  411 | T transform_vector(const T &amp; points, const geometry_msgs::msg::Transform &amp; transform)</span>
+     412 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;transform_vector&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:414:17</a><span class="rule-id">cppcheck:useStlAlgorithm</span></div><div class="violation-body"><div class="message">Consider using std::transform algorithm instead of a raw loop.</div><pre class="code">     412 | {
+     413 |   T transformed;
+     414 |   for (const auto &amp; point : points) {
+<span class="marker">&gt;&gt;&gt;  415 |     transformed.push_back(transform_point(point, transform));</span>
+     416 |   }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Consider using std::transform algorithm instead of a raw loop for better readability and potentially improved performance.</div>
+<pre class="code">T transformed(points.size());
+std::transform(points.begin(), points.end(), transformed.begin(), [&amp;](const auto &amp; point) {
+  return transform_point(point, transform);
+});
+return transformed;</pre></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:519</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;calc_interpolated_pose&#x27; is never used.</div><pre class="code">     517 |  * @return interpolated point
+     518 |  */
+     519 | template &lt;class Pose1, class Pose2&gt;
+<span class="marker">&gt;&gt;&gt;  520 | geometry_msgs::msg::Pose calc_interpolated_pose(</span>
+     521 |   const Pose1 &amp; src_pose, const Pose2 &amp; dst_pose, const double ratio,</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;calc_interpolated_pose&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:557</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;create_vector3&#x27; is never used.</div><pre class="code">     555 |   return output_pose;
+     556 | }
+     557 |
+<span class="marker">&gt;&gt;&gt;  558 | inline geometry_msgs::msg::Vector3 create_vector3(const double x, double y, double z)</span>
+     559 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;create_vector3&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:562</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;create_twist&#x27; is never used.</div><pre class="code">     560 |   return geometry_msgs::build&lt;geometry_msgs::msg::Vector3&gt;().x(x).y(y).z(z);
+     561 | }
+     562 |
+<span class="marker">&gt;&gt;&gt;  563 | inline geometry_msgs::msg::Twist create_twist(</span>
+     564 |   const geometry_msgs::msg::Vector3 &amp; velocity, geometry_msgs::msg::Vector3 &amp; angular)</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;create_twist&#x27; is never used.</div></div></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp">deps/autoware/autoware_utils_geometry/include/autoware_utils_geometry/geometry.hpp:568</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;calc_norm&#x27; is never used.</div><pre class="code">     566 |   return geometry_msgs::build&lt;geometry_msgs::msg::Twist&gt;().linear(velocity).angular(angular);
+     567 | }
+     568 |
+<span class="marker">&gt;&gt;&gt;  569 | inline double calc_norm(const geometry_msgs::msg::Vector3 &amp; v)</span>
+     570 | {</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;calc_norm&#x27; is never used.</div></div></div></div>
+</div>
+</body>
+</html>
