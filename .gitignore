@@ -38,4 +38,4 @@ benchmarks/results/
 .env
 .env.local
 deps/autoware/
-reports/**
+reports/
