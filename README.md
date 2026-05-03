@@ -21,6 +21,16 @@ The tool runs clang-tidy and cppcheck, normalizes their output into a single `Vi
 Real-world baseline on the [Autoware Universe `autoware_utils`](https://github.com/autowarefoundation/autoware_utils) package: **78 files, 794 violations, 150 errors** in under a minute (without LLM review).
 
 ![Index page](docs/screenshots/index.png)
+![Report page](docs/screenshots/report.png)
+
+## Live demo
+
+The action runs on every C++ PR and posts inline review comments with violation explanations and one-click fix suggestions.
+
+[**View the demo PR →**](https://github.com/yssmansoor/safecpp-demo/pull/1)
+
+![PR comments 1](docs/screenshots/PR1.png)
+![PR comments 2](docs/screenshots/PR2.png)
 
 ## Architecture
 

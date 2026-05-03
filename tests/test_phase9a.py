@@ -130,8 +130,8 @@ def test_render_github_uses_repo_root_for_relative_paths(tmp_path: Path) -> None
     assert payload["comments"][0]["path"] == "src/foo.cpp"
 
 
-def test_render_github_skips_violations_outside_repo(tmp_path: Path) -> None:
-    """If a violation's file isn't under repo_root, it gets skipped."""
+def test_render_github_falls_back_when_path_outside_repo(tmp_path: Path) -> None:
+    """If a violation's file isn't under repo_root, fall back to the raw path."""
     other_root = tmp_path / "other"
     other_root.mkdir()
     src = other_root / "outside.cpp"
@@ -140,4 +140,6 @@ def test_render_github_skips_violations_outside_repo(tmp_path: Path) -> None:
     violations = [_v(file=str(src.resolve()), line=1)]
     payload = json.loads(render_github(violations, repo_root=tmp_path / "repo"))
 
-    assert payload["comments"] == []
+    # The comment is kept; path falls back to the unresolved value
+    assert len(payload["comments"]) == 1
+    assert "outside.cpp" in payload["comments"][0]["path"]
