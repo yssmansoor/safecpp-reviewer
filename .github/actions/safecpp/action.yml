@@ -1,0 +1,137 @@
+name: 'safecpp-reviewer'
+description: 'Review C++ for MISRA / AUTOSAR / cppcoreguidelines violations and post review comments on the PR.'
+author: 'yssmansoor'
+
+inputs:
+  files:
+    description: 'Glob of files to scan when no PR diff is available.'
+    required: false
+    default: '**/*.cpp **/*.hpp'
+  checks:
+    description: 'clang-tidy check glob.'
+    required: false
+    default: 'cppcoreguidelines-*,modernize-*,readability-*,bugprone-*'
+  use-llm:
+    description: 'Enable LLM-based fix suggestions. Requires SAFECPP_LLM_URL secret.'
+    required: false
+    default: 'false'
+  llm-url:
+    description: 'OpenAI-compatible chat completions URL for the LLM.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout PR with full history
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install clang-tidy + cppcheck
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy cppcheck
+
+    - name: Install safecpp-reviewer
+      shell: bash
+      run: |
+        pip install --upgrade pip
+        pip install "safecpp-reviewer @ git+https://github.com/yssmansoor/safecpp-reviewer@main"
+
+    - name: Compute changed lines
+      shell: bash
+      id: diff
+      run: |
+        BASE_SHA="${{ github.event.pull_request.base.sha }}"
+        HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+        python "${{ github.action_path }}/changed_lines.py" \
+          "$BASE_SHA" "$HEAD_SHA" > /tmp/changed.json
+
+        # Files to scan = keys of the JSON map, filtered to .cpp/.hpp
+        python -c "
+        import json, sys
+        d = json.load(open('/tmp/changed.json'))
+        files = [f for f in d if f.endswith(('.cpp', '.hpp', '.h', '.cc', '.cxx'))]
+        sys.stdout.write('\n'.join(files))
+        " > /tmp/changed_files.txt
+
+        echo "Changed files:"
+        cat /tmp/changed_files.txt
+
+        if [ ! -s /tmp/changed_files.txt ]; then
+          echo "No C++ files changed — exiting cleanly."
+          echo "skip=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Run safecpp-reviewer
+      if: steps.diff.outputs.skip != 'true'
+      shell: bash
+      run: |
+        FILES=$(cat /tmp/changed_files.txt | tr '\n' ' ')
+
+        EXTRA_ARGS=""
+        if [ "${{ inputs.use-llm }}" = "true" ] && [ -n "${{ inputs.llm-url }}" ]; then
+          EXTRA_ARGS="--server ${{ inputs.llm-url }} --use-graph"
+        else
+          EXTRA_ARGS="--no-llm"
+        fi
+
+        safecpp review $FILES \
+          --checks "${{ inputs.checks }}" \
+          --changed-lines /tmp/changed.json \
+          --repo-root "$(pwd)" \
+          -f github \
+          -o /tmp/comments.json \
+          $EXTRA_ARGS || true
+
+        echo "Generated comments:"
+        cat /tmp/comments.json | python -m json.tool || true
+
+    - name: Post review comments
+      if: steps.diff.outputs.skip != 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          if (!fs.existsSync('/tmp/comments.json')) {
+            console.log('No comments file produced.');
+            return;
+          }
+          const data = JSON.parse(fs.readFileSync('/tmp/comments.json', 'utf-8'));
+          if (!data.comments || data.comments.length === 0) {
+            console.log('No violations on changed lines — clean PR!');
+            return;
+          }
+
+          const pr = context.payload.pull_request;
+          for (const c of data.comments) {
+            try {
+              await github.rest.pulls.createReviewComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                commit_id: pr.head.sha,
+                path: c.path,
+                line: c.line,
+                side: c.side || 'RIGHT',
+                body: c.body,
+              });
+            } catch (err) {
+              console.log(`Failed to post comment on ${c.path}:${c.line}: ${err.message}`);
+            }
+          }
+
+          console.log(`Posted ${data.comments.length} review comment(s).`);
+
+branding:
+  icon: 'shield'
+  color: 'orange'
