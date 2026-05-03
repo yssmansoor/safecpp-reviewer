@@ -12,11 +12,11 @@ Use ``--changed-lines`` + ``-f github`` to produce PR review comments.
 
 from __future__ import annotations
 
+import enum
 import json
 import logging
 import time
 from collections import Counter
-from enum import Enum
 from pathlib import Path
 from typing import Annotated
 
@@ -53,7 +53,7 @@ err_console = Console(stderr=True)
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
 
 
-class OutputFormat(Enum.StrEnum):
+class OutputFormat(enum.StrEnum):
     terminal = "terminal"
     json = "json"
     html = "html"

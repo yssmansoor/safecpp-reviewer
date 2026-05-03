@@ -58,7 +58,6 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
 .sev-style   { background: #1d3a5a; color: #58a6ff; }
 .sev-note    { background: #30363d; color: #8b949e; }
 .tool-tag { color: #8b949e; font-size: 0.85rem; }
-.location { color: #58a6ff; font-family: monospace; font-size: 0.85rem; }
 .rule-id { color: #d2a8ff; font-family: monospace; font-size: 0.85rem; }
 .violation-body { padding: 1rem; }
 .message { color: #f0f6fc; margin-bottom: 0.75rem; font-weight: 500; }
@@ -118,163 +117,123 @@ h1 { color: #f0f6fc; margin-bottom: 0.25rem; }
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+.location {
+    color: #58a6ff;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.location:hover { text-decoration: underline; }
+.back-link {
+    display: inline-block;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 <div class="container">
+
 <h1>safecpp-reviewer — sample_violations.cpp</h1>
-<div class="subtitle">Generated 2026-05-02 08:44:46</div>
+<div class="subtitle">Generated 2026-05-03 12:24:40</div>
 <div class="summary"><div class="stat"><div class="stat-label">Total</div><div class="stat-value">19</div></div><div class="stat"><div class="stat-label">Errors</div><div class="stat-value">1</div></div><div class="stat"><div class="stat-label">Warnings</div><div class="stat-value">12</div></div><div class="stat"><div class="stat-label">Style</div><div class="stat-value">6</div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:9:5</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">       7 |
-       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
-       9 | // [modernize-use-nullptr] NULL instead of nullptr
-<span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;process&#x27; is never used.</div>
-<pre class="code">// cppcheck:unusedFunction
-void process(int a, int b) {
-    int* ptr = nullptr;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:9:17</span><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">       7 |
-       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
-       9 | // [modernize-use-nullptr] NULL instead of nullptr
-<span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Parameter name &#x27;a&#x27; is too short, expected at least 3 characters.</div>
-<pre class="code">int process(int arg1, int b) {
-    int* ptr = nullptr;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:16</span><span class="rule-id">clang-tidy:modernize-use-nullptr</span></div><div class="violation-body"><div class="message">use nullptr</div><pre class="code">       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:5</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:5</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
       10 | int process(int a, int b) {
 <span class="marker">&gt;&gt;&gt;   11 |     int* ptr = NULL;                   // modernize-use-nullptr</span>
-      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use nullptr instead of NULL.</div>
-<pre class="code">int* ptr = nullptr;</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:11:18</span><span class="rule-id">clang-tidy:readability-redundant-casting</span></div><div class="violation-body"><div class="message">redundant explicit casting to the same type &#x27;int&#x27; as the sub-expression, remove this casting</div><pre class="code">       9 | // [modernize-use-nullptr] NULL instead of nullptr
+      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:17</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:10:17</a><span class="rule-id">clang-tidy:readability-identifier-length</span></div><div class="violation-body"><div class="message">parameter name &#x27;a&#x27; is too short, expected at least 3 characters</div><pre class="code">       8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
+       9 | // [modernize-use-nullptr] NULL instead of nullptr
+      10 | int process(int a, int b) {
+<span class="marker">&gt;&gt;&gt;   11 |     int* ptr = NULL;                   // modernize-use-nullptr</span>
+      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:11:16</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:11:16</a><span class="rule-id">clang-tidy:modernize-use-nullptr</span></div><div class="violation-body"><div class="message">use nullptr</div><pre class="code">       9 | // [modernize-use-nullptr] NULL instead of nullptr
       10 | int process(int a, int b) {
       11 |     int* ptr = NULL;                   // modernize-use-nullptr
 <span class="marker">&gt;&gt;&gt;   12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast</span>
-      13 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Redundant explicit casting to the same type &#x27;int&#x27; as the sub-expression, remove this casting.</div>
-<pre class="code">int result = a + b;</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:14:10</span><span class="rule-id">clang-tidy:clang-analyzer-core.NullDereference</span></div><div class="violation-body"><div class="message">Dereference of null pointer (loaded from variable &#x27;ptr&#x27;)</div><pre class="code">      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
-      13 |
+      13 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:12:18</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:12:18</a><span class="rule-id">clang-tidy:readability-redundant-casting</span></div><div class="violation-body"><div class="message">redundant explicit casting to the same type &#x27;int&#x27; as the sub-expression, remove this casting</div><pre class="code">      10 | int process(int a, int b) {
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr
+      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
+<span class="marker">&gt;&gt;&gt;   13 | </span>
+      14 |     // [cppcheck: nullPointer] — ptr is never assigned a valid address</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:15:10</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:15:10</a><span class="rule-id">clang-tidy:clang-analyzer-core.NullDereference</span></div><div class="violation-body"><div class="message">Dereference of null pointer (loaded from variable &#x27;ptr&#x27;)</div><pre class="code">      13 |
       14 |     // [cppcheck: nullPointer] — ptr is never assigned a valid address
-<span class="marker">&gt;&gt;&gt;   15 |     *ptr = result;</span>
-      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Dereference of null pointer (loaded from variable &#x27;ptr&#x27;).</div>
-<pre class="code">// [cppcheck: nullPointer] — ptr is never assigned a valid address
-// *ptr = result;</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:20:8</span><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      18 | }
-      19 |
-      20 | // [cppcoreguidelines-avoid-magic-numbers]
-<span class="marker">&gt;&gt;&gt;   21 | double magic() {</span>
-      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; has a trailing return type that is not necessary and can be simplified.</div>
-<pre class="code">double magic() {
-    return 3.14159 * 42;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:21:12</span><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">3.14159 is a magic number; consider replacing it with a named constant</div><pre class="code">      19 |
+      15 |     *ptr = result;
+<span class="marker">&gt;&gt;&gt;   16 | </span>
+      17 |     return result;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:21:8</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:21:8</a><span class="rule-id">clang-tidy:modernize-use-trailing-return-type</span></div><div class="violation-body"><div class="message">use a trailing return type for this function</div><pre class="code">      19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
       21 | double magic() {
 <span class="marker">&gt;&gt;&gt;   22 |     return 3.14159 * 42;</span>
-      23 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">3.14159 is a magic number; consider replacing it with a named constant.</div>
-<pre class="code">const double PI = 3.14159;
-
-double magic() {
-    return PI * 42;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:25:7</span><span class="rule-id">clang-tidy:cppcoreguidelines-special-member-functions</span></div><div class="violation-body"><div class="message">class &#x27;Base&#x27; defines a default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator</div><pre class="code">      23 | }
-      24 |
+      23 | }</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:22:12</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:22:12</a><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">3.14159 is a magic number; consider replacing it with a named constant</div><pre class="code">      20 | // [cppcoreguidelines-avoid-magic-numbers]
+      21 | double magic() {
+      22 |     return 3.14159 * 42;
+<span class="marker">&gt;&gt;&gt;   23 | }</span>
+      24 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:26:7</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:26:7</a><span class="rule-id">clang-tidy:cppcoreguidelines-special-member-functions</span></div><div class="violation-body"><div class="message">class &#x27;Base&#x27; defines a default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator</div><pre class="code">      24 |
       25 | // [modernize-use-override] missing override keyword
-<span class="marker">&gt;&gt;&gt;   26 | class Base {</span>
-      27 | public:</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The class &#x27;Base&#x27; defines a default destructor but does not define a copy constructor, a copy assignment operator, a move constructor, or a move assignment operator, which violates the cppcoreguidelines-special-member-functions rule.</div>
-<pre class="code">class Base {
-public:
-    Base() = default;
-    Base(const Base&amp;) = default;
-    Base&amp; operator=(const Base&amp;) = default;
-    Base(Base&amp;&amp;) = default;
-    Base&amp; operator=(Base&amp;&amp;) = default;
-    ~Base() = default;
-};</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:33:10</span><span class="rule-id">clang-tidy:cppcoreguidelines-explicit-virtual-functions,modernize-use-override</span></div><div class="violation-body"><div class="message">annotate this function with &#x27;override&#x27; or (rarely) &#x27;final&#x27;</div><pre class="code">      31 |
-      32 | class Derived : public Base {
+      26 | class Base {
+<span class="marker">&gt;&gt;&gt;   27 | public:</span>
+      28 |     virtual void tick() {}</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:34:10</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:34:10</a><span class="rule-id">clang-tidy:cppcoreguidelines-explicit-virtual-functions,modernize-use-override</span></div><div class="violation-body"><div class="message">annotate this function with &#x27;override&#x27; or (rarely) &#x27;final&#x27;</div><pre class="code">      32 | class Derived : public Base {
       33 | public:
-<span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
-      35 | };</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier.</div>
-<pre class="code">void tick() override {}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:38:5</span><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays</span></div><div class="violation-body"><div class="message">do not declare C-style arrays, use std::array&lt;&gt; instead</div><pre class="code">      36 |
-      37 | // [cppcheck: unusedFunction]
-      38 | static void unused_helper() {
-<span class="marker">&gt;&gt;&gt;   39 |     char buf[16];</span>
-      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function uses a C-style array, which is deprecated. It should use std::array&lt;&gt; instead.</div>
-<pre class="code">static void unused_helper() {
-    std::array&lt;char, 16&gt; buf;
-    strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:38:14</span><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">16 is a magic number; consider replacing it with a named constant</div><pre class="code">      36 |
-      37 | // [cppcheck: unusedFunction]
-      38 | static void unused_helper() {
-<span class="marker">&gt;&gt;&gt;   39 |     char buf[16];</span>
-      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The number 16 is a magic number. It should be replaced with a named constant.</div>
-<pre class="code">#define BUFFER_SIZE 16
-
-static void unused_helper() {
-    std::array&lt;char, BUFFER_SIZE&gt; buf;
-    strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><span class="location">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:12</span><span class="rule-id">clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay</span></div><div class="violation-body"><div class="message">do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead</div><pre class="code">      37 | // [cppcheck: unusedFunction]
+      34 |     void tick() {}   // should be tick() override
+<span class="marker">&gt;&gt;&gt;   35 | };</span>
+      36 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:5</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:5</a><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays</span></div><div class="violation-body"><div class="message">do not declare C-style arrays, use std::array&lt;&gt; instead</div><pre class="code">      37 | // [cppcheck: unusedFunction]
       38 | static void unused_helper() {
       39 |     char buf[16];
 <span class="marker">&gt;&gt;&gt;   40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</span>
-      41 | }</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The array is implicitly decayed into a pointer, which loses size information. It should use std::array::data() to get the pointer.</div>
-<pre class="code">static void unused_helper() {
-    std::array&lt;char, 16&gt; buf;
-    strcpy(buf.data(), &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:9</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;process&#x27; is never used.</div><pre class="code">       7 |
+      41 | }</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:14</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:39:14</a><span class="rule-id">clang-tidy:cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers</span></div><div class="violation-body"><div class="message">16 is a magic number; consider replacing it with a named constant</div><pre class="code">      37 | // [cppcheck: unusedFunction]
+      38 | static void unused_helper() {
+      39 |     char buf[16];
+<span class="marker">&gt;&gt;&gt;   40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy</span>
+      41 | }</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-warning">warning</span><span class="tool-tag">clang-tidy</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:40:12</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">/home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp:40:12</a><span class="rule-id">clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay</span></div><div class="violation-body"><div class="message">do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead</div><pre class="code">      38 | static void unused_helper() {
+      39 |     char buf[16];
+      40 |     strcpy(buf, &quot;hello world!!!&quot;);  // buffer overflow + deprecated strcpy
+<span class="marker">&gt;&gt;&gt;   41 | }</span></pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:9</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:9</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;process&#x27; is never used.</div><pre class="code">       7 |
        8 | // [cppcoreguidelines-pro-type-cstyle-cast] C-style cast
        9 | // [modernize-use-nullptr] NULL instead of nullptr
 <span class="marker">&gt;&gt;&gt;   10 | int process(int a, int b) {</span>
-      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Use trailing return type syntax for better readability.</div>
-<pre class="code">auto process(int arg1, int b) -&gt; int {
-    int* ptr = nullptr;
-    return arg1 + b;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:14:6</span><span class="rule-id">cppcheck:nullPointer</span></div><div class="violation-body"><div class="message">Null pointer dereference: ptr</div><pre class="code">      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
+      11 |     int* ptr = NULL;                   // modernize-use-nullptr</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-error">error</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:14:6</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:14:6</a><span class="rule-id">cppcheck:nullPointer</span></div><div class="violation-body"><div class="message">Null pointer dereference: ptr</div><pre class="code">      12 |     int result = (int)(a + b);         // cppcoreguidelines-pro-type-cstyle-cast
       13 |
       14 |     // [cppcheck: nullPointer] — ptr is never assigned a valid address
 <span class="marker">&gt;&gt;&gt;   15 |     *ptr = result;</span>
-      16 | </pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">Null pointer dereference: ptr.</div>
-<pre class="code">// [cppcheck: nullPointer] — ptr is never assigned a valid address
-// *ptr = result;</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:20</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;magic&#x27; is never used.</div><pre class="code">      18 | }
+      16 | </pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:20</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:20</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;magic&#x27; is never used.</div><pre class="code">      18 | }
       19 |
       20 | // [cppcoreguidelines-avoid-magic-numbers]
 <span class="marker">&gt;&gt;&gt;   21 | double magic() {</span>
-      22 |     return 3.14159 * 42;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;magic&#x27; is never used and should be removed to clean up the codebase.</div></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:27</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; is never used.</div><pre class="code">      25 | // [modernize-use-override] missing override keyword
+      22 |     return 3.14159 * 42;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:27</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:27</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; is never used.</div><pre class="code">      25 | // [modernize-use-override] missing override keyword
       26 | class Base {
       27 | public:
 <span class="marker">&gt;&gt;&gt;   28 |     virtual void tick() {}</span>
-      29 |     virtual ~Base() = default;</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;tick&#x27; is never used.</div>
-<pre class="code">class Base {
-public:
-    // cppcheck-suppress unusedFunction
-    virtual void tick() {}
-    virtual ~Base() = default;
-}</pre></div></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:33:10</span><span class="rule-id">cppcheck:missingOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier.</div><pre class="code">      31 |
+      29 |     virtual ~Base() = default;</pre></div></div>
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:33:10</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:33:10</a><span class="rule-id">cppcheck:missingOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is not marked with a &#x27;override&#x27; specifier.</div><pre class="code">      31 |
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
       35 | };</pre></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:33:10</span><span class="rule-id">cppcheck:uselessOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function</div><pre class="code">      31 |
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:33:10</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:33:10</a><span class="rule-id">cppcheck:uselessOverride</span></div><div class="violation-body"><div class="message">The function &#x27;tick&#x27; overrides a function in a base class but is identical to the overridden function</div><pre class="code">      31 |
       32 | class Derived : public Base {
       33 | public:
 <span class="marker">&gt;&gt;&gt;   34 |     void tick() {}   // should be tick() override</span>
       35 | };</pre></div></div>
-<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><span class="location">tests/fixtures/sample_violations.cpp:37</span><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;unused_helper&#x27; is never used.</div><pre class="code">      35 | };
+<div class="violation"><div class="violation-header"><span class="badge sev-style">style</span><span class="tool-tag">cppcheck</span><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:37</a><a class="location" href="file:///home/abumahdi/projects/safecpp_reviewer/tests/fixtures/sample_violations.cpp">tests/fixtures/sample_violations.cpp:37</a><span class="rule-id">cppcheck:unusedFunction</span></div><div class="violation-body"><div class="message">The function &#x27;unused_helper&#x27; is never used.</div><pre class="code">      35 | };
       36 |
       37 | // [cppcheck: unusedFunction]
 <span class="marker">&gt;&gt;&gt;   38 | static void unused_helper() {</span>
-      39 |     char buf[16];</pre><div class="fix-section"><div class="fix-label">↪ Suggested Fix</div><div class="fix-prose">The function &#x27;unused_helper&#x27; is never used.</div></div></div></div>
+      39 |     char buf[16];</pre></div></div>
 </div>
 </body>
 </html>
