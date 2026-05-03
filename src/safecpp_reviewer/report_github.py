@@ -104,7 +104,8 @@ def render_github(
                 path = Path(v.file).resolve().relative_to(repo_root.resolve())
             except ValueError:
                 # Outside repo root — skip
-                continue
+                path = v.file
+                # continue
 
         comments.append(
             {
