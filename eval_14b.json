@@ -1,0 +1,265 @@
+{
+  "model": "qwen-14b",
+  "server_url": "http://127.0.0.1:8080",
+  "timestamp": "2026-05-03T16:13:30.597789",
+  "total_cases": 15,
+  "verified_count": 13,
+  "keyword_match_count": 15,
+  "mean_similarity": 0.85238,
+  "mean_score": 1.3223866666666666,
+  "pass_rate": 0.8666666666666667,
+  "by_rule": {
+    "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast": {
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast",
+      "total": 2,
+      "verified": 2,
+      "pass_rate": 1.0,
+      "mean_score": 1.42185
+    },
+    "cppcheck:nullPointer": {
+      "rule_id": "cppcheck:nullPointer",
+      "total": 1,
+      "verified": 1,
+      "pass_rate": 1.0,
+      "mean_score": 1.38
+    },
+    "clang-tidy:bugprone-not-null-terminated-result": {
+      "rule_id": "clang-tidy:bugprone-not-null-terminated-result",
+      "total": 1,
+      "verified": 1,
+      "pass_rate": 1.0,
+      "mean_score": 1.4617
+    },
+    "clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay": {
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay",
+      "total": 1,
+      "verified": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.4544
+    },
+    "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast": {
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast",
+      "total": 2,
+      "verified": 2,
+      "pass_rate": 1.0,
+      "mean_score": 1.5
+    },
+    "clang-tidy:cppcoreguidelines-avoid-magic-numbers": {
+      "rule_id": "clang-tidy:cppcoreguidelines-avoid-magic-numbers",
+      "total": 2,
+      "verified": 2,
+      "pass_rate": 1.0,
+      "mean_score": 1.4896500000000001
+    },
+    "clang-tidy:cppcoreguidelines-owning-memory": {
+      "rule_id": "clang-tidy:cppcoreguidelines-owning-memory",
+      "total": 1,
+      "verified": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.4365
+    },
+    "clang-tidy:modernize-use-nullptr": {
+      "rule_id": "clang-tidy:modernize-use-nullptr",
+      "total": 2,
+      "verified": 2,
+      "pass_rate": 1.0,
+      "mean_score": 1.5
+    },
+    "clang-tidy:modernize-use-override": {
+      "rule_id": "clang-tidy:modernize-use-override",
+      "total": 2,
+      "verified": 2,
+      "pass_rate": 1.0,
+      "mean_score": 1.3901
+    },
+    "clang-tidy:modernize-use-trailing-return-type": {
+      "rule_id": "clang-tidy:modernize-use-trailing-return-type",
+      "total": 1,
+      "verified": 1,
+      "pass_rate": 1.0,
+      "mean_score": 1.5
+    }
+  },
+  "results": [
+    {
+      "case_id": "reinterpret-cast-001",
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast",
+      "llm_explanation": "The reinterpret_cast is used for bit-level float access, which can lead to undefined behavior. It is recommended to use std::bit_cast for such conversions to ensure type safety.",
+      "llm_fix": "#include <cstdint>\n#include <bit>\n\nuint32_t float_to_bits(float f) {\n    return std::bit_cast<uint32_t>(f);\n}",
+      "verified": true,
+      "similarity": 0.6584,
+      "keyword_match": true,
+      "score": 1.3975,
+      "elapsed_seconds": 3.93,
+      "error": null
+    },
+    {
+      "case_id": "reinterpret-cast-002",
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast",
+      "llm_explanation": "The use of reinterpret_cast to convert a byte buffer to a struct is unsafe and can lead to undefined behavior. It is recommended to use std::memcpy to copy the data into a struct instance.",
+      "llm_fix": "struct Header { int magic; int version; };\nconst Header* parse(const char* buf) {\n    static Header header;\n    std::memcpy(&header, buf, sizeof(Header));\n    return &header;\n}",
+      "verified": true,
+      "similarity": 0.8205,
+      "keyword_match": true,
+      "score": 1.4462,
+      "elapsed_seconds": 4.03,
+      "error": null
+    },
+    {
+      "case_id": "null-deref-001",
+      "rule_id": "cppcheck:nullPointer",
+      "llm_explanation": "Dereferencing a null pointer causes undefined behavior and typically a crash. Ensure the pointer is non-null before use or design the API to take a reference instead.",
+      "llm_fix": "void crash() {\n    int* p = nullptr;\n    if (p != nullptr) {\n        *p = 5;\n    }\n}",
+      "verified": true,
+      "similarity": 0.6,
+      "keyword_match": true,
+      "score": 1.38,
+      "elapsed_seconds": 3.16,
+      "error": null
+    },
+    {
+      "case_id": "unsafe-string-001",
+      "rule_id": "clang-tidy:bugprone-not-null-terminated-result",
+      "llm_explanation": "The use of strncpy can lead to a non-null-terminated string if the source string is longer than the specified size. This can cause undefined behavior in subsequent string operations.",
+      "llm_fix": "#include <cstring>\nvoid copy_short(char* dst, const char* src) {\n    strncpy(dst, src, 15);\n    dst[15] = '\\0';\n}",
+      "verified": true,
+      "similarity": 0.8722,
+      "keyword_match": true,
+      "score": 1.4617,
+      "elapsed_seconds": 3.54,
+      "error": null
+    },
+    {
+      "case_id": "array-decay-001",
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay",
+      "llm_explanation": "Passing a C array to a function that expects a pointer loses the size information, which can lead to out-of-bounds access. Using std::span is recommended to carry the size information.",
+      "llm_fix": "#include <span>\n\nint sum(const std::span<const int> arr) {\n    int total = 0;\n    for (int i = 0; i < arr.size(); ++i) total += arr[i];\n    return total;\n}\n\nint main() {\n    int data[4] = {1, 2, 3, 4};\n    return sum(std::span<const int>(data, 4));\n}",
+      "verified": false,
+      "similarity": 0.8479,
+      "keyword_match": true,
+      "score": 0.4544,
+      "elapsed_seconds": 5.95,
+      "error": null
+    },
+    {
+      "case_id": "cstyle-cast-001",
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast",
+      "llm_explanation": "C-style casts are discouraged as they can obscure the type of conversion being performed and can lead to undefined behavior. Use static_cast for explicit type conversions.",
+      "llm_fix": "int compute(int a, int b) {\n    return static_cast<int>(a + b);\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 2.68,
+      "error": null
+    },
+    {
+      "case_id": "cstyle-cast-002",
+      "rule_id": "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast",
+      "llm_explanation": "C-style casts are discouraged as they can obscure the type of conversion being performed and may lead to undefined behavior. Use static_cast for explicit type conversions.",
+      "llm_fix": "int truncate(float x) {\n    return static_cast<int>(x);\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 2.43,
+      "error": null
+    },
+    {
+      "case_id": "magic-number-001",
+      "rule_id": "clang-tidy:cppcoreguidelines-avoid-magic-numbers",
+      "llm_explanation": "The code uses a magic number (3.14159) which is hard to maintain and review. It should be replaced with a named constexpr constant.",
+      "llm_fix": "constexpr double kPi = 3.14159;\ndouble area(double r) {\n    return kPi * r * r;\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 3.16,
+      "error": null
+    },
+    {
+      "case_id": "magic-number-002",
+      "rule_id": "clang-tidy:cppcoreguidelines-avoid-magic-numbers",
+      "llm_explanation": "The function returns a magic number, which is hard to maintain and review. Replace it with a named constexpr constant to make the meaning explicit.",
+      "llm_fix": "constexpr int kSecondsInADay = 86400;\n\nint seconds_in_a_day() {\n    return kSecondsInADay;\n}",
+      "verified": true,
+      "similarity": 0.931,
+      "keyword_match": true,
+      "score": 1.4793,
+      "elapsed_seconds": 3.02,
+      "error": null
+    },
+    {
+      "case_id": "owning-memory-001",
+      "rule_id": "clang-tidy:cppcoreguidelines-owning-memory",
+      "llm_explanation": "The use of a raw owning pointer from 'new' is not recommended as it can lead to memory leaks and unclear ownership. It is better to use smart pointers like std::unique_ptr or std::shared_ptr.",
+      "llm_fix": "#include <memory>\n\nint* allocate(int n) {\n    return new int[n];\n}\n\nstd::unique_ptr<int[]> allocate_unique(int n) {\n    return std::make_unique<int[]>(n);\n}",
+      "verified": false,
+      "similarity": 0.7884,
+      "keyword_match": true,
+      "score": 0.4365,
+      "elapsed_seconds": 4.59,
+      "error": null
+    },
+    {
+      "case_id": "use-nullptr-001",
+      "rule_id": "clang-tidy:modernize-use-nullptr",
+      "llm_explanation": "The use of NULL is deprecated in favor of nullptr. NULL is a macro that expands to 0, which can lead to type-related issues. Using nullptr avoids these problems by having its own type (std::nullptr_t) that only converts to pointer types.",
+      "llm_fix": "int* find(int n) {\n    if (n < 0) return nullptr;\n    return new int(n);\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 3.86,
+      "error": null
+    },
+    {
+      "case_id": "use-nullptr-002",
+      "rule_id": "clang-tidy:modernize-use-nullptr",
+      "llm_explanation": "The integer literal 0 is used as a null pointer, which can lead to type errors and overload resolution issues. Use nullptr instead.",
+      "llm_fix": "int* default_ptr() {\n    return nullptr;\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 2.17,
+      "error": null
+    },
+    {
+      "case_id": "use-override-001",
+      "rule_id": "clang-tidy:modernize-use-override",
+      "llm_explanation": "The 'tick' method in the Derived class overrides the 'tick' method in the Base class, but it is missing the 'override' keyword. This can lead to silent bugs if the base class method signature changes or if there is a typo in the method name.",
+      "llm_fix": "class Derived : public Base {\npublic:\n    void tick() override {}\n};",
+      "verified": true,
+      "similarity": 0.6337,
+      "keyword_match": true,
+      "score": 1.3901,
+      "elapsed_seconds": 3.42,
+      "error": null
+    },
+    {
+      "case_id": "use-override-002",
+      "rule_id": "clang-tidy:modernize-use-override",
+      "llm_explanation": "The 'sample' method in the 'Lidar' class overrides the 'sample' method in the 'Sensor' class, but it is missing the 'override' keyword. This can lead to silent bugs if the base class method signature changes.",
+      "llm_fix": "class Lidar : public Sensor {\npublic:\n    int sample() const override { return 42; }\n};",
+      "verified": true,
+      "similarity": 0.6336,
+      "keyword_match": true,
+      "score": 1.3901,
+      "elapsed_seconds": 3.52,
+      "error": null
+    },
+    {
+      "case_id": "use-trailing-001",
+      "rule_id": "clang-tidy:modernize-use-trailing-return-type",
+      "llm_explanation": "The function is declared without a trailing return type, which can reduce readability, especially in template-heavy code.",
+      "llm_fix": "auto add(int a, int b) -> int {\n    return a + b;\n}",
+      "verified": true,
+      "similarity": 1.0,
+      "keyword_match": true,
+      "score": 1.5,
+      "elapsed_seconds": 2.25,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+cases:
+  - case_id: "cstyle-cast-001"
+    rule_id: "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast"
+    description: "C-style cast on integer arithmetic"
+    bad_code: |
+      int compute(int a, int b) {
+          return (int)(a + b);
+      }
+    expected_fix: |
+      int compute(int a, int b) {
+          return static_cast<int>(a + b);
+      }
+    expected_explanation_keywords:
+      - "static_cast"
+      - "named cast"
+      - "C-style"
+
+  - case_id: "cstyle-cast-002"
+    rule_id: "clang-tidy:cppcoreguidelines-pro-type-cstyle-cast"
+    description: "C-style cast on float-to-int conversion"
+    bad_code: |
+      int truncate(float x) {
+          return (int)x;
+      }
+    expected_fix: |
+      int truncate(float x) {
+          return static_cast<int>(x);
+      }
+    expected_explanation_keywords:
+      - "static_cast"
+      - "explicit"
+
+  - case_id: "magic-number-001"
+    rule_id: "clang-tidy:cppcoreguidelines-avoid-magic-numbers"
+    description: "Magic number in arithmetic"
+    bad_code: |
+      double area(double r) {
+          return 3.14159 * r * r;
+      }
+    expected_fix: |
+      constexpr double kPi = 3.14159;
+      double area(double r) {
+          return kPi * r * r;
+      }
+    expected_explanation_keywords:
+      - "constexpr"
+      - "named constant"
+      - "magic number"
+
+  - case_id: "magic-number-002"
+    rule_id: "clang-tidy:cppcoreguidelines-avoid-magic-numbers"
+    description: "Magic number in time conversion"
+    bad_code: |
+      int seconds_in_a_day() {
+          return 86400;
+      }
+    expected_fix: |
+      constexpr int kSecondsPerDay = 86400;
+      int seconds_in_a_day() {
+          return kSecondsPerDay;
+      }
+    expected_explanation_keywords:
+      - "constexpr"
+      - "named"
+
+  - case_id: "owning-memory-001"
+    rule_id: "clang-tidy:cppcoreguidelines-owning-memory"
+    description: "Raw owning pointer from new"
+    bad_code: |
+      int* allocate(int n) {
+          return new int[n];
+      }
+    expected_fix: |
+      #include <memory>
+      std::unique_ptr<int[]> allocate(int n) {
+          return std::make_unique<int[]>(n);
+      }
+    expected_explanation_keywords:
+      - "unique_ptr"
+      - "smart pointer"
+      - "ownership"

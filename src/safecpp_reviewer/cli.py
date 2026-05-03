@@ -10,6 +10,7 @@ Use ``--verify`` (with ``--use-graph``) to re-run clang-tidy on each LLM fix.
 Use ``--changed-lines`` + ``-f github`` to produce PR review comments.
 """
 
+# At the top of cli.py, remove this line:
 from __future__ import annotations
 
 import enum
@@ -18,6 +19,8 @@ import logging
 import time
 from collections import Counter
 from pathlib import Path
+
+# And make sure this is in your imports:
 from typing import Annotated
 
 import typer
@@ -36,6 +39,7 @@ from safecpp_reviewer.analyzer.changed_lines import (
 )
 from safecpp_reviewer.analyzer.clang_tidy import ClangTidyRunner
 from safecpp_reviewer.analyzer.models import Violation
+from safecpp_reviewer.eval import EvalHarness, EvalSummary, load_cases
 from safecpp_reviewer.llm.client import LlamaCppClient
 from safecpp_reviewer.report import render_html
 from safecpp_reviewer.report_github import render_github
@@ -501,6 +505,163 @@ def version() -> None:
     from importlib.metadata import version as pkg_version
 
     console.print(f"safecpp-reviewer {pkg_version('safecpp-reviewer')}")
+
+
+@app.command(name="eval")
+def eval_command(
+    server_url: Annotated[
+        str,
+        typer.Option("--server", help="OpenAI-compatible LLM server URL."),
+    ] = "http://127.0.0.1:8080",
+    model: Annotated[
+        str,
+        typer.Option(
+            "--model",
+            help="Model identifier for the report (descriptive only).",
+        ),
+    ] = "qwen2.5-coder-7b",
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Where to write the JSON summary. Stdout if omitted.",
+        ),
+    ] = None,
+    cases_dir: Annotated[
+        Path | None,
+        typer.Option(
+            "--cases",
+            help="Directory of eval YAML files (default: bundled).",
+            exists=True,
+            file_okay=False,
+            dir_okay=True,
+        ),
+    ] = None,
+    rule_filter: Annotated[
+        str | None,
+        typer.Option(
+            "--rule",
+            help="Only run cases whose rule_id contains this substring.",
+        ),
+    ] = None,
+    verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
+) -> None:
+    """Run the LLM fix-quality eval suite and emit a summary report."""
+    if verbose:
+        logging.getLogger().setLevel(logging.INFO)
+
+    # ---- Build reviewer (eval requires LLM)
+    client = LlamaCppClient(base_url=server_url)
+    if not client.health_check():
+        err_console.print(
+            f"[red]✗[/] LLM server unreachable at {server_url}. Eval requires a running model."
+        )
+        raise typer.Exit(code=2)
+
+    reviewer = ViolationReviewer(client)
+
+    # ---- Load cases
+    cases = load_cases(cases_dir)
+    if rule_filter:
+        cases = [c for c in cases if rule_filter in c.rule_id]
+    if not cases:
+        err_console.print("[red]✗[/] No eval cases found.")
+        raise typer.Exit(code=2)
+
+    err_console.print(f"[dim]Running {len(cases)} eval case(s) against {model} at {server_url}[/]")
+
+    # ---- Run harness
+    harness = EvalHarness(reviewer=reviewer)
+    summary = harness.run(cases, model_name=model)
+
+    # ---- Print results
+    _print_eval_summary(summary)
+
+    # ---- Persist
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
+        err_console.print(f"[green]✓[/] Wrote eval summary: {output}")
+
+
+def _print_eval_summary(summary: EvalSummary) -> None:
+    """Render an EvalSummary as a rich table."""
+    overall = Table(title=f"Eval results — {summary.model}")
+    overall.add_column("Metric", style="cyan")
+    overall.add_column("Value", justify="right")
+    overall.add_row("Total cases", str(summary.total_cases))
+    overall.add_row(
+        "Verified (pass)",
+        f"{summary.verified_count}/{summary.total_cases} ({summary.pass_rate:.0%})",
+    )
+    overall.add_row("Mean similarity", f"{summary.mean_similarity:.2f}")
+    overall.add_row("Keyword matches", f"{summary.keyword_match_count}/{summary.total_cases}")
+    overall.add_row("Mean score", f"{summary.mean_score:.3f} / 1.500")
+    console.print(overall)
+
+    if summary.by_rule:
+        per_rule = Table(title="Per-rule breakdown")
+        per_rule.add_column("Rule", style="cyan")
+        per_rule.add_column("Cases", justify="right")
+        per_rule.add_column("Verified", justify="right")
+        per_rule.add_column("Pass rate", justify="right")
+        per_rule.add_column("Mean score", justify="right")
+
+        for rule_id, stats in sorted(summary.by_rule.items(), key=lambda kv: -kv[1].mean_score):
+            per_rule.add_row(
+                rule_id,
+                str(stats.total),
+                str(stats.verified),
+                f"{stats.pass_rate:.0%}",
+                f"{stats.mean_score:.3f}",
+            )
+        console.print(per_rule)
+
+
+# ============================================================
+# Add eval-compare command for ablation tables across runs
+# ============================================================
+
+
+@app.command(name="eval-compare")
+def eval_compare(
+    summaries: Annotated[
+        list[Path],
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            readable=True,
+            help="Two or more eval summary JSON files.",
+        ),
+    ],
+) -> None:
+    """Print an ablation table comparing multiple eval runs."""
+    if len(summaries) < 2:
+        err_console.print("[red]✗[/] Need at least two summaries to compare.")
+        raise typer.Exit(code=2)
+
+    loaded: list[EvalSummary] = []
+    for p in summaries:
+        loaded.append(EvalSummary.model_validate_json(p.read_text()))
+
+    table = Table(title="Eval comparison")
+    table.add_column("Metric", style="cyan")
+    for s in loaded:
+        table.add_column(s.model, justify="right")
+
+    rows = [
+        ("Cases", lambda s: str(s.total_cases)),
+        ("Pass rate", lambda s: f"{s.pass_rate:.0%}"),
+        ("Mean score", lambda s: f"{s.mean_score:.3f}"),
+        ("Keyword match", lambda s: f"{s.keyword_match_count}/{s.total_cases}"),
+        ("Mean similarity", lambda s: f"{s.mean_similarity:.2f}"),
+    ]
+    for label, getter in rows:
+        table.add_row(label, *(getter(s) for s in loaded))
+
+    console.print(table)
 
 
 if __name__ == "__main__":

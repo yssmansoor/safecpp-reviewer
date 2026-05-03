@@ -1,0 +1,111 @@
+cases:
+  - case_id: "reinterpret-cast-001"
+    rule_id: "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast"
+    description: "Reinterpret cast for bit-level float access"
+    bad_code: |
+      #include <cstdint>
+      uint32_t float_to_bits(float f) {
+          return *reinterpret_cast<uint32_t*>(&f);
+      }
+    expected_fix: |
+      #include <cstdint>
+      #include <cstring>
+      uint32_t float_to_bits(float f) {
+          uint32_t bits;
+          std::memcpy(&bits, &f, sizeof(bits));
+          return bits;
+      }
+    expected_explanation_keywords:
+      - "memcpy"
+      - "bit_cast"
+      - "undefined behavior"
+      - "type punning"
+
+  - case_id: "reinterpret-cast-002"
+    rule_id: "clang-tidy:cppcoreguidelines-pro-type-reinterpret-cast"
+    description: "Reinterpret cast on byte buffer to struct"
+    bad_code: |
+      struct Header { int magic; int version; };
+      const Header* parse(const char* buf) {
+          return reinterpret_cast<const Header*>(buf);
+      }
+    expected_fix: |
+      #include <cstring>
+      struct Header { int magic; int version; };
+      Header parse(const char* buf) {
+          Header h;
+          std::memcpy(&h, buf, sizeof(h));
+          return h;
+      }
+    expected_explanation_keywords:
+      - "memcpy"
+      - "alignment"
+      - "strict aliasing"
+
+  - case_id: "null-deref-001"
+    rule_id: "cppcheck:nullPointer"
+    description: "Dereference of literally null pointer"
+    bad_code: |
+      void crash() {
+          int* p = nullptr;
+          *p = 5;
+      }
+    expected_fix: |
+      void crash() {
+          int value = 5;
+          int* p = &value;
+          *p = 5;
+      }
+    expected_explanation_keywords:
+      - "null"
+      - "undefined behavior"
+      - "dereference"
+
+  - case_id: "unsafe-string-001"
+    rule_id: "clang-tidy:bugprone-not-null-terminated-result"
+    description: "strncpy may produce non-null-terminated result"
+    bad_code: |
+      #include <cstring>
+      void copy_short(char* dst, const char* src) {
+          strncpy(dst, src, 16);
+      }
+    expected_fix: |
+      #include <string>
+      void copy_short(char* dst, const char* src) {
+          std::string tmp(src);
+          tmp.copy(dst, 15);
+          dst[15] = '\0';
+      }
+    expected_explanation_keywords:
+      - "null-terminated"
+      - "std::string"
+      - "buffer"
+
+  - case_id: "array-decay-001"
+    rule_id: "clang-tidy:cppcoreguidelines-pro-bounds-array-to-pointer-decay"
+    description: "C array passed where pointer is expected"
+    bad_code: |
+      int sum(const int* arr, int n) {
+          int total = 0;
+          for (int i = 0; i < n; ++i) total += arr[i];
+          return total;
+      }
+      int main() {
+          int data[4] = {1, 2, 3, 4};
+          return sum(data, 4);
+      }
+    expected_fix: |
+      #include <span>
+      int sum(std::span<const int> arr) {
+          int total = 0;
+          for (int v : arr) total += v;
+          return total;
+      }
+      int main() {
+          int data[4] = {1, 2, 3, 4};
+          return sum(data);
+      }
+    expected_explanation_keywords:
+      - "span"
+      - "bounds"
+      - "array"

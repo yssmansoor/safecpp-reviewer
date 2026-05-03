@@ -1,0 +1,100 @@
+cases:
+  - case_id: "use-nullptr-001"
+    rule_id: "clang-tidy:modernize-use-nullptr"
+    description: "NULL macro instead of nullptr"
+    bad_code: |
+      int* find(int n) {
+          if (n < 0) return NULL;
+          return new int(n);
+      }
+    expected_fix: |
+      int* find(int n) {
+          if (n < 0) return nullptr;
+          return new int(n);
+      }
+    expected_explanation_keywords:
+      - "nullptr"
+      - "NULL"
+      - "type safety"
+
+  - case_id: "use-nullptr-002"
+    rule_id: "clang-tidy:modernize-use-nullptr"
+    description: "Integer literal 0 used as null pointer"
+    bad_code: |
+      int* default_ptr() {
+          return 0;
+      }
+    expected_fix: |
+      int* default_ptr() {
+          return nullptr;
+      }
+    expected_explanation_keywords:
+      - "nullptr"
+
+  - case_id: "use-override-001"
+    rule_id: "clang-tidy:modernize-use-override"
+    description: "Missing override on virtual method"
+    bad_code: |
+      class Base {
+      public:
+          virtual ~Base() = default;
+          virtual void tick() {}
+      };
+      class Derived : public Base {
+      public:
+          void tick() {}
+      };
+    expected_fix: |
+      class Base {
+      public:
+          virtual ~Base() = default;
+          virtual void tick() {}
+      };
+      class Derived : public Base {
+      public:
+          void tick() override {}
+      };
+    expected_explanation_keywords:
+      - "override"
+      - "virtual"
+
+  - case_id: "use-override-002"
+    rule_id: "clang-tidy:modernize-use-override"
+    description: "Missing override on inherited const method"
+    bad_code: |
+      class Sensor {
+      public:
+          virtual ~Sensor() = default;
+          virtual int sample() const { return 0; }
+      };
+      class Lidar : public Sensor {
+      public:
+          int sample() const { return 42; }
+      };
+    expected_fix: |
+      class Sensor {
+      public:
+          virtual ~Sensor() = default;
+          virtual int sample() const { return 0; }
+      };
+      class Lidar : public Sensor {
+      public:
+          int sample() const override { return 42; }
+      };
+    expected_explanation_keywords:
+      - "override"
+
+  - case_id: "use-trailing-001"
+    rule_id: "clang-tidy:modernize-use-trailing-return-type"
+    description: "Function declared without trailing return type"
+    bad_code: |
+      int add(int a, int b) {
+          return a + b;
+      }
+    expected_fix: |
+      auto add(int a, int b) -> int {
+          return a + b;
+      }
+    expected_explanation_keywords:
+      - "trailing"
+      - "auto"
