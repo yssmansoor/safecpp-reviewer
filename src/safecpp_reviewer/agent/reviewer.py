@@ -20,12 +20,14 @@ logger = logging.getLogger(__name__)
 class ViolationReviewer:
     """Review C++ violations and provide explanations and fix suggestions."""
 
-    _FENCE_RE = re.compile(
-        r'"explanation"\s*:\s*"(?P<exp>(?:[^"\\]|\\.)*)"'
-        r".*?"
-        r'"fixed_code"\s*:\s*"(?P<code>.*?)"\s*\}',
-        re.DOTALL,
-    )
+    # _FENCE_RE = re.compile(
+    #     r'"explanation"\s*:\s*"(?P<exp>(?:[^"\\]|\\.)*)"'
+    #     r".*?"
+    #     r'"fixed_code"\s*:\s*"(?P<code>.*?)"\s*\}',
+    #     re.DOTALL,
+    # )
+
+    _FENCE_RE = re.compile(r"^\s*```(?:json)?\s*\n?(.*?)\n?```\s*$", re.DOTALL)
 
     def __init__(self, client: LlamaCppClient, rule_store: RuleStore | None = None) -> None:
         self.client = client
@@ -80,8 +82,13 @@ class ViolationReviewer:
         except Exception:
             return None
 
+    # def _strip_fences(self, text: str) -> str:
+    #     """Remove markdown code fences if present."""
+    #     text = text.strip()
+    #     m: typing.Final = self._FENCE_RE.match(text)
+    #     return m.group(1).strip() if m else text
+
     def _strip_fences(self, text: str) -> str:
-        """Remove markdown code fences if present."""
         text = text.strip()
         m: typing.Final = self._FENCE_RE.match(text)
         return m.group(1).strip() if m else text
@@ -105,7 +112,7 @@ class ViolationReviewer:
         try:
             prompt: typing.Final = build_user_prompt(violation, self.rule_store)
             result: typing.Final = self.client.complete(
-                prompt, system=SYSTEM_PROMPT, temperature=0.1, max_tokens=512
+                prompt, system=SYSTEM_PROMPT, temperature=0.1, max_tokens=2048
             )
             cleaned: typing.Final = self._strip_fences(result.text)
             response: typing.Final = self._parse_review_response(cleaned)
@@ -136,7 +143,7 @@ class ViolationReviewer:
         try:
             prompt: typing.Final = build_chunk_user_prompt(chunk, violations, self.rule_store)
             result: typing.Final = self.client.complete(
-                prompt, system=CHUNK_SYSTEM_PROMPT, temperature=0.1, max_tokens=1024
+                prompt, system=CHUNK_SYSTEM_PROMPT, temperature=0.1, max_tokens=2048
             )
             cleaned: typing.Final = self._strip_fences(result.text)
             response: typing.Final = self._parse_chunk_review_response(cleaned)

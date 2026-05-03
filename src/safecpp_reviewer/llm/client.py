@@ -39,7 +39,7 @@ class LlamaCppClient:
     def __init__(
         self,
         provider: str = "local",  # "local" | "openai"
-        model: str = "owan",
+        model: str = "qwen2.5-coder-7b",
         api_key: str | None = None,
         base_url: str = "http://127.0.0.1:8080",
         timeout: float = 60.0,

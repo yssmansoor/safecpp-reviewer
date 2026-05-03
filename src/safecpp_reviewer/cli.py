@@ -231,11 +231,13 @@ def _print_comparison(
 # ---------------------------------------------------------------------------
 
 
-def _build_reviewer(no_llm: bool, server_url: str) -> ViolationReviewer | None:
+def _build_reviewer(
+    no_llm: bool, server_url: str, model: str = "qwen2.5-coder-7b"
+) -> ViolationReviewer | None:
     """Construct a reviewer if the LLM server is reachable, else None."""
     if no_llm:
         return None
-    client = LlamaCppClient(base_url=server_url)
+    client = LlamaCppClient(base_url=server_url, model=model)
     if not client.health_check():
         err_console.print(
             f"[yellow]⚠[/] llama.cpp server unreachable at {server_url} — "
@@ -336,6 +338,10 @@ def review(
             help="Repository root for resolving relative paths (github format).",
         ),
     ] = None,
+    model: Annotated[
+        str,
+        typer.Option("--model", help="Model identifier sent to the LLM server."),
+    ] = "qwen2.5-coder-7b",
     verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Enable info logging.")] = False,
 ) -> None:
     """Run static analysis + (optional) LLM review on a C++ file."""
@@ -346,7 +352,7 @@ def review(
         fmt = [OutputFormat.terminal]
 
     # ---- Reviewer & verifier
-    reviewer = _build_reviewer(no_llm, server_url)
+    reviewer = _build_reviewer(no_llm, server_url, model=model)
     verifier = _build_verifier(verify, no_llm, checks)
 
     if verifier is not None:
@@ -445,6 +451,10 @@ def batch(
             help="Re-run clang-tidy on each LLM fix. Implies --use-graph.",
         ),
     ] = False,
+    model: Annotated[
+        str,
+        typer.Option("--model", help="Model identifier sent to the LLM server."),
+    ] = "qwen2.5-coder-7b",
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
 ) -> None:
     """Analyze multiple files and generate an indexed HTML report."""
@@ -454,7 +464,7 @@ def batch(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # ---- Set up reviewer & verifier (shared across all files)
-    reviewer = _build_reviewer(no_llm, server_url)
+    reviewer = _build_reviewer(no_llm, server_url, model=model)
     verifier = _build_verifier(verify, no_llm, checks)
 
     if verifier is not None and not use_graph:

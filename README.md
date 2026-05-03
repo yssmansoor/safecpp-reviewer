@@ -110,12 +110,15 @@ src/safecpp_reviewer/
 ## Hardware
 
 Developed and tested on:
-
 - AMD Radeon RX 9070 XT (16 GB VRAM) running ROCm 7.2.2
 - Intel Raptor Lake-S, 32 GB RAM
 - Ubuntu 24.04, kernel 6.17
 
-Model: `Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf` served by llama-server on port 8080.
+Models tested:
+- Qwen2.5-Coder-7B-Instruct Q5_K_M — 52 tok/s, 65% eval pass rate
+- Qwen2.5-Coder-14B-Instruct Q5_K_M — 28 tok/s, 78% eval pass rate
+
+The 14B model trades throughput for quality; static-analysis-only mode runs without an LLM at all.
 
 ## License
 
